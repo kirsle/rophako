@@ -1,0 +1,88 @@
+/******************************************************************************
+ * "Resets" - styles on HTML tags                                             *
+ ******************************************************************************/
+
+body {
+    background-color: #FFFFFF;
+    font-family: "Trebuchet MS",Verdana,Arial,Helvetica,sans-serif;
+    font-size: small;
+    color: #000000;
+    width: 850px;
+    margin: 20px auto;
+}
+
+h1, h2, h3, h4 {
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-weight: bold;
+    margin: 12px 0px;
+}
+h1 {
+    font-size: 32pt;
+    margin-top: 0px;
+}
+h2 {
+    font-size: 28pt;
+}
+h3 {
+    font-size: 24pt;
+}
+h4 {
+    font-size: 18pt;
+}
+
+a:link, a:visited {
+    color: #006699;
+    text-decoration: underline;
+}
+
+header {
+    display: block;
+    padding: 12px;
+    border: 1px solid #000000;
+    margin-bottom: 40px;
+    box-shadow: 1px 1px 5px #000000;
+    border-radius: 12px;
+}
+header h1 {
+    font-size: 46pt;
+    text-align: center;
+    color: #0099FF;
+    text-shadow: 2px 2px 2px #000099;
+}
+
+nav {
+    float: left;
+    width: 200px;
+    border: 1px solid #000000;
+    border-radius: 12px;
+}
+nav ul {
+    list-style-type: none;
+    padding: 8px;
+    margin: 0px;
+}
+nav ul li {
+    padding: 2px 0px;
+}
+nav ul li.header {
+    font-weight: bold;
+}
+
+div#content {
+    float: right;
+    width: 620px;
+}
+
+div.clear {
+    clear: both;
+}
+
+footer {
+    clear: both;
+    margin-top: 40px;
+    padding: 12px;
+    text-align: center;
+    color: #707070;
+    border: 1px solid #000000;
+    border-radius: 12px;
+}
