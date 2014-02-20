@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title %}Admin Center{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#delete_button").click(function() {
+        return window.confirm("Are you sure?");
+    });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+
+<h1>Edit User #{{ info["uid"] }}</h1>
+
+<form action="{{ url_for('admin.edit_user', uid=info['uid']) }}" method="POST">
+<input type="hidden" name="token" value="{{ csrf_token() }}">
+<fieldset>
+    <legend>User Details</legend>
+
+    <strong>Username:</strong><br>
+    <input type="text" size="20" name="username" value="{{ info['username'] }}"><p>
+
+    <strong>Real name:</strong><br>
+    <input type="text" size="20" name="name" value="{{ info['name'] }}"><p>
+
+    <strong>Reset Password:</strong><br>
+    <input type="password" size="20" name="password1"><br>
+    <input type="password" size="20" name="password2"><p>
+
+    <strong>Role:</strong><br>
+    <select name="role">
+        <option value="user"{% if info["role"] == "user" %} selected{% endif %}>User</option>
+        <option value="admin"{% if info["role"] == "admin" %} selected{% endif %}>Admin</option>
+    </select><p>
+
+    <button type="submit" name="action" value="save">Save Changes</button>
+    <button type="submit" name="action" id="delete_button" value="delete">Delete User</button>
+</fieldset>
+</form>
+
+{% endblock %}

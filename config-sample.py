@@ -22,8 +22,12 @@ SITE_NAME = "example.com"
 # Do NOT use that one. It was just an example! Make your own.
 SECRET_KEY = 'for the love of Arceus, change this key!'
 
+# Password strength: number of iterations for bcrypt to hash passwords.
+BCRYPT_ITERATIONS = 12
+
 # Rophako uses a flat file JSON database system, and the Redis caching server
 # sits between Ropahko and the filesystem.
+DB_ROOT      = "db"
 REDIS_HOST   = "localhost"
 REDIS_PORT   = 6379
 REDIS_DB     = 0

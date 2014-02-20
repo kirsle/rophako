@@ -17,6 +17,13 @@
         <li><a href="/">Home</a></li>
         <li><a href="#">About Rophako</a></li>
         <li><a href="#">Download</a></li>
+
+        <li class="header">:: Site Admin</li>
+        {% if session["login"] %}
+            <li><a href="{{ url_for('account.logout') }}">Log out</a></li>
+        {% else %}
+            <li><a href="{{ url_for('account.login') }}">Log in</a></li>
+        {% endif %}
     </ul>
 </nav>
 
@@ -34,6 +41,9 @@
         {{ app["name"] }} v{{ app["version"] }}
     </a>
 </footer>
+
+<script type="text/javascript" src="/js/jquery-2.1.0.min.js"></script>
+{% block scripts %}{% endblock %}
 
 </body>
 </html>

@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block title %}Admin Center{% endblock %}
+
+{% block content %}
+
+<h1>User Management</h1>
+
+<h2>Create New User</h2>
+
+<form action="{{ url_for('admin.create_user') }}" method="POST">
+<input type="hidden" name="token" value="{{ csrf_token() }}">
+<fieldset>
+    <legend>Create New User</legend>
+
+    <strong>Username:</strong><br>
+    <input type="text" size="40" name="username" placeholder="soandso"><p>
+
+    <strong>Real name:</strong><br>
+    <input type="text" size="40" name="name" placeholder="John Smith"><p>
+
+    <strong>Passphrase:</strong><br>
+    <input type="password" size="40" name="password1" placeholder="correct horse battery staple"><p>
+
+    <strong>Confirm:</strong><br>
+    <input type="password" size="40" name="password2" placeholder="correct horse battery staple"><p>
+
+    <strong>Role:</strong><br>
+    <select name="role">
+        <option value="user" selected>User</option>
+        <option value="admin">Admin</option>
+    </select>
+
+    <button type="submit">Create</button>
+</fieldset>
+
+<h2>User List</h2>
+
+<table class="table table-wide">
+    <thead>
+        <tr>
+            <th width="100">User ID</th>
+            <th width="300">Username</th>
+            <th>Real name</th>
+            <th width="100">Role</th>
+            <th width="100">Log in</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for user in users %}
+        <tr>
+            <td>{{ user["uid"] }}</td>
+            <td><a href="{{ url_for('admin.edit_user', uid=user['uid']) }}">{{ user["username"] }}</a></td>
+            <td>{{ user["name"] }}</td>
+            <td>{{ user["role"] }}</td>
+            <td>
+                {% if user["role"] != "admin" %}
+                    <a href="{{ url_for('admin.impersonate', uid=user['uid']) }}">Log in as</a>
+                {% else %}
+                    n/a
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

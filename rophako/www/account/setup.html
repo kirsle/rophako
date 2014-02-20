@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block title %}Initial Setup{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="/rophako/setup.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<h1>Welcome to Rophako!</h1>
+
+This is the initial setup for the Rophako CMS. The main purpose of this is
+to create the initial Administrator user account.<p>
+
+<form id="setup_form" action="{{ url_for('account.setup') }}" method="POST">
+<input type="hidden" name="token" value="{{ csrf_token() }}">
+<fieldset>
+    <legend>Admin User</legend>
+
+    Your site needs at least one admin user to log in and manage the site.
+    You can use any username/password combination you want, but "admin" is
+    a typical username.<p>
+
+    <strong>Username:</strong><br>
+    <input type="text" size="40" name="username" id="username" placeholder="admin"><p>
+
+    <strong>Real name:</strong><br>
+    <input type="text" size="40" name="name" placeholder="John Doe"><p>
+
+    <strong>Passphrase:</strong><br>
+    This can be as long as you want. Pick something
+    <a href="http://xkcd.com/936/" target="_blank">secure!</a><br>
+    <input type="password" size="40" id="pw1" name="password1" placeholder="correct horse battery staple"><p>
+
+    <strong>Confirm Passphrase:</strong><br>
+    <input type="password" size="40" id="pw2" name="password2" placeholder="correct horse battery staple"><p>
+
+    <button type="submit">Next</button>
+</fieldset>
+</form>
+
+{% endblock %}

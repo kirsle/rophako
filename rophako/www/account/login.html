@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}Log In{% endblock %}
+
+{% block content %}
+
+<h1>Log In</h1>
+
+<form action="{{ url_for('account.login') }}" method="POST">
+<input type="hidden" name="token" value="{{ csrf_token() }}">
+<fieldset>
+    <legend>Log In</legend>
+
+    <strong>Username:</strong><br>
+    <input type="text" size="20" name="username" id="username"><p>
+
+    <strong>Passphrase:</strong><br>
+    <input type="password" size="20" name="password"><p>
+
+    <button type="submit">Log In</button>
+</fieldset>
+</form>
+
+{% endblock %}

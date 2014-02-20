@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}Admin Center{% endblock %}
+
+{% block content %}
+
+<h1>Admin Center</h1>
+
+<ul>
+    <li><a href="{{ url_for('admin.users') }}">View and Manage Users</a></li>
+</ul>
+
+{% endblock %}
