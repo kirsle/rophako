@@ -192,6 +192,7 @@ def update():
 
 
 @mod.route("/delete", methods=["GET", "POST"])
+@admin_required
 def delete():
     """Delete a blog post."""
     post_id = request.args.get("id")
