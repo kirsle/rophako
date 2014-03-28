@@ -2,21 +2,31 @@
 
 # Legacy endpoint compatibility from kirsle.net.
 
-from flask import request, redirect
+from flask import request, redirect, url_for
 from rophako import app
+import rophako.model.blog as Blog
 
 @app.route("/+")
 def google_plus():
     return redirect("https://plus.google.com/+NoahPetherbridge/posts")
 
 @app.route("/blog.html")
-def legacy_blog():
-    post_id = request.args.get("id", "")
+def ancient_legacy_blog():
+    post_id = request.args.get("id", None)
+    if post_id is None:
+        return redirect(url_for("blog.index"))
 
-    # All of this is TO-DO.
-    # friendly_id = get friendly ID
-    # return redirect(...)
-    return "TO-DO"
+    # Look up the friendly ID.
+    post = Blog.get_entry(post_id)
+    if not post:
+        flash("That blog entry wasn't found.")
+        return redirect(url_for("blog.index"))
+
+    return redirect(url_for("blog.entry", fid=post["fid"]))
+
+@app.route("/blog/kirsle/<fid>")
+def legacy_blog(fid):
+    return redirect(url_for("blog.entry", fid=fid))
 
 @app.route("/<page>.html")
 def legacy_url(page):

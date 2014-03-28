@@ -1,0 +1,13 @@
+{% from "blog/entry.inc.html" import blog_entry %}
+
+{% include "blog/nav-links.inc.html" %}
+
+{% if count == 0 %}
+    There are no blog posts yet.
+{% else %}
+    {% for post in posts %}
+        {{ blog_entry(post, from="index") }}
+    {% endfor %}
+{% endif %}
+
+{% include "blog/nav-links.inc.html" %}

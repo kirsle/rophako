@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}{{ post["subject"] }}{% endblock %}
+{% block content %}
+
+<h1>{{ post["subject"] }}</h1>
+
+{% from "blog/entry.inc.html" import blog_entry %}
+{{ blog_entry(post) }}
+
+{% endblock %}

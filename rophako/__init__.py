@@ -17,8 +17,10 @@ app.secret_key = config.SECRET_KEY
 # Load all the blueprints!
 from rophako.modules.admin import mod as AdminModule
 from rophako.modules.account import mod as AccountModule
+from rophako.modules.blog import mod as BlogModule
 app.register_blueprint(AdminModule)
 app.register_blueprint(AccountModule)
+app.register_blueprint(BlogModule)
 
 # Custom Jinja handler to support custom- and default-template folders for
 # rendering templates.
@@ -28,6 +30,7 @@ app.jinja_loader = jinja2.ChoiceLoader([
 ])
 
 app.jinja_env.globals["csrf_token"] = rophako.utils.generate_csrf_token
+app.jinja_env.globals["include_page"] = rophako.utils.include
 
 
 @app.before_request
@@ -85,7 +88,6 @@ def before_request():
 @app.context_processor
 def after_request():
     """Called just before render_template. Inject g.info into the template vars."""
-    g.info["time_elapsed"] = "%.03f" % (time.time() - g.info["time"])
     return g.info
 
 
@@ -100,14 +102,13 @@ def catchall(path):
         if os.path.isfile(abspath):
             return send_file(abspath)
         elif not "." in path and os.path.isfile(abspath + ".html"):
-            return render_template(path + ".html")
+            return rophako.utils.template(path + ".html")
 
     return not_found("404")
 
 
 @app.route("/")
 def index():
-    print "INDEX PAGE"
     return catchall("index")
 
 

@@ -1,0 +1,152 @@
+{% extends "layout.html" %}
+{% block title %}Update Blog{% endblock %}
+{% block content %}
+
+{% if preview %}
+    <h1>Preview: {{ subject }}</h1>
+
+    {{ body|safe }}
+
+    <hr>
+{% endif %}
+
+<h1>Update Blog</h1>
+
+<form name="editor" action="{{ url_for('blog.update') }}" method="POST">
+    <input type="hidden" name="id" value="{{ post_id }}">
+    <input type="hidden" name="author" value="{{ author }}">
+    <input type="hidden" name="token" value="{{ csrf_token() }}">
+
+    <strong>Subject:</strong><br>
+    <input type="text" size="80" name="subject" value="{{ subject }}"><p>
+
+    <strong>Friendly ID:</strong><br>
+    You can leave this blank if this is a new post. It defaults to be based
+    on the subject.<br>
+    <input type="text" size="80" name="fid" value="{{ fid }}"><p>
+
+    <strong>Body:</strong><br>
+    <textarea cols="80" rows="12" name="body">{{ body }}</textarea><br>
+    <a href="/emoticons" target="_blank">Emoticon reference</a> (opens in new window)<p>
+
+    <strong>Avatar:</strong><br>
+    <span id="avatar-preview"></span>
+    <select name="avatar" id="avatar">
+        <option value=""{% if avatar == "" %} selected{% endif %}>Use my profile picture</option>
+        {% for pic in avatars %}
+        <option value="{{ pic }}"{% if avatar == pic %} selected{% endif %}>{{ pic }}</option>
+        {% endfor %}
+    </select><p>
+
+    <strong>Categories:</strong><br>
+    <small>Comma-separated list, e.g. General, HTML, Perl, Web Design</small><br>
+    <input type="text" size="40" name="categories" value="{{ categories }}"><p>
+
+    <strong>Privacy:</strong><br>
+    <select name="privacy">
+        <option value="public"{% if privacy == "public" %} selected{% endif %}>
+            Public: everybody can see this blog entry
+        </option>
+        <option value="private"{% if privacy == "private" %} selected{% endif %}>
+            Private: only site admins can see this blog entry
+        </option>
+    </select><p>
+
+    <strong>Options:</strong><br>
+    <label>
+        <input type="checkbox" name="emoticons" value="true"{% if emoticons %} checked{% endif %}>
+        Enable graphical emoticons
+    </label><br>
+    <label>
+        <input type="checkbox" name="comments" value="true"{% if comments %} checked{% endif %}>
+        Enable comments on this entry
+    </label><p>
+
+    <strong>Time Stamp:</strong><br>
+    <input type="text" size="2" name="month" id="month" value="{{ month }}"> /
+    <input type="text" size="2" name="day" id="day" value="{{ day }}"> /
+    <input type="text" size="4" name="year" id="year" value="{{ year }}"> @
+    <input type="text" size="2" name="hour" id="hour" value="{{ hour }}"> :
+    <input type="text" size="2" name="min" id="min" value="{{ min }}"> :
+    <input type="text" size="2" name="sec" id="sec" value="{{ sec }}"><br>
+    mm / dd / yyyy @ hh:mm:ss<br>
+    <label>
+        <input type="checkbox" id="autoup" value="yes"{% if post_id == "" %} checked{% endif %}>
+        Automatically update
+    </label><p>
+
+    <button type="submit" name="action" value="preview">Preview</button>
+    <button type="submit" name="action" value="publish">Publish Entry</button>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var userPic = "/static/avatars/default.png"; // TODO
+
+    $(document).ready(function() {
+        // Preview their selected avatar.
+        updateAvatar();
+        $("#avatar").on("change", updateAvatar);
+
+        // Start ticking the timestamp updater.
+        setInterval(timestamps, 500)
+    });
+
+    function updateAvatar() {
+        var chosen = $("#avatar").val();
+
+        var picture = ""; // which pic to show
+        if (chosen === "") {
+            picture = userPic;
+        }
+        else {
+            picture = "/static/avatars/" + chosen;
+        }
+
+        // Show the pic
+        if (picture.length) {
+            $("#avatar-preview").html("<img src=\"" + picture + "\" alt=\"Preview\"><br>");
+        }
+        else {
+            $("#avatar-preview").html("");
+        }
+    }
+
+    function timestamps() {
+        function padout(num) {
+            if (num < 10) {
+                return '0' + num;
+            }
+            return num;
+        }
+
+        if ($("#autoup").is(":checked")) {
+            var d = new Date();
+            var mon  = d.getMonth();    // 0..11
+            var day  = d.getDate();     // 1..31
+            var year = d.getFullYear(); // 2014
+            var hour = d.getHours();    // 0..23
+            var min  = d.getMinutes();  // 0..59
+            var sec  = d.getSeconds();  // 0..59
+
+            // Adjust the dates.
+            mon++;
+            mon = padout(mon);
+            day = padout(day);
+            hour = padout(hour);
+            min = padout(min);
+            sec = padout(sec);
+
+            // Update the fields.
+            $("#month").val(mon);
+            $("#day").val(day);
+            $("#year").val(year);
+            $("#hour").val(hour);
+            $("#min").val(min);
+            $("#sec").val(sec);
+        }
+    }
+</script>
+{% endblock %}

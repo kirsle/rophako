@@ -32,3 +32,11 @@ REDIS_HOST   = "localhost"
 REDIS_PORT   = 6379
 REDIS_DB     = 0
 REDIS_PREFIX = "rophako:"
+
+# Blog settings
+BLOG_ENTRIES_PER_PAGE = 5  # Number of entries to show per page
+BLOG_ENTRIES_PER_RSS  = 5  # The same, but for the RSS feed
+BLOG_DEFAULT_CATEGORY = "Uncategorized"
+BLOG_DEFAULT_PRIVACY  = "public"
+BLOG_TIME_FORMAT      = "%A, %B %d %Y @ %I:%M:%S %p" # "Weekday, Month dd yyyy @ hh:mm:ss AM"
+BLOG_ALLOW_COMMENTS   = True
