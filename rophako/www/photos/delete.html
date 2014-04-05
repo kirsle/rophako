@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}Delete Photo{% endblock %}
+{% block content %}
+
+<h1>Delete Photo</h1>
+
+<img src="{{ app['photo_url'] }}/{{ photo['thumb'] }}" class="portrait"><p>
+
+<form name="delete" action="{{ url_for('photo.delete', key=key) }}" method="POST">
+    <input type="hidden" name="token" value="{{ csrf_token() }}">
+    Are you <strong>sure</strong> you want to delete this photo?<p>
+
+    <button type="submit">Yes, Delete This Photo</button>
+</form>
+
+{% endblock %}

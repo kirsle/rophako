@@ -9,7 +9,7 @@ import calendar
 
 import rophako.model.user as User
 import rophako.model.blog as Blog
-from rophako.utils import template, pretty_time, admin_required
+from rophako.utils import template, pretty_time, login_required
 from rophako.log import logger
 from config import *
 
@@ -42,6 +42,8 @@ def entry(fid):
 
     # Get the author's information.
     post["profile"] = User.get_user(uid=post["author"])
+    post["photo"]   = User.get_picture(uid=post["author"])
+    post["photo_url"] = PHOTO_ROOT_PUBLIC
 
     # Pretty-print the time.
     post["pretty_time"] = pretty_time(BLOG_TIME_FORMAT, post["time"])
@@ -60,7 +62,7 @@ def dummy():
 
 
 @mod.route("/update", methods=["GET", "POST"])
-@admin_required
+@login_required
 def update():
     """Post/edit a blog entry."""
 
@@ -192,7 +194,7 @@ def update():
 
 
 @mod.route("/delete", methods=["GET", "POST"])
-@admin_required
+@login_required
 def delete():
     """Delete a blog post."""
     post_id = request.args.get("id")
@@ -286,6 +288,8 @@ def partial_index():
 
         # Get the author's information.
         post["profile"] = User.get_user(uid=post["author"])
+        post["photo"]   = User.get_picture(uid=post["author"])
+        post["photo_url"] = PHOTO_ROOT_PUBLIC
 
         post["pretty_time"] = pretty_time(BLOG_TIME_FORMAT, post["time"])
 

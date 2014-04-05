@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}Edit Photo{% endblock %}
+{% block content %}
+
+<h1>Edit Photo</h1>
+
+<img src="{{ app['photo_url'] }}/{{ photo['thumb'] }}" class="portrait"><p>
+
+<form name="edit" action="{{ url_for('photo.edit', key=key) }}" method="POST">
+    <input type="hidden" name="token" value="{{ csrf_token() }}">
+
+    <strong>Photo Caption:</strong><br>
+    <input type="text" size="40" name="caption" value="{{ photo['caption'] }}"><p>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+{% endblock %}

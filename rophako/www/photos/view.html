@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}{{ photo["caption"] or "Photo" }}{% endblock %}
+{% block content %}
+
+{% macro nav_links() %}
+    <div class="right">
+        Photo {{ photo["position"] }} of {{ photo["siblings"] }}
+        {% if photo["siblings"] > 1 %}
+            &nbsp;&nbsp;&nbsp;
+            [
+                <a href="{{ url_for('photo.view_photo', key=photo['previous']) }}">&lt; Previous</a>
+                |
+                <a href="{{ url_for('photo.view_photo', key=photo['next']) }}">Next &gt;</a>
+            ]
+        {% endif %}
+    </div>
+{% endmacro %}
+
+<h1>Photo</h1>
+
+<a href="{{ url_for('photo.album_index', name=photo['album']) }}">&lt; Back to Album</a><p>
+
+{{ nav_links() }}
+
+<div class="center">
+    <a href="{{ url_for('photo.view_photo', key=photo['next']) }}">
+        <img src="{{ app['photo_url'] }}/{{ photo['large'] }}" class="portrait">
+    </a><br>
+    <strong>{{ photo["caption"] }}</strong>
+</div>
+<p>
+
+Uploaded by {{ author["name"] }} on {{ photo["pretty_time"] }}.
+
+{{ nav_links() }}
+
+{% if session["login"] %}
+    <h1>Administrative Options</h1>
+
+    <ul>
+        <li><a href="{{ url_for('photo.upload') }}">Upload a Photo</a></li>
+        <li><a href="{{ url_for('photo.set_cover', album=photo['album'], key=photo['key']) }}">Set Album Cover</a></li>
+        <li><a href="{{ url_for('photo.set_profile', key=photo['key']) }}">Set as my Profile Picture</a></li>
+        <li><a href="{{ url_for('photo.edit', key=photo['key']) }}">Edit this photo</a></li>
+        <li><a href="{{ url_for('photo.delete', key=photo['key']) }}">Delete this photo</a></li>
+    </ul>
+{% endif %}
+
+{% endblock %}

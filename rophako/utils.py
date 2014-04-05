@@ -76,3 +76,10 @@ def pretty_time(time_format, unix):
     """Pretty-print a time stamp."""
     date = datetime.datetime.fromtimestamp(unix)
     return date.strftime(time_format)
+
+
+def sanitize_name(name):
+    """Sanitize a name that may be used in the filesystem.
+
+    Only allows numbers, letters, and some symbols."""
+    return re.sub(r'[^A-Za-z0-9 .-_]+', '', name)

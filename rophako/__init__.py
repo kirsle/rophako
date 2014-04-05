@@ -18,9 +18,11 @@ app.secret_key = config.SECRET_KEY
 from rophako.modules.admin import mod as AdminModule
 from rophako.modules.account import mod as AccountModule
 from rophako.modules.blog import mod as BlogModule
+from rophako.modules.photo import mod as PhotoModule
 app.register_blueprint(AdminModule)
 app.register_blueprint(AccountModule)
 app.register_blueprint(BlogModule)
+app.register_blueprint(PhotoModule)
 
 # Custom Jinja handler to support custom- and default-template folders for
 # rendering templates.
@@ -50,6 +52,7 @@ def before_request():
             "name": "Rophako",
             "version": __version__,
             "author": "Noah Petherbridge",
+            "photo_url": config.PHOTO_ROOT_PUBLIC,
         },
         "uri": request.path.split("/")[1:],
         "session": {

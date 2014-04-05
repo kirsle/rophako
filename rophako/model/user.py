@@ -7,6 +7,7 @@ import time
 
 import config
 import rophako.jsondb as JsonDB
+import rophako.model.photo as Photo
 from rophako.log import logger
 
 def create(username, password, name=None, uid=None, role="user"):
@@ -47,6 +48,7 @@ def create(username, password, name=None, uid=None, role="user"):
         uid=uid,
         username=username,
         name=name,
+        picture="",
         role=role,
         password=hashedpass,
         created=time.time(),
@@ -123,6 +125,17 @@ def get_user(uid=None, username=None):
         uid = get_uid(username)
         logger.debug("get_user: resolved username {} to UID {}".format(username, uid))
     return JsonDB.get("users/by-id/{}".format(uid))
+
+
+def get_picture(uid):
+    """Get the chosen profile photo for the user."""
+    data = get_user(uid=uid)
+    pic = data["picture"]
+    if len(pic):
+        photo = Photo.get_photo(pic)
+        if photo:
+            return photo["avatar"]
+    return None
 
 
 def exists(uid=None, username=None):

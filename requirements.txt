@@ -1,3 +1,5 @@
 flask
 redis
 bcrypt
+pillow
+requests

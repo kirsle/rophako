@@ -10,7 +10,9 @@
 
     <div class="blog-author">
         <a href="#">{# TODO #}
-            {% if post["avatar"] %}
+            {% if post["photo"] %}
+                <img src="{{ post['photo_url'] }}/{{ post['photo'] }}">
+            {% elif post["avatar"] %}
                 <img src="/static/avatars/{{ post['avatar'] }}">
             {% else %}
                 <img src="/static/avatars/default.png">

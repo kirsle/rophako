@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+{% block title %}Upload a Photo{% endblock %}
+{% block content %}
+
+<h1>Upload a Photo</h1>
+
+You can upload a photo from your computer or by pasting in the URL to a photo
+somewhere else on the Internet.
+
+<form name="upload" action="{{ url_for('photo.upload') }}" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="token" value="{{ csrf_token() }}">
+
+    <fieldset>
+        <legend>Where is your picture located?</legend>
+
+        <label>
+            <input type="radio" class="location" name="location" value="pc" checked> On my computer
+        </label>
+        <label>
+            <input type="radio" class="location" name="location" value="www"> On the web
+        </label><p>
+
+        <div id="pic-pc" class="location-div">
+            <strong>Upload a picture from my computer</strong><br>
+            <input type="file" size="30" name="file">
+        </div>
+
+        <div id="pic-www" class="location-div">
+            <strong>Upload a picture from the Internet</strong><br>
+            <input type="text" size="40" name="url" placeholder="http://" autocomplete="off">
+        </div>
+        <p>
+
+        Only jpeg, gif and png images are supported. There is no maximum file size
+        limit, but be reasonable.
+    </fieldset>
+
+    <fieldset>
+        <legend>Photo Options</legend>
+
+        <strong>Photo album:</strong><br>
+        <select id="album" name="album">
+            <optgroup label="Albums">
+            {% for album in album_list %}
+                <option value="{{ album }}"{% if album == selected %} selected{% endif %}>{{ album }}</option>
+            {% endfor %}
+            </optgroup>
+            <option value="">Create a new album</option>
+        </select><p>
+
+        <blockquote id="create-album">
+            <strong>New album:</strong><br>
+            <input type="text" size="20" id="new-album" name="new-album">
+        </blockquote>
+
+        <strong>Caption:</strong><br>
+        <input type="text" size="40" name="caption">
+    </fieldset>
+    <p>
+
+    <button type="submit">Upload Picture</button>
+
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $("#pic-www").hide();
+        $("#create-album").hide();
+
+        $(".location").change(function() {
+            $(".location-div").hide();
+            $("#pic-" + $(this).val()).show();
+        });
+
+        $("#album").change(function() {
+            if ($(this).val() === "") {
+                $("#create-album").show();
+            }
+            else {
+                $("#new-album").val("");
+                $("#create-album").hide();
+            }
+        });
+    });
+</script>
+{% endblock %}
