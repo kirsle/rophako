@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Comment Subscriptions{% endblock %}
+{% block content %}
+
+<h1>You have been unsubscribed</h1>
+
+The e-mail address <strong>{{ email }}</strong> has been unsubscribed
+{% if thread == "*" %}
+    from all comment threads on this site.
+{% else %}
+    from the comment thread "{{ thread }}".
+{% endif %}
+
+{% endblock %}

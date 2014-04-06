@@ -10,6 +10,9 @@ DEBUG = True
 # Unique name of your site, e.g. "kirsle.net"
 SITE_NAME = "example.com"
 
+# E-mail addresses for site notifications (i.e. new comments).
+NOTIFY_ADDRESS = ["root@localhost"]
+
 # Secret key used for session cookie signing. Make this long and hard to guess.
 #
 # Tips for creating a strong secret key:
@@ -35,6 +38,19 @@ REDIS_HOST   = "localhost"
 REDIS_PORT   = 6379
 REDIS_DB     = 0
 REDIS_PREFIX = "rophako:"
+
+# Mail settings
+MAIL_METHOD = "smtp" # or "sendmail", not yet implemented
+MAIL_SERVER = "localhost"
+MAIL_PORT   = 25
+MAIL_SENDER = "Rophako CMS <no-reply@rophako.kirsle.net>"
+
+# Emoticon theme used for blog posts and comments. Should exist at the URL
+# "/static/smileys" from your document root, and have a file named
+# "emoticons.json" inside. If you add a custom theme to your private site
+# folder, then also change EMOTICON_ROOT_PRIVATE to look there instead.
+EMOTICON_THEME = "tango"
+EMOTICON_ROOT_PRIVATE = os.path.join(_basedir, "rophako", "www", "static", "smileys")
 
 ################################################################################
 ## Blog Settings                                                              ##
@@ -64,3 +80,13 @@ PHOTO_TIME_FORMAT   = BLOG_TIME_FORMAT
 PHOTO_WIDTH_LARGE  = 800  # Max width of full size photos.
 PHOTO_WIDTH_THUMB  = 256  # Max square width of photo thumbnails.
 PHOTO_WIDTH_AVATAR = 96   # Square width of photo avatars.
+
+################################################################################
+## Comment Settings                                                           ##
+################################################################################
+
+COMMENT_TIME_FORMAT = "%A, %B %d %Y @ %I:%M %p"
+
+# We use Gravatar for comments if the user provides an e-mail address. Specify
+# the URL to a fallback image to use in case they don't have a gravatar.
+COMMENT_DEFAULT_AVATAR = ""

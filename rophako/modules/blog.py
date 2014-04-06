@@ -9,6 +9,8 @@ import calendar
 
 import rophako.model.user as User
 import rophako.model.blog as Blog
+import rophako.model.comment as Comment
+import rophako.model.emoticons as Emoticons
 from rophako.utils import template, pretty_time, login_required
 from rophako.log import logger
 from config import *
@@ -40,6 +42,10 @@ def entry(fid):
     post = Blog.get_entry(post_id)
     post["post_id"] = post_id
 
+    # Render emoticons.
+    if post["emoticons"]:
+        post["body"] = Emoticons.render(post["body"])
+
     # Get the author's information.
     post["profile"] = User.get_user(uid=post["author"])
     post["photo"]   = User.get_picture(uid=post["author"])
@@ -48,8 +54,8 @@ def entry(fid):
     # Pretty-print the time.
     post["pretty_time"] = pretty_time(BLOG_TIME_FORMAT, post["time"])
 
-    # TODO: count the comments for this post
-    post["comment_count"] = 0
+    # Count the comments for this post
+    post["comment_count"] = Comment.count_comments("blog-{}".format(post_id))
 
     g.info["post"] = post
     return template("blog/entry.html")
@@ -286,6 +292,10 @@ def partial_index():
 
         post["post_id"] = post_id
 
+        # Render emoticons.
+        if post["emoticons"]:
+            post["body"] = Emoticons.render(post["body"])
+
         # Get the author's information.
         post["profile"] = User.get_user(uid=post["author"])
         post["photo"]   = User.get_picture(uid=post["author"])
@@ -293,8 +303,8 @@ def partial_index():
 
         post["pretty_time"] = pretty_time(BLOG_TIME_FORMAT, post["time"])
 
-        # TODO: count the comments for this post
-        post["comment_count"] = 0
+        # Count the comments for this post
+        post["comment_count"] = Comment.count_comments("blog-{}".format(post_id))
 
         selected.append(post)
         g.info["count"] += 1

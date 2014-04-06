@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block title %}Comment Subscriptions{% endblock %}
+{% block content %}
+
+<h1>Subscribing to Comments</h1>
+
+When posting a comment on this site, you can optionally subscribe to future
+comments on the same page (so you can get an e-mail notification when somebody
+answers your questions, for example).<p>
+
+You can unsubscribe from these e-mails in the future by clicking a link in the
+e-mail. Or, you can unsubscribe from all comment threads by entering your
+e-mail address in the form below.<p>
+
+<h2>Privacy Policy</h2>
+
+<ul>
+    <li>
+        Your e-mail address that you use when you post the comment will only be
+        used for sending you notifications via e-mail when somebody else replies
+        to the comment thread and for showing a
+        <a href="http://www.gravatar.com/" target="_blank">Gravatar</a> next to
+        your comment.
+    </li>
+
+    <li>
+        Your e-mail will not be visible to anybody else on this site.
+    </li>
+
+    <li>
+        Your e-mail won't be given to any spammers so you don't need to worry
+        about junk mail.
+    </li>
+
+    <li>
+        You can unsubscribe from individual comment threads by using the link
+        provided in the notification e-mail. You can unsubscribe from ALL
+        threads by using the form on this page.
+    </li>
+</ul>
+
+<h2>Unsubscribe from All Comment Threads</h2>
+
+<form name="unsubscribe" action="{{ url_for('comment.unsubscribe') }}" method="POST">
+    <input type="hidden" name="token" value="{{ csrf_token() }}">
+    <input type="hidden" name="thread" value="*">
+
+    Enter the e-mail address to be unsubscribed from all threads:<br>
+    <input type="email" size="40" name="email"><p>
+
+    <button type="submit">Unsubscribe</button>
+
+    <div style="display: none">
+        If you can see this, do not touch these fields.<br>
+        <input type="text" name="url" value="http://"><br>
+        <input type="text" name="message" value="">
+    </div>
+</form>
+
+
+{% endblock %}

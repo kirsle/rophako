@@ -1,0 +1,328 @@
+{
+   "map" : {
+      "neutral.png" : [
+         ":-|",
+         ":|"
+      ],
+      "rain.png" : [
+         "(st)"
+      ],
+      "mail.png" : [
+         "(E)",
+         "(e)"
+      ],
+      "tongue.png" : [
+         ":-P",
+         ":P",
+         ":-p",
+         ":p"
+      ],
+      "computer.png" : [
+         "(co)"
+      ],
+      "love-over.png" : [
+         "(U)",
+         "(u)"
+      ],
+      "good.png" : [
+         "(Y)",
+         "(y)"
+      ],
+      "in-love.png" : [
+         "*IN",
+         "LOVE*"
+      ],
+      "coffee.png" : [
+         "(C)",
+         "(c)"
+      ],
+      "secret.png" : [
+         ":-X",
+         ":-x"
+      ],
+      "wilt.png" : [
+         "|-0"
+      ],
+      "yin-yang.png" : [
+         "(%)"
+      ],
+      "yawn.png" : [
+         "|-)"
+      ],
+      "glasses-nerdy.png" : [
+         "8-|"
+      ],
+      "laugh.png" : [
+         ":-D",
+         ":D",
+         ":d",
+         ":-d"
+      ],
+      "skywalker.png" : [
+         "C:-)",
+         "c:-)",
+         "C:)",
+         "c:)"
+      ],
+      "car.png" : [
+         "(au)"
+      ],
+      "pizza.png" : [
+         "(pi)"
+      ],
+      "thunder.png" : [
+         "(li)"
+      ],
+      "teeth.png" : [
+         "8o|"
+      ],
+      "moon.png" : [
+         "(S)"
+      ],
+      "smile-big.png" : [
+         ":-))",
+         ":))"
+      ],
+      "sarcastic.png" : [
+         "^o)"
+      ],
+      "confused.png" : [
+         ":-S",
+         ":S",
+         ":s",
+         ":-s"
+      ],
+      "film.png" : [
+         "(~)"
+      ],
+      "party.png" : [
+         "<:o)"
+      ],
+      "turtle.png" : [
+         "(tu)"
+      ],
+      "beer.png" : [
+         "(B)",
+         "(b)"
+      ],
+      "clock.png" : [
+         "(O)",
+         "(o)"
+      ],
+      "plate.png" : [
+         "(pl)"
+      ],
+      "highfive.png" : [
+         "(h5)"
+      ],
+      "angry.png" : [
+         ":-@",
+         ":@",
+         ">:o",
+         ">:O"
+      ],
+      "rose.png" : [
+         "(F)",
+         "(f)"
+      ],
+      "sick.png" : [
+         ":-!",
+         ":!",
+         "+o(",
+         "+O("
+      ],
+      "victory.png" : [
+         "*BRAVO*",
+         ":BRAVO:",
+         ":bravo:",
+         ":clapping:"
+      ],
+      "angel.png" : [
+         "O:-)",
+         "O:)",
+         "(A)",
+         "(a)"
+      ],
+      "thinking.png" : [
+         "*-)"
+      ],
+      "island.png" : [
+         "(ip)"
+      ],
+      "smile.png" : [
+         ":-)",
+         ":)"
+      ],
+      "rose-dead.png" : [
+         "(W)",
+         "(w)"
+      ],
+      "msn.png" : [
+         "(M)",
+         "(m)"
+      ],
+      "umbrella.png" : [
+         "(um)"
+      ],
+      "hug-left.png" : [
+         "({)"
+      ],
+      "shock.png" : [
+         ":-O",
+         ":-o",
+         ":O",
+         ":o",
+         "=-O",
+         "=-o"
+      ],
+      "rotfl.png" : [
+         "*ROFL*",
+         "*rofl*"
+      ],
+      "airplane.png" : [
+         "(ap)"
+      ],
+      "sun.png" : [
+         "(#)"
+      ],
+      "goat.png" : [
+         "(nah)"
+      ],
+      "crying.png" : [
+         ":'("
+      ],
+      "sad.png" : [
+         ":-(",
+         ":("
+      ],
+      "cat.png" : [
+         "(@)"
+      ],
+      "bomb.png" : [
+         "@="
+      ],
+      "glasses-cool.png" : [
+         "(H)",
+         "(h)"
+      ],
+      "hypnotized.png" : [
+         "%)",
+         "%-)"
+      ],
+      "girl.png" : [
+         "(X)",
+         "(x)"
+      ],
+      "bowl.png" : [
+         "(||)"
+      ],
+      "bad.png" : [
+         "(N)",
+         "(n)"
+      ],
+      "mobile.png" : [
+         "(mp)"
+      ],
+      "monkey.png" : [
+         ":-(|)"
+      ],
+      "love.png" : [
+         "(L)",
+         "(l)"
+      ],
+      "phone.png" : [
+         "(T)",
+         "(t)"
+      ],
+      "quiet.png" : [
+         ":-#"
+      ],
+      "eyeroll.png" : [
+         "8-)",
+         "8)"
+      ],
+      "vampire.png" : [
+         ":-[",
+         ":["
+      ],
+      "dog.png" : [
+         "(&)"
+      ],
+      "camera.png" : [
+         "(P)",
+         "(p)"
+      ],
+      "dance.png" : [
+         "*DANCE*",
+         ":dance:"
+      ],
+      "snail.png" : [
+         "(sn)"
+      ],
+      "soccerball.png" : [
+         "(so)"
+      ],
+      "star.png" : [
+         "(*)"
+      ],
+      "lamp.png" : [
+         "(I)",
+         "(i)"
+      ],
+      "sheep.png" : [
+         "(bah)"
+      ],
+      "boy.png" : [
+         "(Z)",
+         "(z)"
+      ],
+      "dont-know.png" : [
+         ":^)"
+      ],
+      "rainbow.png" : [
+         "(R)",
+         "(r)"
+      ],
+      "coins.png" : [
+         "(mo)"
+      ],
+      "hug-right.png" : [
+         "(})"
+      ],
+      "embarrassed.png" : [
+         ":-$",
+         ":$"
+      ],
+      "devil.png" : [
+         "(6)"
+      ],
+      "kiss.png" : [
+         ":-*",
+         "(K)",
+         "(k)"
+      ],
+      "brb.png" : [
+         "(brb)"
+      ],
+      "present.png" : [
+         "(G)",
+         "(g)"
+      ],
+      "cake.png" : [
+         "(^)"
+      ],
+      "drink.png" : [
+         "(D)",
+         "(d)"
+      ],
+      "musical-note.png" : [
+         "(8)"
+      ],
+      "wink.png" : [
+         ";-)",
+         ";)"
+      ]
+   },
+   "source" : "http://digsbies.org/site/content/project/tango-emoticons-big-pack",
+   "name" : "Tango"
+}

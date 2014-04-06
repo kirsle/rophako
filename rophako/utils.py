@@ -7,8 +7,10 @@ import datetime
 import time
 import re
 import importlib
+import smtplib
 
 from rophako.log import logger
+from config import *
 
 
 def login_required(f):
@@ -52,6 +54,29 @@ def template(name, **kwargs):
     return html
 
 
+def send_email(to, subject, message, sender=None):
+    """Send an e-mail out."""
+    if sender is None:
+        sender = MAIL_SENDER
+
+    if type(to) != list:
+        to = [to]
+
+    logger.info("Send email to {}".format(to))
+    if MAIL_METHOD == "smtp":
+        # Send mail with SMTP.
+        for email in to:
+            server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT)
+            server.set_debuglevel(1)
+            msg = """From: {}
+To: {}
+Subject: {}
+
+{}""".format(sender, email, subject, message)
+            server.sendmail(sender, email, msg)
+            server.quit()
+
+
 def generate_csrf_token():
     """Generator for CSRF tokens."""
     if "_csrf" not in session:
@@ -82,4 +107,4 @@ def sanitize_name(name):
     """Sanitize a name that may be used in the filesystem.
 
     Only allows numbers, letters, and some symbols."""
-    return re.sub(r'[^A-Za-z0-9 .-_]+', '', name)
+    return re.sub(r'[^A-Za-z0-9 .\-_]+', '', name)

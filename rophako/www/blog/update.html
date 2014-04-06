@@ -27,7 +27,7 @@
 
     <strong>Body:</strong><br>
     <textarea cols="80" rows="12" name="body">{{ body }}</textarea><br>
-    <a href="/emoticons" target="_blank">Emoticon reference</a> (opens in new window)<p>
+    <a href="{{ url_for('emoticons.index') }}" target="_blank">Emoticon reference</a> (opens in new window)<p>
 
     <strong>Avatar:</strong><br>
     <span id="avatar-preview"></span>

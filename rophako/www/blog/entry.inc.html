@@ -67,5 +67,13 @@
             {% endif %}
         ]
     </div>
+    <p>
+
+    {% if from != "index" %}
+        {{ include_page("comment.partial_index",
+            thread="blog-"+post["post_id"]|string,
+            subject=post["subject"],
+        ) | safe }}
+    {% endif %}
 
 {% endmacro %}

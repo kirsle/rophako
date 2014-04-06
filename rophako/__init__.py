@@ -19,10 +19,14 @@ from rophako.modules.admin import mod as AdminModule
 from rophako.modules.account import mod as AccountModule
 from rophako.modules.blog import mod as BlogModule
 from rophako.modules.photo import mod as PhotoModule
+from rophako.modules.comment import mod as CommentModule
+from rophako.modules.emoticons import mod as EmoticonsModule
 app.register_blueprint(AdminModule)
 app.register_blueprint(AccountModule)
 app.register_blueprint(BlogModule)
 app.register_blueprint(PhotoModule)
+app.register_blueprint(CommentModule)
+app.register_blueprint(EmoticonsModule)
 
 # Custom Jinja handler to support custom- and default-template folders for
 # rendering templates.
@@ -33,6 +37,10 @@ app.jinja_loader = jinja2.ChoiceLoader([
 
 app.jinja_env.globals["csrf_token"] = rophako.utils.generate_csrf_token
 app.jinja_env.globals["include_page"] = rophako.utils.include
+
+# Preload the emoticon data.
+import rophako.model.emoticons as Emoticons
+Emoticons.load_theme()
 
 
 @app.before_request

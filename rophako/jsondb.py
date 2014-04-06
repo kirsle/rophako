@@ -117,6 +117,11 @@ def read_json(path):
     if not os.path.isfile(path):
         raise Exception("Can't read JSON file {}: file not found!".format(path))
 
+    # Don't allow any fishy looking paths.
+    if ".." in path:
+        logger.error("ERROR: JsonDB tried to read a path with two dots: {}".format(path))
+        raise Exception()
+
     # Open and lock the file.
     fh = codecs.open(path, 'r', 'utf-8')
     flock(fh, LOCK_SH)
@@ -137,6 +142,11 @@ def read_json(path):
 def write_json(path, data):
     """Write a JSON document."""
     path = str(path)
+
+    # Don't allow any fishy looking paths.
+    if ".." in path:
+        logger.error("ERROR: JsonDB tried to write a path with two dots: {}".format(path))
+        raise Exception()
 
     logger.debug("JsonDB: WRITE > {}".format(path))
 
