@@ -14,4 +14,8 @@ This project is under heavy construction.
 
 These may need to be installed for the dependencies to build:
 
-**Fedora:** `libffi-devel`
+**Fedora:** `libffi-devel libjpeg-devel libpng-devel`
+
+# Configuration
+
+See `Apache.md` for Apache setup information.

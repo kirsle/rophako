@@ -9,19 +9,16 @@
     {% endif %}
 
     <div class="blog-author">
-        <a href="#">{# TODO #}
-            {% if post["photo"] %}
-                <img src="{{ post['photo_url'] }}/{{ post['photo'] }}">
-            {% elif post["avatar"] %}
-                <img src="/static/avatars/{{ post['avatar'] }}">
-            {% else %}
-                <img src="/static/avatars/default.png">
-            {% endif %}
-        </a><br>
+        {% if post["photo"] %}
+            <img src="{{ post['photo_url'] }}/{{ post['photo'] }}">
+        {% elif post["avatar"] %}
+            <img src="/static/avatars/{{ post['avatar'] }}">
+        {% else %}
+            <img src="/static/avatars/default.png">
+        {% endif %}
+        <br>
 
-        <a href="#">
-            {{ post["profile"]["username"] }}
-        </a>
+        {{ post["profile"]["username"] }}
     </div>
 
     <div class="blog-timestamp">
