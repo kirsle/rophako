@@ -46,26 +46,19 @@ def get_index():
     return db
 
 
-def __get_categories():
-    """Get the blog categories cache.
+def get_categories():
+    """Get the blog categories and their popularity."""
+    index = get_index()
 
-    The category cache is in the following format:
+    # Group by tags.
+    tags = {}
+    for post, data in index.iteritems():
+        for tag in data["categories"]:
+            if not tag in tags:
+                tags[tag] = 0
+            tags[tag] += 1
 
-    ```
-    {
-        'category_name': {
-            'post_id': 'friendly_id',
-            ...
-        },
-        ...
-    }
-    ```
-    """
-
-    # Index doesn't exist?
-    if not JsonDB.exists("blog/tags"):
-        return {}
-    return JsonDB.get("blog/tags")
+    return tags
 
 
 def get_entry(post_id):

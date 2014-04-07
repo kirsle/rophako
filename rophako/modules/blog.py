@@ -6,6 +6,8 @@ from flask import Blueprint, g, request, redirect, url_for, session, flash
 import re
 import datetime
 import calendar
+import time
+from xml.dom.minidom import Document
 
 import rophako.model.user as User
 import rophako.model.blog as Blog
@@ -225,6 +227,85 @@ def delete():
 
     return template("blog/delete.html")
 
+
+@mod.route("/rss")
+def rss():
+    """RSS feed for the blog."""
+    doc = Document()
+
+    rss = doc.createElement("rss")
+    rss.setAttribute("version", "2.0")
+    rss.setAttribute("xmlns:blogChannel", "http://backend.userland.com/blogChannelModule")
+    doc.appendChild(rss)
+
+    channel = doc.createElement("channel")
+    rss.appendChild(channel)
+
+    rss_time = "%a, %d %b %Y %H:%M:%S GMT"
+
+    ######
+    ## Channel Information
+    ######
+
+    today = time.strftime(rss_time, time.gmtime())
+
+    xml_add_text_tags(doc, channel, [
+        ["title", RSS_TITLE],
+        ["link", RSS_LINK],
+        ["description", RSS_DESCRIPTION],
+        ["language", RSS_LANGUAGE],
+        ["copyright", RSS_COPYRIGHT],
+        ["pubDate", today],
+        ["lastBuildDate", today],
+        ["webmaster", RSS_WEBMASTER],
+    ])
+
+    ######
+    ## Image Information
+    ######
+
+    image = doc.createElement("image")
+    channel.appendChild(image)
+    xml_add_text_tags(doc, image, [
+        ["title", RSS_IMAGE_TITLE],
+        ["url", RSS_IMAGE_URL],
+        ["link", RSS_LINK],
+        ["width", RSS_IMAGE_WIDTH],
+        ["height", RSS_IMAGE_HEIGHT],
+        ["description", RSS_IMAGE_DESCRIPTION],
+    ])
+
+    ######
+    ## Add the blog posts
+    ######
+
+    index = Blog.get_index()
+    posts = get_index_posts(index)
+    for post_id in posts[:BLOG_ENTRIES_PER_RSS]:
+        post = Blog.get_entry(post_id)
+        item = doc.createElement("item")
+        channel.appendChild(item)
+        xml_add_text_tags(doc, item, [
+            ["title", post["subject"]],
+            ["link", url_for("blog.entry", fid=post["fid"])],
+            ["description", post["body"]],
+            ["pubDate", time.strftime(rss_time, time.gmtime(post["time"]))],
+        ])
+
+    return doc.toprettyxml(encoding="utf-8")
+
+
+def xml_add_text_tags(doc, root_node, tags):
+    """RSS feed helper function.
+
+    Add a collection of simple tag/text pairs to a root XML element."""
+    for pair in tags:
+        name, value = pair
+        channelTag = doc.createElement(name)
+        channelTag.appendChild(doc.createTextNode(str(value)))
+        root_node.appendChild(channelTag)
+
+
 def partial_index():
     """Partial template for including the index view of the blog."""
 
@@ -249,18 +330,8 @@ def partial_index():
     else:
         pool = index
 
-    # Separate the sticky posts from the normal ones.
-    sticky, normal = set(), set()
-    for post_id, data in pool.iteritems():
-        if data["sticky"]:
-            sticky.add(post_id)
-        else:
-            normal.add(post_id)
-
-    # Sort the blog IDs by published time.
-    posts = []
-    posts.extend(sorted(sticky, key=lambda x: pool[x]["time"], reverse=True))
-    posts.extend(sorted(normal, key=lambda x: pool[x]["time"], reverse=True))
+    # Get the posts we want.
+    posts = get_index_posts(pool)
 
     # Handle pagination.
     offset = request.args.get("skip", 0)
@@ -313,3 +384,41 @@ def partial_index():
     g.info["posts"] = selected
 
     return template("blog/index.inc.html")
+
+
+def get_index_posts(index):
+    """Helper function to get data for the blog index page."""
+    # Separate the sticky posts from the normal ones.
+    sticky, normal = set(), set()
+    for post_id, data in index.iteritems():
+        if data["sticky"]:
+            sticky.add(post_id)
+        else:
+            normal.add(post_id)
+
+    # Sort the blog IDs by published time.
+    posts = []
+    posts.extend(sorted(sticky, key=lambda x: index[x]["time"], reverse=True))
+    posts.extend(sorted(normal, key=lambda x: index[x]["time"], reverse=True))
+    return posts
+
+def partial_tags():
+    """Get a listing of tags and their quantities for the nav bar."""
+    tags = Blog.get_categories()
+
+    # Sort the tags by popularity.
+    sort_tags = [ tag for tag in sorted(tags.keys(), key=lambda y: tags[y], reverse=True) ]
+    result = []
+    has_small = False
+    for tag in sort_tags:
+        result.append(dict(
+            category=tag,
+            count=tags[tag],
+            small=tags[tag] < 3, # TODO: make this configurable
+        ))
+        if tags[tag] < 3:
+            has_small = True
+
+    g.info["tags"] = result
+    g.info["has_small"] = has_small
+    return template("blog/categories.inc.html")

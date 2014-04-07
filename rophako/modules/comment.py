@@ -14,7 +14,6 @@ from config import *
 
 mod = Blueprint("comment", __name__, url_prefix="/comments")
 
-## TODO: emoticon support
 
 @mod.route("/")
 def index():

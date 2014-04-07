@@ -21,12 +21,14 @@ from rophako.modules.blog import mod as BlogModule
 from rophako.modules.photo import mod as PhotoModule
 from rophako.modules.comment import mod as CommentModule
 from rophako.modules.emoticons import mod as EmoticonsModule
+from rophako.modules.contact import mod as ContactModule
 app.register_blueprint(AdminModule)
 app.register_blueprint(AccountModule)
 app.register_blueprint(BlogModule)
 app.register_blueprint(PhotoModule)
 app.register_blueprint(CommentModule)
 app.register_blueprint(EmoticonsModule)
+app.register_blueprint(ContactModule)
 
 # Custom Jinja handler to support custom- and default-template folders for
 # rendering templates.
@@ -114,6 +116,8 @@ def catchall(path):
             return send_file(abspath)
         elif not "." in path and os.path.isfile(abspath + ".html"):
             return rophako.utils.template(path + ".html")
+        elif not "." in path and os.path.isfile(abspath + "/index.html"):
+            return rophako.utils.template(path + "/index.html")
 
     return not_found("404")
 
@@ -125,7 +129,6 @@ def index():
 
 @app.errorhandler(404)
 def not_found(error):
-    print "NOT FOUND"
     return render_template('errors/404.html', **g.info), 404
 
 

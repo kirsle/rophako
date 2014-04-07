@@ -4,6 +4,7 @@
 
 import os
 _basedir = os.path.abspath(os.path.dirname(__file__))
+import datetime
 
 DEBUG = True
 
@@ -62,6 +63,19 @@ BLOG_DEFAULT_CATEGORY = "Uncategorized"
 BLOG_DEFAULT_PRIVACY  = "public"
 BLOG_TIME_FORMAT      = "%A, %B %d %Y @ %I:%M:%S %p" # "Weekday, Month dd yyyy @ hh:mm:ss AM"
 BLOG_ALLOW_COMMENTS   = True
+
+# RSS feed settings.
+RSS_TITLE             = "Kirsle.net"
+RSS_LINK              = "http://www.kirsle.net/"
+RSS_LANGUAGE          = "en"
+RSS_DESCRIPTION       = "The web blog of Kirsle"
+RSS_COPYRIGHT         = "Copyright {}, Kirsle.net".format(str(datetime.datetime.now().strftime("%Y")))
+RSS_WEBMASTER         = NOTIFY_ADDRESS[0]
+RSS_IMAGE_TITLE       = RSS_TITLE
+RSS_IMAGE_URL         = "http://www.kirsle.net/static/avatars/casey.png"
+RSS_IMAGE_WIDTH       = 96
+RSS_IMAGE_HEIGHT      = 96
+RSS_IMAGE_DESCRIPTION = "Kirsle's Avatar"
 
 ################################################################################
 ## Photo Settings                                                             ##

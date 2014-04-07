@@ -2,13 +2,20 @@
 
 # Legacy endpoint compatibility from kirsle.net.
 
-from flask import request, redirect, url_for
+from flask import g, request, redirect, url_for, flash
+import re
+import os
+
 from rophako import app
+from rophako.utils import template
 import rophako.model.blog as Blog
+import rophako.jsondb as JsonDB
+
 
 @app.route("/+")
 def google_plus():
     return redirect("https://plus.google.com/+NoahPetherbridge/posts")
+
 
 @app.route("/blog.html")
 def ancient_legacy_blog():
@@ -24,9 +31,66 @@ def ancient_legacy_blog():
 
     return redirect(url_for("blog.entry", fid=post["fid"]))
 
+
 @app.route("/blog/kirsle/<fid>")
 def legacy_blog(fid):
     return redirect(url_for("blog.entry", fid=fid))
+
+
+@app.route("/rss.cgi")
+def legacy_rss():
+    return redirect(url_for("blog.rss"))
+
+
+@app.route("/firered/<page>")
+@app.route("/firered")
+def legacy_firered(page=""):
+    g.info["page"] = str(page) or "1"
+    return template("firered.html")
+
+
+@app.route("/download", methods=["GET", "POST"])
+def legacy_download():
+    form = None
+    if request.method == "POST":
+        form = request.form
+    else:
+        form = request.args
+
+    method   = form.get("method", "index")
+    project  = form.get("project", "")
+    filename = form.get("file", "")
+
+    root = "/home/kirsle/www/projects"
+
+    if project and filename:
+        # Filter the sections.
+        project = re.sub(r'[^A-Za-z0-9]', '', project) # Project name is alphanumeric only.
+        filename = re.sub(r'[^A-Za-z0-9\-_\.]', '', filename)
+
+        # Check that all the files exist.
+        if os.path.isdir(os.path.join(root, project)) and os.path.isfile(os.path.join(root, project, filename)):
+            # Hit counters.
+            hits = { "hits": 0 }
+            db = "data/downloads/{}-{}".format(project, filename)
+            if JsonDB.exists(db.format(project, filename)):
+                hits = JsonDB.get(db)
+
+            # Actually getting the file?
+            if method == "get":
+                # Up the hit counter.
+                hits["hits"] += 1
+                JsonDB.commit(db, hits)
+
+            g.info["method"] = method
+            g.info["project"] = project
+            g.info["file"] = filename
+            g.info["hits"] = hits["hits"]
+            return template("download.html")
+
+    flash("The file or project wasn't found.")
+    return redirect(url_for("index"))
+
 
 @app.route("/<page>.html")
 def legacy_url(page):

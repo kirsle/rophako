@@ -3,7 +3,7 @@
 {% if can_older or can_newer %}
     <div class="right">
     [
-        <a href="/rss">RSS Feed</a> | {# TODO! #}
+        <a href="{{ url_for('blog.rss') }}">RSS Feed</a> |
     {% if can_earlier %}
         {% if category %}
             <a href="{{ url_for('blog.category', category=category) }}?skip={{ earlier }}">&lt; Newer</a>
