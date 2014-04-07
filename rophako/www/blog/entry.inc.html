@@ -9,10 +9,10 @@
     {% endif %}
 
     <div class="blog-author">
-        {% if post["photo"] %}
-            <img src="{{ post['photo_url'] }}/{{ post['photo'] }}">
-        {% elif post["avatar"] %}
+        {% if post["avatar"] %}
             <img src="/static/avatars/{{ post['avatar'] }}">
+        {% elif post["photo"] %}
+            <img src="{{ post['photo_url'] }}/{{ post['photo'] }}">
         {% else %}
             <img src="/static/avatars/default.png">
         {% endif %}
