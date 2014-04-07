@@ -94,4 +94,4 @@ def legacy_download():
 
 @app.route("/<page>.html")
 def legacy_url(page):
-    return "/{}".format(page)
+    return redirect("/{}".format(page))
