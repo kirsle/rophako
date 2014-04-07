@@ -30,8 +30,9 @@ def main():
         sys.exit(1)
 
     convert_index()
-    #convert_tags()
     convert_posts()
+    convert_comments()
+    convert_subscriptions()
 
 
 def convert_index():
@@ -49,12 +50,6 @@ def convert_index():
         new[post_id] = data
 
     JsonDB.commit("blog/index", new)
-
-
-def convert_tags():
-    print "Converting tag index"
-    index = json_get("blog/tags/1.json")
-    JsonDB.commit("blog/tags", index)
 
 
 def convert_posts():
@@ -75,6 +70,43 @@ def convert_posts():
 
         print "*", post["subject"]
         JsonDB.commit("blog/entries/{}".format(post_id), post)
+
+
+def convert_comments():
+    print "Converting comments..."
+
+    for name in glob.glob(os.path.join(siikir, "comments/1/*.json")):
+        name = name.split("/")[-1]
+        if name.startswith("photos-"): continue
+        data = json_get("comments/1/{}".format(name))
+
+        thread = name[:len(name)-5]
+
+        # Enforce data types.
+        for cid in data:
+            data[cid]["time"] = int(data[cid]["time"])
+            data[cid]["uid"] = int(data[cid]["uid"])
+
+        print "*", thread
+        JsonDB.commit("comments/threads/{}".format(thread), data)
+
+
+def convert_subscriptions():
+    print "Converting subscriptions..."
+
+    for name in glob.glob(os.path.join(siikir, "subscribers/1/*.json")):
+        name = name.split("/")[-1]
+        if name.startswith("photos-"): continue
+        data = json_get("subscribers/1/{}".format(name))
+
+        thread = name[:len(name)-5]
+
+        # Enforce data types.
+        for email in data:
+            data[email] = int(data[email])
+
+        print "*", thread
+        JsonDB.commit("comments/subscribers/{}".format(thread), data)
 
 
 def json_get(document):
