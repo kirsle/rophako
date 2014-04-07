@@ -83,7 +83,7 @@
 
 {% block scripts %}
 <script>
-    var userPic = "/static/avatars/default.png"; // TODO
+    var userPic = "{% if userpic %}{{ app['photo_url'] }}/{{ userpic }}{% else %}/static/avatars/default.png{% endif %}";
 
     $(document).ready(function() {
         // Preview their selected avatar.

@@ -76,6 +76,7 @@ def update():
 
     # Get our available avatars.
     g.info["avatars"] = Blog.list_avatars()
+    g.info["userpic"] = User.get_picture(uid=g.info["session"]["uid"])
 
     # Default vars.
     g.info.update(dict(
