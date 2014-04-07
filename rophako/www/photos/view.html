@@ -46,4 +46,9 @@ Uploaded by {{ author["name"] }} on {{ photo["pretty_time"] }}.
     </ul>
 {% endif %}
 
+{{ include_page("comment.partial_index",
+    thread="photos-{}".format(photo["key"]),
+    subject="Photo Comment",
+) | safe }}
+
 {% endblock %}
