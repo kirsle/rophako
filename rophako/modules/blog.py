@@ -356,6 +356,7 @@ def partial_index():
     selected = []
     stop = offset + BLOG_ENTRIES_PER_PAGE
     if stop > len(posts): stop = len(posts)
+    index = 1 # Let each post know its position on-page.
     for i in range(offset, stop):
         post_id = posts[i]
         post    = Blog.get_entry(post_id)
@@ -375,6 +376,8 @@ def partial_index():
 
         # Count the comments for this post
         post["comment_count"] = Comment.count_comments("blog-{}".format(post_id))
+        post["position_index"] = index
+        index += 1
 
         selected.append(post)
         g.info["count"] += 1

@@ -64,7 +64,7 @@ def before_request():
             "author": "Noah Petherbridge",
             "photo_url": config.PHOTO_ROOT_PUBLIC,
         },
-        "uri": request.path.split("/")[1:],
+        "uri": request.path,
         "session": {
             "login": False, # Not logged in, until proven otherwise.
             "username": "guest",
