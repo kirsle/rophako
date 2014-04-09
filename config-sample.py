@@ -17,8 +17,7 @@ SITE_NAME = "example.com"
 # Rophako pages, e.g. for account, blog, photo albums and so on, have templates
 # in the default site. You can override those templates by creating files with
 # the same paths in your site's HTML folder.
-#SITE_ROOT = os.path.join(_basedir, "site", "www")
-SITE_ROOT = "/home/noah/git/kirsle.net/www"
+SITE_ROOT = os.path.join(_basedir, "site", "www")
 
 # E-mail addresses for site notifications (i.e. new comments).
 NOTIFY_ADDRESS = ["root@localhost"]
