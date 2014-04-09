@@ -180,10 +180,8 @@ def format_message(message):
 def get_comments(thread):
     """Get the comment thread."""
     doc = "comments/threads/{}".format(thread)
-    print doc
     if JsonDB.exists(doc):
         return JsonDB.get(doc)
-    print "NOT EXIST"
     return {}
 
 

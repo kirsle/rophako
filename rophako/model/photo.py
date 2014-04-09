@@ -87,7 +87,6 @@ def get_photo(key):
     # IDs of its siblings.
     siblings = index["photo-order"][album]
     i = 0
-    print siblings
     for pid in siblings:
         if pid == key:
             # We found us! Find the siblings.
@@ -105,7 +104,6 @@ def get_photo(key):
                 snext = siblings[0]
             else:
                 # Right in the middle.
-                print "MIDDLE!"
                 sprev = siblings[i-1]
                 snext = siblings[i+1]
 

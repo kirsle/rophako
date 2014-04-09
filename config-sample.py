@@ -11,6 +11,15 @@ DEBUG = True
 # Unique name of your site, e.g. "kirsle.net"
 SITE_NAME = "example.com"
 
+# Path to your site's HTML root. Whenever Rophako tries to render a template,
+# it will check in your site's root for the template first before defaulting to
+# the default fallback pages in the rophako/www folder. All of the core
+# Rophako pages, e.g. for account, blog, photo albums and so on, have templates
+# in the default site. You can override those templates by creating files with
+# the same paths in your site's HTML folder.
+#SITE_ROOT = os.path.join(_basedir, "site", "www")
+SITE_ROOT = "/home/noah/git/kirsle.net/www"
+
 # E-mail addresses for site notifications (i.e. new comments).
 NOTIFY_ADDRESS = ["root@localhost"]
 

@@ -6,6 +6,7 @@ from flask import g
 import time
 import re
 import glob
+import os
 
 import config
 import rophako.jsondb as JsonDB
@@ -200,7 +201,7 @@ def list_avatars():
         # Load avatars from both locations. We check the built-in set first,
         # so if you have matching names in your local site those will override.
         "rophako/www/static/avatars/*.*",
-        "site/www/static/avatars/*.*",
+        os.path.join(config.SITE_ROOT, "static", "avatars", "*.*"),
     ]
     for path in paths:
         for filename in glob.glob(path):
@@ -214,8 +215,10 @@ def get_next_id(index):
     """Get the next free ID for a blog post."""
     logger.debug("Getting next available blog ID number")
     sort = sorted(index.keys(), key=lambda x: int(x))
-    logger.debug("Highest post ID is: {}".format(sort[-1]))
-    next_id = int(sort[-1]) + 1
+    next_id = 1
+    if len(sort) > 0:
+        next_id = int(sort[-1]) + 1
+    logger.debug("Highest post ID is: {}".format(next_id))
 
     # Sanity check!
     if next_id in index:

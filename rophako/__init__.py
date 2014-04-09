@@ -33,8 +33,8 @@ app.register_blueprint(ContactModule)
 # Custom Jinja handler to support custom- and default-template folders for
 # rendering templates.
 app.jinja_loader = jinja2.ChoiceLoader([
-    jinja2.FileSystemLoader("site/www"),    # Site specific.
-    jinja2.FileSystemLoader("rophako/www"), # Default
+    jinja2.FileSystemLoader(config.SITE_ROOT), # Site specific.
+    jinja2.FileSystemLoader("rophako/www"),    # Default/fall-back
 ])
 
 app.jinja_env.globals["csrf_token"] = rophako.utils.generate_csrf_token
@@ -110,7 +110,7 @@ def catchall(path):
     otherwise we give the 404 error page."""
 
     # Search for this file.
-    for root in ["site/www", "rophako/www"]:
+    for root in [config.SITE_ROOT, "rophako/www"]:
         abspath = os.path.abspath("{}/{}".format(root, path))
         if os.path.isfile(abspath):
             return send_file(abspath)

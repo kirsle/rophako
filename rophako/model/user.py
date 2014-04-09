@@ -161,7 +161,6 @@ def check_auth(username, password):
 
     # Get the user's file.
     db = get_user(username=username)
-    print db
 
     # Check the password.
     return bcrypt.hashpw(str(password), str(db["password"])) == db["password"]

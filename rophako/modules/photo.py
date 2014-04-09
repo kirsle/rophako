@@ -51,9 +51,6 @@ def view_photo(key):
         flash("That photo wasn't found!")
         return redirect(url_for(".albums"))
 
-    from pprint import pprint
-    pprint(photo)
-
     # Get the author info.
     author = User.get_user(uid=photo["author"])
     if author:
@@ -217,7 +214,6 @@ def arrange_albums():
 
     if request.method == "POST":
         order = request.form.get("order", "").split(";")
-        print order
         Photo.order_albums(order)
         flash("The albums have been rearranged!")
         return redirect(url_for(".albums"))

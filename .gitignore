@@ -1,7 +1,5 @@
 # Don't check in site specific settings.
 config.py
-site/www/*.html
-site/www/*/*
 
 # Compiled Python
 *.pyc

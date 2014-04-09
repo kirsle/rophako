@@ -134,9 +134,7 @@ def update():
         for field in ["fid", "subject", "body", "avatar", "categories", "privacy"]:
             g.info[field] = request.form.get(field)
         for boolean in ["emoticons", "comments"]:
-            print "BOOL:", boolean, request.form.get(boolean)
             g.info[boolean] = True if request.form.get(boolean, None) == "true" else False
-            print g.info[boolean]
         for number in ["author", "month", "day", "year", "hour", "min", "sec"]:
             g.info[number] = int(request.form.get(number, 0))
 
