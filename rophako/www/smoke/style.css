@@ -97,18 +97,18 @@ table.table-wide {
 }
 
 table.table th {
-    background-color: #003366;
+    background-color: #333333;
     color: #FFFFFF;
     text-align: left;
     padding: 4px;
 }
 
 table.table tr:nth-child(even) {
-    background-color: #000000;
+    background-color: #FFFFFF;
 }
 
 table.table tr:nth-child(odd) {
-    background-color: #202020;
+    background-color: #CFCFCF;
 }
 
 table.table td {

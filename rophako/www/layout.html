@@ -24,7 +24,14 @@
 
         <li class="header">:: Site Admin</li>
         {% if session["login"] %}
-            <li><a href="{{ url_for('account.logout') }}">Log out</a></li>
+            {% if session["role"] == "admin" %}
+                <li><a href="{{ url_for('admin.index') }}">Admin Center</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('blog.update') }}">Update Blog</a></li>
+            {% if "impersonator" in session %}
+                <li><a href="{{ url_for('admin.unimpersonate') }}">Unimpersonate</a>
+            {% endif %}
+            <li><a href="{{ url_for('account.logout') }}">Log out {{ session["username"] }}</a></li>
         {% else %}
             <li><a href="{{ url_for('account.login') }}">Log in</a></li>
         {% endif %}
