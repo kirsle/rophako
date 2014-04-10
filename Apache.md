@@ -2,9 +2,59 @@
 
 Here's some tips on getting Rophako set up on Apache.
 
+# mod\_uwsgi
+
+For simple sites you can set it up with `mod_uwsgi` in Apache.
+
+## Apache configuration:
+
+```apache
+<VirtualHost *:80>
+    ServerName www.example.com
+    WSGIDaemonProcess rophako user=www-data group=www-data threads=5 home=/home/www-data/git/rophako
+    WSGIScriptAlias / /home/www-data/git/rophako/app.wsgi
+    WSGIScriptReloading On
+    CustomLog /home/www-data/logs/access_log combined
+    ErrorLog /home/www-data/logs/error_log
+
+    <Directory /home/www-data/sites/rophako>
+        WSGIProcessGroup rophako
+        WSGIApplicationGroup %{GLOBAL}
+        Order allow,deny
+        Allow from all
+    </Directory>
+</VirtualHost>
+```
+
+## app.wsgi
+
+A copy of `app.wsgi` is included in the git repo's root. Here it is though for reference. This assumes you're
+using a Python virtualenv named "rophako":
+
+```python
+#!/usr/bin/env python
+
+"""WSGI runner script for the Rophako CMS."""
+
+import sys
+import os
+
+# Add the CWD to the path.
+sys.path.append(".")
+
+# Use the 'rophako' virtualenv.
+activate_this = os.environ['HOME']+'/.virtualenv/rophako/bin/activate_this.py'
+execfile(activate_this, dict(__file__=activate_this))
+
+from rophako import app as application
+
+# vim:ft=python
+```
+
+
 # mod\_fcgid and mod\_rewrite
 
-For kirsle.net I needed to set it up using `mod_fcgid` because my site has a lot
+For kirsle.net I needed to set it up using `mod\_fcgid` because my site has a lot
 of legacy URLs to old static files, so Rophako needs to serve the main website
 pages and Apache needs to serve everything else.
 
