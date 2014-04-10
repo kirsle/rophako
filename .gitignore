@@ -3,3 +3,7 @@ config.py
 
 # Compiled Python
 *.pyc
+
+/site/www/static/photos/*.jpg
+/site/www/static/photos/*.png
+/site/www/static/photos/*.gif
