@@ -6,7 +6,11 @@ A simplistic content management system designed for
 Rophako is [Azulian](http://www.kirsle.net/wizards/translator.html) for
 "website." Pronounce it however you like. I pronounce it "roe-fa-koe."
 
-This project is under heavy construction.
+This project is currently in "beta" status. It is currently powering kirsle.net
+and a couple other small sites.
+
+Check out Rophako's official homepage and example site:
+[rophako.kirsle.net](http://rophako.kirsle.net/)
 
 # Installation
 
