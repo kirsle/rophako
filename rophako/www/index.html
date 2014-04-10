@@ -4,7 +4,77 @@
 
 <h1>Welcome!</h1>
 
-This is the Rophako CMS!<p>
+This is the Rophako CMS! It's a simple web app framework written in Python that
+supports a web blog, photo albums, and a commenting system. It's open source
+software released under the GNU General Public License version 2. It was
+designed by Noah Petherbridge to power his personal website and blog,
+<a href="http://www.kirsle.net/" target="_blank">Kirsle.net</a>, but it's
+also designed to be easily reusable for getting any website up and running
+quickly.<p>
+
+<a href="https://github.com/kirsle/rophako" target="_blank">Clone it at
+Github!</a><p>
+
+<h2>Features</h2>
+
+<ul>
+    <li><strong>Web Blog</strong>
+    <ul>
+        <li>Rophako's primary feature, apart from being a general content
+            management system, is to be a web blog. The blog supports having
+            multiple authors and having multiple avatars (you can upload an
+            avatar for each topic your blog covers, and select the avatar when
+            you post an entry).</li>
+        <li>There's a built-in RSS feed for the blog so your readers can
+            follow it in their RSS readers.</li>
+        <li>Tag your blog posts with a list of categories and enable your
+            readers to use them to read just the posts they're interested in.</li>
+        <li>Blog posts can be commented on by guests on the Internet.</li>
+        <li>Include graphical emoticons in your blog posts!</li>
+    </ul></li>
+
+    <li><strong>Photo Albums</strong>
+    <ul>
+        <li>Upload as many pictures as you want to photo albums on your site.
+            The default settings allow for having relatively high-resolution
+            photos (800 pixels wide), and thumbnailing is done automatically.</li>
+        <li>The staff user accounts on your site can pick a photo from the
+            albums to be "their" profile photo, which will be used on their
+            blog posts and comments (if they don't select one of the blog
+            avatars instead).</li>
+        <li>Photos, like blog posts, can be commented on.</li>
+        <li>Drag-and-drop user interface to rearrange your photos and photo
+            albums.</li>
+    </ul></li>
+
+    <li><strong>Comments</strong>
+    <ul>
+        <li>Comments can be left by anyone on the Internet. A reverse CAPTCHA
+            is used that stops random spam bots from posting comments.</li>
+        <li>Comments can include graphical emoticons, like blog posts.</li>
+        <li>Commenters can subscribe to a comment thread when they post, so that
+            they'll receive e-mail notifications when somebody else replies to
+            that thread. Unsubscribing is easy, too.</li>
+        <li>If a commenter leaves their e-mail address,
+            <a href="http://www.gravatar.com/" target="_blank">Gravatar</a>
+            avatars are used. If they don't have a Gravatar, you can specify
+            the default fall-back avatar to use.</li>
+    </ul></li>
+
+    <li><strong>Dual Template System</strong>
+    <ul>
+        <li>When Rophako wants to show the user a page, it first looks in your
+            custom site's template folder before defaulting to its built-in
+            templates.</li>
+        <li>All of Rophako's core features (including this page!) have templates
+            built in. So, you don't need to write any HTML code to get blogs,
+            photo albums and everything else working!</li>
+        <li>If you want to customize Rophako's built-in pages (for example, the
+            blog templates), you can just add files to your custom site's folder
+            with the same file names. Rophako will use your templates instead
+            of its own!</li>
+    </ul></li>
+</ul>
 
 {{ include_page("blog.partial_index") | safe }}
 

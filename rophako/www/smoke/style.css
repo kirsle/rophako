@@ -1,0 +1,340 @@
+/******************************************************************************
+ * Rophako CMS - Smoke Theme                                                  *
+ ******************************************************************************/
+
+/*********************
+ * HTML Resets
+ *********************/
+
+body {
+    background-image: url("navbg.png");
+    background-position: 0 0;
+    background-repeat: repeat-y;
+    background-color: #CFCFCF;
+    font-family: Ubuntu,Verdana,Arial,Helvetica,sans-serif;
+    font-size: small;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+}
+
+a:link, a:visited {
+    color: #FF4400;
+    text-decoration: underline;
+}
+
+a img {
+    border: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-weight: bold;
+    color: #000000;
+    text-shadow: 2px 2px 4px #FF4444;
+    padding: 0;
+    margin: 15px 0;
+}
+h1 {
+    font-size: 34pt;
+}
+h1:first-of-type {
+    margin-top: 0;
+}
+h2 {
+    font-size: 28pt;
+}
+h3 {
+    font-size: 24pt;
+}
+h4 {
+    font-size: 18pt;
+}
+
+fieldset {
+    display: block;
+    border: 1px solid #666666;
+}
+
+fieldset legend {
+    font-weight: bold;
+}
+
+/*********************
+ * Classes used by core Rophako pages. You'll want to
+ * implement these in your custom layout.
+ *********************/
+
+.right {
+    text-align: right;
+}
+
+.center {
+    text-align: center;
+}
+
+.clear {
+    clear: both;
+}
+
+table.table,
+table.table th,
+table.table td {
+    border: 1px solid #999999;
+}
+
+table.table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0px;
+    padding: 0px;
+}
+
+table.table-wide {
+    width: 100%;
+}
+
+table.table th {
+    background-color: #003366;
+    color: #FFFFFF;
+    text-align: left;
+    padding: 4px;
+}
+
+table.table tr:nth-child(even) {
+    background-color: #000000;
+}
+
+table.table tr:nth-child(odd) {
+    background-color: #202020;
+}
+
+table.table td {
+    padding: 4px;
+}
+
+/* Photo Grids: see http://ansciath.tumblr.com/post/7347495869/css-aspect-ratio */
+ul.photo-grid {
+    list-style: none;
+    display: inline;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+ul.photo-grid li {
+    position: relative;
+    display: inline-block;
+    width: 260px;
+    height: 260px;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+ul.photo-grid li .dummy {
+    padding-top: 100%;
+}
+
+.photo-grid-item {
+    cursor: pointer;
+    overflow: hidden; /* Crop off long names, etc. */
+
+    /* We use absolute positioning to detach this element from the flow, */
+    /* allowing the .dummy to dictate the height of the square. */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.photo-grid-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.photo-grid-item .name {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14pt;
+    font-weight: bold;
+    color: #FFFFFF;
+    text-align: left;
+    text-shadow: 1px 1px 0px #000000,
+                -1px -1px 0px #000000,
+                 1px -1px 0px #000000,
+                -1px 1px 0px #000000;
+}
+
+/* Make a photo look nice. */
+.portrait {
+    display: inline;
+    background-color: #CFCFCF;
+    padding: 4px;
+    border: 1px solid #000000;
+    box-shadow: 0px 0px 4px #FF4444;
+}
+
+/* Blog titles when shown on index view */
+a.blog-title-index:link, a.blog-title-index:visited {
+    font-size: 32pt;
+    font-weight: bold;
+    color: #000000;
+    text-decoration: none;
+    text-shadow: 2px 2px 4px #FF4444;
+}
+a.blog-title-index:hover, a.blog-title-index:active {
+    text-decoration: underline;
+    text-shadow: 2px 2px 4px #FF4444;
+}
+
+/* Poster's avatar box */
+.blog-author, .comment-author {
+    float: right;
+    background-color: #999999;
+    border: 1px solid #000000;
+    padding: 2px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    width: 100px; /* 96 avatar width + 4px padding */
+    text-align: center;
+    font-weight: bold
+}
+.blog-author a, .comment-author a {
+    text-decoration: none;
+}
+div.siikir-avatar {
+    width: 96px;
+    margin: auto;
+}
+
+/* Timestamp and author line below blog titles */
+.blog-timestamp {
+    font-style: italic;
+    padding-left: 30px;
+    padding-top: 5px;
+    padding-bottom: 10px
+}
+
+ul.blog-categories {
+    list-style: none;
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+ul.blog-categories li {
+    display: inline;
+}
+ul.blog-categories li:after {
+    content: ", ";
+}
+ul.blog-categories li:last-child:after {
+    content: "";
+}
+
+/* Blog comment wrapper */
+.comment {
+    border: 1px dashed #006699;
+    padding: 5px
+}
+
+/*********************
+ * Smoke Theme UI
+ *********************/
+
+header {
+    display: block;
+    background-image: url("header.png");
+    background-position: left bottom;
+    background-repeat: repeat-x;
+    margin: 0;
+    height: 174px;
+}
+
+header img {
+    position: absolute;
+    top: 0px;
+    left: 16px;
+    width: 161px;
+    height: 169px;
+}
+
+header span {
+    font-size: 72pt;
+    font-weight: bold;
+    font-style: italic;
+    line-height: 169px;
+    color: #CFCFCF;
+    margin-left: 220px;
+}
+
+nav {
+    position: absolute;
+    top: 180px;
+    left: 0px;
+    width: 200px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: block;
+    line-height: 1.5em;
+    padding-left: 10px;
+    color: #FFFFFF;
+}
+
+nav ul li.header {
+    background-image: url("navhead.png");
+    background-repeat: no-repeat;
+    height: 34px;
+    line-height: 34px;
+    font-weight: bold;
+    color: #000000;
+    margin: 8px 0px;
+}
+
+nav a:link, nav a:visited {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+nav a:hover, nav a:active {
+    text-decoration: underline;
+}
+
+#content {
+    position: absolute;
+    top: 180px;
+    left: 220px;
+    right: 20px;
+}
+
+footer {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    color: #666666;
+    margin: 40px 0px;
+}
+
+footer div {
+    display: block;
+    width: 400px;
+    margin: auto;
+}
+
+footer a:link, footer a:visited {
+    color: #666666;
+}
