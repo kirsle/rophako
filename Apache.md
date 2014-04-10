@@ -2,9 +2,9 @@
 
 Here's some tips on getting Rophako set up on Apache.
 
-# mod\_uwsgi
+# mod\_wsgi
 
-For simple sites you can set it up with `mod_uwsgi` in Apache.
+For simple sites you can set it up with `mod_wsgi` in Apache.
 
 ## Apache configuration:
 
@@ -54,7 +54,7 @@ from rophako import app as application
 
 # mod\_fcgid and mod\_rewrite
 
-For kirsle.net I needed to set it up using `mod\_fcgid` because my site has a lot
+For kirsle.net I needed to set it up using `mod_fcgid` because my site has a lot
 of legacy URLs to old static files, so Rophako needs to serve the main website
 pages and Apache needs to serve everything else.
 
