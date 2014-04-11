@@ -2,7 +2,7 @@
 
 """Endpoints for the web blog."""
 
-from flask import Blueprint, g, request, redirect, url_for, session, flash
+from flask import Blueprint, g, request, redirect, url_for, session, flash, make_response
 import re
 import datetime
 import calendar
@@ -291,7 +291,9 @@ def rss():
             ["pubDate", time.strftime(rss_time, time.gmtime(post["time"]))],
         ])
 
-    return doc.toprettyxml(encoding="utf-8")
+    resp = make_response(doc.toprettyxml(encoding="utf-8"))
+    resp.headers["Content-Type"] = "application/rss+xml; charset=utf-8"
+    return resp
 
 
 def xml_add_text_tags(doc, root_node, tags):
