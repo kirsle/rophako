@@ -29,17 +29,17 @@ def ancient_legacy_blog():
         flash("That blog entry wasn't found.")
         return redirect(url_for("blog.index"))
 
-    return redirect(url_for("blog.entry", fid=post["fid"]))
+    return redirect(url_for("blog.entry", fid=post["fid"]), code=301)
 
 
 @app.route("/blog/kirsle/<fid>")
 def legacy_blog(fid):
-    return redirect(url_for("blog.entry", fid=fid))
+    return redirect(url_for("blog.entry", fid=fid), code=301)
 
 
 @app.route("/rss.cgi")
 def legacy_rss():
-    return redirect(url_for("blog.rss"))
+    return redirect(url_for("blog.rss"), code=301)
 
 
 @app.route("/firered/<page>")
@@ -94,4 +94,4 @@ def legacy_download():
 
 @app.route("/<page>.html")
 def legacy_url(page):
-    return redirect("/{}".format(page))
+    return redirect("/{}".format(page), code=301)
