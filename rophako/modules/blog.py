@@ -286,7 +286,7 @@ def rss():
         channel.appendChild(item)
         xml_add_text_tags(doc, item, [
             ["title", post["subject"]],
-            ["link", url_for("blog.entry", fid=post["fid"])],
+            ["link", url_for("blog.entry", fid=post["fid"], _external=True)],
             ["description", post["body"]],
             ["pubDate", time.strftime(rss_time, time.gmtime(post["time"]))],
         ])
