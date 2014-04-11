@@ -39,6 +39,18 @@
 </nav>
 
 <div id="content">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <h1>Notice!</h1>
+
+            <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
     {% block content %}{% endblock %}
 
     <footer>
