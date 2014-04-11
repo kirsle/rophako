@@ -303,7 +303,7 @@ def xml_add_text_tags(doc, root_node, tags):
     for pair in tags:
         name, value = pair
         channelTag = doc.createElement(name)
-        channelTag.appendChild(doc.createTextNode(str(value)))
+        channelTag.appendChild(doc.createTextNode(unicode(value)))
         root_node.appendChild(channelTag)
 
 
