@@ -22,6 +22,10 @@ SITE_ROOT = os.path.join(_basedir, "site", "www")
 # E-mail addresses for site notifications (i.e. new comments).
 NOTIFY_ADDRESS = ["root@localhost"]
 
+# Set this to true if you want your app to force use of SSL. This will also turn
+# on Flask's secure-only session cookies.
+FORCE_SSL = False
+
 # Secret key used for session cookie signing. Make this long and hard to guess.
 #
 # Tips for creating a strong secret key:

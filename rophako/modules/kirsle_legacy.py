@@ -7,7 +7,7 @@ import re
 import os
 
 from rophako import app
-from rophako.utils import template
+from rophako.utils import template, login_required
 import rophako.model.blog as Blog
 import rophako.jsondb as JsonDB
 
@@ -95,3 +95,14 @@ def legacy_download():
 @app.route("/<page>.html")
 def legacy_url(page):
     return redirect("/{}".format(page), code=301)
+
+@app.route("/ssl_test")
+@login_required
+def ssl_test():
+    criteria = [
+        request.is_secure,
+        app.debug,
+        request.headers.get("X-Forwarded-Proto", "http") == "https"
+    ]
+
+    return str(criteria)

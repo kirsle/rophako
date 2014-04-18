@@ -1,4 +1,5 @@
 flask
+flask-sslify
 redis
 bcrypt
 pillow

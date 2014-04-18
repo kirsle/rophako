@@ -9,7 +9,7 @@ There {% if comments|length == 1 %}is{% else %}are{% endif %}
 {% for comment in comments %}
     <div class="comment">
         <div class="comment-author">
-            {% if comment["image"] and (comment["image"].startswith('http:') or comment["image"].startswith('https:')) %}
+            {% if comment["image"] and (comment["image"].startswith('http:') or comment["image"].startswith('https:') or comment["image"].startswith('//')) %}
                 <img src="{{ comment['image'] }}" alt="Avatar" width="96" height="96">
             {% elif comment["image"] %}
                 <img src="{{ photo_url }}/{{ comment['image'] }}" alt="Avatar" width="96" height="96">

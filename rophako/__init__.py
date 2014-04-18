@@ -1,6 +1,7 @@
 __version__ = '0.01'
 
 from flask import Flask, g, request, session, render_template, send_file, abort
+from flask_sslify import SSLify
 import jinja2
 import os.path
 import time
@@ -13,6 +14,11 @@ app = Flask(__name__,
 )
 app.DEBUG      = config.DEBUG
 app.secret_key = config.SECRET_KEY
+
+# Security?
+if config.FORCE_SSL:
+    app.SESSION_COOKIE_SECURE = True
+    sslify = SSLify(app)
 
 # Load all the blueprints!
 from rophako.modules.admin import mod as AdminModule

@@ -226,7 +226,7 @@ def gravatar(email):
         }
         if default:
             params["d"] = default
-        url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
+        url = "//www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
         url += urllib.urlencode(params)
         return url
     return ""
