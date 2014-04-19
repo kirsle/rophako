@@ -5,7 +5,7 @@
 {% if preview %}
     <h1>Preview: {{ subject }}</h1>
 
-    {{ body|safe }}
+    {{ rendered_body|safe }}
 
     <hr>
 {% endif %}
@@ -26,6 +26,12 @@
     <input type="text" size="80" name="fid" value="{{ fid }}"><p>
 
     <strong>Body:</strong><br>
+    <label>
+        <input type="radio" name="format" value="markdown"{% if format == "markdown" %} checked{% endif %}> Markdown
+    </label>
+    <label>
+        <input type="radio" name="format" value="html"{% if format == "html" %} checked{% endif %}> HTML
+    </label><br>
     <textarea cols="80" rows="12" name="body">{{ body }}</textarea><br>
     <a href="{{ url_for('emoticons.index') }}" target="_blank">Emoticon reference</a> (opens in new window)<p>
 

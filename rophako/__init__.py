@@ -120,10 +120,21 @@ def catchall(path):
         abspath = os.path.abspath("{}/{}".format(root, path))
         if os.path.isfile(abspath):
             return send_file(abspath)
-        elif not "." in path and os.path.isfile(abspath + ".html"):
-            return rophako.utils.template(path + ".html")
-        elif not "." in path and os.path.isfile(abspath + "/index.html"):
-            return rophako.utils.template(path + "/index.html")
+
+        # The exact file wasn't found, look for some extensions and index pages.
+        suffixes = [
+            ".html",
+            "/index.html",
+            ".md",         # Markdown formatted pages.
+            "/index.md",
+        ]
+        for suffix in suffixes:
+            if not "." in path and os.path.isfile(abspath + suffix):
+                # HTML, or Markdown?
+                if suffix.endswith(".html"):
+                    return rophako.utils.template(path + suffix)
+                else:
+                    return rophako.utils.markdown_template(abspath + suffix)
 
     return not_found("404")
 

@@ -13,7 +13,7 @@ import rophako.model.user as User
 import rophako.model.blog as Blog
 import rophako.model.comment as Comment
 import rophako.model.emoticons as Emoticons
-from rophako.utils import template, pretty_time, login_required
+from rophako.utils import template, render_markdown, pretty_time, login_required
 from rophako.log import logger
 from config import *
 
@@ -44,9 +44,15 @@ def entry(fid):
     post = Blog.get_entry(post_id)
     post["post_id"] = post_id
 
+    # Render the body.
+    if post["format"] == "markdown":
+        post["rendered_body"] = render_markdown(post["body"])
+    else:
+        post["rendered_body"] = post["body"]
+
     # Render emoticons.
     if post["emoticons"]:
-        post["body"] = Emoticons.render(post["body"])
+        post["rendered_body"] = Emoticons.render(post["rendered_body"])
 
     # Get the author's information.
     post["profile"] = User.get_user(uid=post["author"])
@@ -85,6 +91,7 @@ def update():
         author=g.info["session"]["uid"],
         subject="",
         body="",
+        format="markdown",
         avatar="",
         categories="",
         privacy=BLOG_DEFAULT_PRIVACY,
@@ -110,7 +117,7 @@ def update():
             g.info["post"] = post
 
             # Copy fields.
-            for field in ["author", "fid", "subject", "body", "avatar",
+            for field in ["author", "fid", "subject", "format", "body", "avatar",
                           "categories", "privacy", "emoticons", "comments"]:
                 g.info[field] = post[field]
 
@@ -141,6 +148,17 @@ def update():
         # What action are they doing?
         if action == "preview":
             g.info["preview"] = True
+
+            # Render markdown?
+            if g.info["format"] == "markdown":
+                g.info["rendered_body"] = render_markdown(g.info["body"])
+            else:
+                g.info["rendered_body"] = g.info["body"]
+
+            # Render emoticons.
+            if g.info["emoticons"]:
+                g.info["rendered_body"] = Emoticons.render(g.info["rendered_body"])
+
         elif action == "publish":
             # Publishing! Validate inputs first.
             invalid = False
@@ -188,6 +206,7 @@ def update():
                     ip         = request.remote_addr,
                     emoticons  = g.info["emoticons"],
                     comments   = g.info["comments"],
+                    format     = g.info["format"],
                     body       = g.info["body"],
                 )
 
@@ -365,9 +384,15 @@ def partial_index():
 
         post["post_id"] = post_id
 
+        # Render the body.
+        if post["format"] == "markdown":
+            post["rendered_body"] = render_markdown(post["body"])
+        else:
+            post["rendered_body"] = post["body"]
+
         # Render emoticons.
         if post["emoticons"]:
-            post["body"] = Emoticons.render(post["body"])
+            post["rendered_body"] = Emoticons.render(post["rendered_body"])
 
         # Get the author's information.
         post["profile"] = User.get_user(uid=post["author"])

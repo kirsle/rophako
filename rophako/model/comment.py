@@ -13,7 +13,7 @@ import config
 import rophako.jsondb as JsonDB
 import rophako.model.user as User
 import rophako.model.emoticons as Emoticons
-from rophako.utils import send_email
+from rophako.utils import send_email, render_markdown
 from rophako.log import logger
 
 
@@ -162,15 +162,12 @@ def unsubscribe(thread, email):
 
 def format_message(message):
     """HTML sanitize the message and format it for display."""
-    # We basically want to escape HTML symbols (like what Flask does for us
-    # automatically), but we want line breaks to translate to literal <br> tags.
-    message = re.sub(r'&', '&amp;', message)
-    message = re.sub(r'<', '&lt;', message)
-    message = re.sub(r'>', '&gt;', message)
-    message = re.sub(r'"', '&quot;', message)
-    message = re.sub(r"'", '&apos;', message)
-    message = re.sub(r'\n', '<br>', message)
-    message = re.sub(r'\r', '', message)
+
+    # Comments use Markdown formatting, and HTML tags are escaped by default.
+    message = render_markdown(message)
+
+    # Don't allow commenters to use images.
+    message = re.sub(r'<img.+?/>', '', message)
 
     # Process emoticons.
     message = Emoticons.render(message)

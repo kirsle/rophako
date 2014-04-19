@@ -73,11 +73,15 @@ def get_entry(post_id):
     if len(db["fid"]) == 0:
         db["fid"] = str(post_id)
 
+    # If no "format" option, set it to HTML (legacy)
+    if db.get("format", "") == "":
+        db["format"] = "html"
+
     return db
 
 
 def post_entry(post_id, fid, epoch, author, subject, avatar, categories,
-               privacy, ip, emoticons, comments, body):
+               privacy, ip, emoticons, comments, format, body):
     """Post (or update) a blog entry."""
 
     # Fetch the index.
@@ -139,6 +143,7 @@ def post_entry(post_id, fid, epoch, author, subject, avatar, categories,
         privacy    = privacy or "public",
         author     = author,
         subject    = subject,
+        format     = format,
         body       = body,
     ))
 

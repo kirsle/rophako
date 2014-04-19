@@ -18,6 +18,10 @@ body {
     padding: 0;
 }
 
+small {
+    font-size: 9pt;
+}
+
 a:link, a:visited {
     color: #FF4400;
     text-decoration: underline;
@@ -60,6 +64,17 @@ fieldset {
 
 fieldset legend {
     font-weight: bold;
+}
+
+/* Markdown Code-Hilite class overrides. */
+.codehilite {
+    border: 1px dashed #000000;
+    padding: 0px 20px;
+    background-color: transparent;
+}
+pre, code {
+    font-family: "DejaVu Sans Mono","Ubuntu Mono","Lucida Console","Courier New","Courier",monospace;
+    font-size: 10pt;
 }
 
 /*********************

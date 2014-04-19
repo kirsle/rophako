@@ -4,3 +4,5 @@ redis
 bcrypt
 pillow
 requests
+Markdown
+Pygments

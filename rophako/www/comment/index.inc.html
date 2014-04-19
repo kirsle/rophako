@@ -31,6 +31,7 @@ There {% if comments|length == 1 %}is{% else %}are{% endif %}
     </div><p>
 {% endfor %}
 
+<a name="comments"></a>
 <h2>Add a Comment</h2>
 
 <form name="comment" action="{{ url_for('comment.preview') }}" method="POST">
@@ -56,7 +57,8 @@ There {% if comments|length == 1 %}is{% else %}are{% endif %}
             Your Email:
         </td>
         <td align="left" valign="middle">
-            <input type="text" size="40" name="contact"> <small>(optional)</small>
+            <input type="text" size="40" name="contact">
+            <small>(optional)</small>
         </td>
     </tr>
     <tr>
@@ -65,8 +67,9 @@ There {% if comments|length == 1 %}is{% else %}are{% endif %}
         </td>
         <td align="left" valign="top">
             <textarea cols="40" rows="8" name="message" style="width: 100%"></textarea><br>
-            <small>You can use <a href="{{ url_for('emoticons.index') }}" target="_blank">emoticons</a>
-            in your comment. <em>(opens in a new window)</em></small>
+            <small>Comments can be formatted with <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a>,
+            and you can use<br><a href="{{ url_for('emoticons.index') }}" target="_blank">emoticons</a>
+            in your comment.</small>
         </td>
     </tr>
     <tr>
