@@ -65,6 +65,21 @@ def entry(fid):
     # Count the comments for this post
     post["comment_count"] = Comment.count_comments("blog-{}".format(post_id))
 
+    # Inject information about this post's siblings.
+    index = Blog.get_index()
+    siblings = [None, None] # previous, next
+    sorted_ids = map(lambda y: int(y), sorted(index.keys(), key=lambda x: index[x]["time"], reverse=True))
+    for i in range(0, len(sorted_ids)):
+        if sorted_ids[i] == post_id:
+            # Found us!
+            if i > 0:
+                # We have an older post.
+                siblings[0] = index[ str(sorted_ids[i-1]) ]
+            if i < len(sorted_ids) - 1:
+                # We have a newer post.
+                siblings[1] = index[ str(sorted_ids[i+1]) ]
+    post["siblings"] = siblings
+
     g.info["post"] = post
     return template("blog/entry.html")
 
