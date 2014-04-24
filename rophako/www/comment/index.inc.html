@@ -1,3 +1,4 @@
+<a name="comments"></a>
 {% if header %}
     <h1>Comments</h1>
 {% endif %}
@@ -31,7 +32,6 @@ There {% if comments|length == 1 %}is{% else %}are{% endif %}
     </div><p>
 {% endfor %}
 
-<a name="comments"></a>
 <h2>Add a Comment</h2>
 
 <form name="comment" action="{{ url_for('comment.preview') }}" method="POST">
