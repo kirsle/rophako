@@ -1,4 +1,5 @@
 {# Reusable template for showing a blog post content #}
+{% from "google-ads.inc.html" import leaderboard %}
 
 {% macro blog_entry(post, from=None) %}
 
@@ -68,6 +69,11 @@
         ]
     </div>
     <p>
+
+    {# Show the Google ad after the first post. #}
+    {% if from == "index" and post["position_index"] == 1 %}
+        {{ leaderboard() }}
+    {% endif %}
 
     {% if from != "index" %}
         {% include "blog/sibling-links.html" %}

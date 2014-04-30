@@ -1,0 +1,15 @@
+{##############################################################################
+ # Macro to support Google AdSense ad banners for Rophako.
+ #
+ # Copy this HTML page into your own site's www folder and paste in the code for
+ # your Google ads inside the macros. The macros "nav_ads()" and "leaderboard()"
+ # must be present in this file, even if not used by your site, because the
+ # blog entry.inc.html page needs the leaderboard function.
+ #
+ # I did this because I use Google ads on Kirsle.net and I don't want to
+ # maintain a 99%-identical copy of blog/entry.inc.html just for Kirsle.net. :)
+ ##############################################################################}
+
+{# Macro for leaderboard shaped Google ads. DO NOT REMOVE THIS MACRO OR THE
+   BLOG WILL BREAK. #}
+{% macro leaderboard() %}LeaderBOARD!<p>{% endmacro %}
