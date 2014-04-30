@@ -318,10 +318,21 @@ def rss():
         post = Blog.get_entry(post_id)
         item = doc.createElement("item")
         channel.appendChild(item)
+
+        # Render the body.
+        if post["format"] == "markdown":
+            post["rendered_body"] = render_markdown(post["body"])
+        else:
+            post["rendered_body"] = post["body"]
+
+        # Render emoticons.
+        if post["emoticons"]:
+            post["rendered_body"] = Emoticons.render(post["rendered_body"])
+
         xml_add_text_tags(doc, item, [
             ["title", post["subject"]],
             ["link", url_for("blog.entry", fid=post["fid"], _external=True)],
-            ["description", post["body"]],
+            ["description", post["rendered_body"]],
             ["pubDate", time.strftime(rss_time, time.gmtime(post["time"]))],
         ])
 
