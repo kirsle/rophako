@@ -6,27 +6,31 @@
 
 This is a preview of what your comment is going to look like once posted.<p>
 
-<hr><p>
+<div class="comment">
+    <div class="comment-author">
+        {% if contact %}
+            <img src="{{ gravatar }}" alt="Avatar" width="96" height="96">
+        {% else %}
+            <img src="/static/avatars/default.png" alt="guest" width="96" height="96">
+        {% endif %}<br>
+        <strong>{% if session["login"] %}{{ session["username"] }}{% else %}guest{% endif %}</strong>
+    </div>
 
-{{ preview|safe }}<p>
+    <strong>Posted on {{ pretty_time }} by {{ name or "Anonymous" }}.</strong><p>
 
-<hr><p>
+    {{ preview|safe }}
+
+    <div class="clear"></div>
+</div>
 
 {% if subscribe == "true" and contact %}
+    <p>
     You will be subscribed to future comments on this thread. Notification
     e-mails will be sent to {{ contact }}.<p>
 {% endif %}
 
-<form name="preview" action="{{ url_for('comment.post') }}" method="POST">
-<input type="hidden" name="token" value="{{ csrf_token() }}">
-<input type="hidden" name="thread" value="{{ thread }}">
-<input type="hidden" name="url" value="{{ url }}">
-<input type="hidden" name="subject" value="{{ subject }}">
-<input type="hidden" name="name" value="{{ name }}">
-<input type="hidden" name="message" value="{{ message }}">
-<input type="hidden" name="contact" value="{{ contact }}">
-<input type="hidden" name="subscribe" value="{{ subscribe }}">
-<button type="submit">Publish Comment</button>
-</form>
+<h2>Edit Comment</h2>
+
+{% include "comment/form.inc.html" %}
 
 {% endblock %}

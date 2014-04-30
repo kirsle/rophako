@@ -1,0 +1,65 @@
+{# Common template for leaving a comment/updating the comment preview. #}
+
+<form name="comment" action="{{ url_for('comment.preview') }}" method="POST">
+<input type="hidden" name="token" value="{{ csrf_token() }}">
+<input type="hidden" name="thread" value="{{ thread }}">
+<input type="hidden" name="url" value="{{ url }}">
+<input type="hidden" name="subject" value="{{ subject }}">
+<table border="0" cellspacing="2" cellpadding="2">
+    <tr>
+        <td align="left" valign="middle">
+            Your name:
+        </td>
+        <td align="left" valign="middle">
+            {% if session["login"] %}
+                <strong>{{ session["name"] }}</strong>
+            {% else %}
+                <input type="text" size="40" name="name" value="{{ name }}">
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td align="left" valign="middle">
+            Your Email:
+        </td>
+        <td align="left" valign="middle">
+            <input type="text" size="40" name="contact" value="{{ contact }}">
+            <small>(optional)</small>
+        </td>
+    </tr>
+    <tr>
+        <td align="left" valign="top">
+            Message:
+        </td>
+        <td align="left" valign="top">
+            <textarea cols="40" rows="8" name="message" style="width: 100%">{{ message }}</textarea><br>
+            <small>Comments can be formatted with <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a>,
+            and you can use<br><a href="{{ url_for('emoticons.index') }}" target="_blank">emoticons</a>
+            in your comment.</small>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" align="left" valign="top">
+            <label>
+                <input type="checkbox" name="subscribe" value="true"{% if subscribe == "true" %} checked{% endif %}>
+                Notify me of future comments on this page via e-mail
+                (<a href="{{ url_for('comment.privacy') }}" target="_blank">Privacy Policy</a>)
+            </label>
+        </td>
+    </tr>
+</table><p>
+
+<div style="display: none">
+    If you can see this, don't touch the following fields.<br>
+    <input type="text" name="website" value="http://"><br>
+    <input type="text" name="email" value="">
+</div>
+
+{% if preview %}
+    <button type="submit" name="action" value="preview">Refresh Preview</button>
+    <button type="submit" name="action" value="submit">Submit Comment</button>
+{% else %}
+    <button type="submit" name="action" value="preview">Leave Comment</button>
+{% endif %}
+
+</form>

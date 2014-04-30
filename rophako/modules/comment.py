@@ -23,7 +23,8 @@ def index():
 @mod.route("/preview", methods=["POST"])
 def preview():
     # Get the form fields.
-    form = get_comment_form(request.form)
+    form   = get_comment_form(request.form)
+    thread = sanitize_name(form["thread"])
 
     # Trap fields.
     trap1 = request.form.get("website", "x") != "http://"
@@ -37,49 +38,40 @@ def preview():
         flash("You must provide a message with your comment.")
         return redirect(form["url"])
 
+    # Gravatar?
+    gravatar = Comment.gravatar(form["contact"])
+
+    # Are they submitting?
+    if form["action"] == "submit":
+        Comment.add_comment(
+            thread=thread,
+            uid=g.info["session"]["uid"],
+            ip=request.remote_addr,
+            time=int(time.time()),
+            image=gravatar,
+            name=form["name"],
+            subject=form["subject"],
+            message=form["message"],
+            url=form["url"],
+        )
+
+        # Are we subscribing to the thread?
+        if form["subscribe"] == "true":
+            email = form["contact"]
+            if "@" in email:
+                Comment.add_subscriber(thread, email)
+                flash("You have been subscribed to future comments on this page.")
+
+        flash("Your comment has been added!")
+        return redirect(form["url"])
+
     # Gravatar.
-    g.info["gravatar"] = Comment.gravatar(form.get("contact", ""))
-    g.info["preview"] = Comment.format_message(form.get("message", ""))
+    g.info["gravatar"]    = gravatar
+    g.info["preview"]     = Comment.format_message(form["message"])
+    g.info["pretty_time"] = pretty_time(COMMENT_TIME_FORMAT, time.time())
 
     g.info.update(form)
     return template("comment/preview.html")
-
-
-@mod.route("/post", methods=["POST"])
-def post():
-    # Get the form fields.
-    form = get_comment_form(request.form)
-    thread = sanitize_name(form["thread"])
-
-    # Gravatar?
-    gravatar = Comment.gravatar(form.get("contact"))
-
-    # Validate things.
-    if len(form["message"]) == 0:
-        flash("You must provide a message with your comment.")
-        return redirect(form["url"])
-
-    Comment.add_comment(
-        thread=thread,
-        uid=g.info["session"]["uid"],
-        ip=request.remote_addr,
-        time=int(time.time()),
-        image=gravatar,
-        name=form["name"],
-        subject=form["subject"],
-        message=form["message"],
-        url=form["url"],
-    )
-
-    # Are we subscribing to the thread?
-    if form.get("subscribe", "false") == "true":
-        email = form.get("contact", "")
-        if "@" in email:
-            Comment.add_subscriber(thread, email)
-            flash("You have been subscribed to future comments on this page.")
-
-    flash("Your comment has been added!")
-    return redirect(form["url"])
 
 
 @mod.route("/delete/<thread>/<cid>")
@@ -175,6 +167,7 @@ def partial_index(thread, subject, header=True):
 
 def get_comment_form(form):
     return dict(
+        action  = request.form.get("action", ""),
         thread  = request.form.get("thread", ""),
         url     = request.form.get("url", ""),
         subject = request.form.get("subject", "[No Subject]"),
