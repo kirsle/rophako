@@ -34,6 +34,12 @@ def login():
             session["uid"]  = db["uid"]
             session["name"] = db["name"]
             session["role"] = db["role"]
+
+            # Redirect them to a local page?
+            url = request.form.get("url", "")
+            if url[0] == "/":
+                return redirect(url)
+
             return redirect(url_for("index"))
         else:
             flash("Authentication failed.")
