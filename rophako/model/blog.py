@@ -40,7 +40,7 @@ def get_index():
 
     # Hide any private posts if we aren't logged in.
     if not g.info["session"]["login"]:
-        for post_id, data in db.iteritems():
+        for post_id, data in db.items():
             if data["privacy"] == "private":
                 del db[post_id]
 
@@ -53,7 +53,7 @@ def get_categories():
 
     # Group by tags.
     tags = {}
-    for post, data in index.iteritems():
+    for post, data in index.items():
         for tag in data["categories"]:
             if not tag in tags:
                 tags[tag] = 0
@@ -110,7 +110,7 @@ def post_entry(post_id, fid, epoch, author, subject, avatar, categories,
         while True:
             collision = False
 
-            for k, v in index.iteritems():
+            for k, v in index.items():
                 # Skip the same post, for updates.
                 if k == post_id: continue
 
@@ -191,7 +191,7 @@ def resolve_id(fid):
             return None
 
     # It's a friendly ID. Scan for it.
-    for post_id, data in index.iteritems():
+    for post_id, data in index.items():
         if data["fid"] == fid:
             return int(post_id)
 

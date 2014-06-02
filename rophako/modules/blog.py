@@ -68,7 +68,7 @@ def entry(fid):
     # Inject information about this post's siblings.
     index = Blog.get_index()
     siblings = [None, None] # previous, next
-    sorted_ids = map(lambda y: int(y), sorted(index.keys(), key=lambda x: index[x]["time"], reverse=True))
+    sorted_ids = list(map(lambda y: int(y), sorted(index.keys(), key=lambda x: index[x]["time"], reverse=True)))
     for i in range(0, len(sorted_ids)):
         if sorted_ids[i] == post_id:
             # Found us!
@@ -195,7 +195,7 @@ def update():
                     g.info["min"],
                     g.info["sec"],
                 )
-            except ValueError, e:
+            except ValueError as e:
                 invalid = True
                 flash("Invalid date/time: " + str(e))
 
@@ -364,7 +364,7 @@ def partial_index():
     # Are we narrowing by category?
     if category:
         # Narrow down the index to just those that match the category.
-        for post_id, data in index.iteritems():
+        for post_id, data in index.items():
             if not category in data["categories"]:
                 continue
             pool[post_id] = data
@@ -445,7 +445,7 @@ def get_index_posts(index):
     """Helper function to get data for the blog index page."""
     # Separate the sticky posts from the normal ones.
     sticky, normal = set(), set()
-    for post_id, data in index.iteritems():
+    for post_id, data in index.items():
         if data["sticky"]:
             sticky.add(post_id)
         else:

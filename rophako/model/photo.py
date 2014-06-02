@@ -536,5 +536,5 @@ def random_name(filetype):
 def random_hash():
     """Get a short random hash to use as the base name for a photo."""
     md5 = hashlib.md5()
-    md5.update(str(random.randint(0, 1000000)))
+    md5.update(str(random.randint(0, 1000000)).encode("utf-8"))
     return md5.hexdigest()[:8]

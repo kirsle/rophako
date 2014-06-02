@@ -66,7 +66,7 @@ def commit(document, data):
             segment = "/".join(directory)
             if len(segment) > 0 and not os.path.isdir(segment):
                 logger.debug("JsonDB: mkdir {}".format(segment))
-                os.mkdir(segment, 0755)
+                os.mkdir(segment, 0o755)
 
     # Update the cached document.
     set_cache(document, data, expires=cache_lifetime)

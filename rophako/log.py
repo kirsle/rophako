@@ -2,6 +2,8 @@
 
 """Debug and logging functions."""
 
+from __future__ import print_function
+
 from flask import g, request
 import logging
 
@@ -18,7 +20,7 @@ class LogHandler(logging.Handler):
         name = "-nobody-"
 
         line = line.replace('$prefix$', '')
-        print line
+        print(line)
 
 # Set up the logger.
 logger = logging.getLogger("rophako")

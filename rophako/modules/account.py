@@ -37,7 +37,7 @@ def login():
 
             # Redirect them to a local page?
             url = request.form.get("url", "")
-            if url[0] == "/":
+            if url.startswith("/"):
                 return redirect(url)
 
             return redirect(url_for("index"))

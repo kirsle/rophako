@@ -147,7 +147,7 @@ def exists(uid=None, username=None):
 
 
 def hash_password(password):
-    return bcrypt.hashpw(str(password), bcrypt.gensalt(config.BCRYPT_ITERATIONS))
+    return bcrypt.hashpw(str(password).encode("utf-8"), bcrypt.gensalt(config.BCRYPT_ITERATIONS)).decode("utf-8")
 
 
 def check_auth(username, password):
@@ -163,7 +163,8 @@ def check_auth(username, password):
     db = get_user(username=username)
 
     # Check the password.
-    return bcrypt.hashpw(str(password), str(db["password"])) == db["password"]
+    test = bcrypt.hashpw(str(password).encode("utf-8"), str(db["password"]).encode("utf-8")).decode("utf-8")
+    return test == db["password"]
 
 
 def get_next_uid():

@@ -46,7 +46,7 @@ def load_theme():
 
     try:
         data = json.loads(text)
-    except Exception, e:
+    except Exception as e:
         logger.error("Couldn't load JSON from emoticon file: {}".format(e))
         data = {}
 

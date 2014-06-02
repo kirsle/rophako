@@ -8,6 +8,7 @@ import hashlib
 import urllib
 import random
 import re
+import sys
 
 import config
 import rophako.jsondb as JsonDB
@@ -207,7 +208,7 @@ def write_subscribers(thread, subs):
 def random_hash():
     """Get a short random hash to use as the ID for a comment."""
     md5 = hashlib.md5()
-    md5.update(str(random.randint(0, 1000000)))
+    md5.update(str(random.randint(0, 1000000)).encode("utf-8"))
     return md5.hexdigest()
 
 
@@ -223,7 +224,13 @@ def gravatar(email):
         }
         if default:
             params["d"] = default
-        url = "//www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
-        url += urllib.urlencode(params)
+        url = "//www.gravatar.com/avatar/" + hashlib.md5(email.lower().encode("utf-8")).hexdigest() + "?"
+
+        # URL encode the params, the Python 2 & Python 3 way.
+        if sys.version_info[0] < 3:
+            url += urllib.urlencode(params)
+        else:
+            url += urllib.parse.urlencode(params)
+
         return url
     return ""
