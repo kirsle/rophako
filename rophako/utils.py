@@ -57,30 +57,71 @@ def template(name, **kwargs):
 
 
 def markdown_template(path):
-    """Render a Markdown page to the browser."""
+    """Render a Markdown page to the browser.
+
+    The first line in the Markdown page should be an H1 header beginning with
+    the # sign. This will set the page's <title> to match the header value.
+
+    Pages can include lines that begin with the keyword `:meta` to apply
+    meta information to control the Markdown parser. Supported meta lines
+    and examples:
+
+    To 'blacklist' extensions, i.e. to turn off line breaks inside a paragraph
+    getting translated into a <br> tag (the key is the minus sign):
+    :meta extensions -nl2br
+
+    To add an extension, i.e. the abbreviations from PHP Markdown Extra:
+    :meta extensions abbr"""
 
     # The path is the absolute path to the Markdown file, so open it directly.
     fh = codecs.open(path, "r", "utf-8")
     body = fh.read()
     fh.close()
 
+    # Look for meta information in the file.
+    lines      = body.split("\n")
+    content    = list() # New set of lines, without meta info.
+    extensions = set()
+    blacklist  = set() # Blacklisted extensions
+    for line in lines:
+        if line.startswith(":meta"):
+            parts = line.split(" ")
+            if len(parts) >= 3:
+                # Supported meta commands.
+                if parts[1] == "extensions":
+                    # Extension toggles.
+                    for extension in parts[2:]:
+                        if extension.startswith("-"):
+                            extension = extension[1:]
+                            blacklist.add(extension)
+                        else:
+                            extensions.add(extension)
+        else:
+            content.append(line)
+
     # Extract a title from the first line.
-    first = body.split("\n")[0]
+    first = content[0]
     if first.startswith("#"):
         first = first[1:].strip()
 
-    rendered = render_markdown(body)
+    rendered = render_markdown("\n".join(content),
+        extensions=extensions,
+        blacklist=blacklist,
+    )
     return template("markdown.inc.html",
         title=first,
         markdown=rendered,
     )
 
 
-def render_markdown(body, html_escape=True):
+def render_markdown(body, html_escape=True, extensions=None, blacklist=None):
     """Render a block of Markdown text.
 
     This will default to escaping literal HTML characters. Set
-    `html_escape=False` to trust HTML."""
+    `html_escape=False` to trust HTML.
+
+    * extensions should be a set() of extensions to add.
+    * blacklist should be a set() of extensions to blacklist."""
 
     args = dict(
         lazy_ol=False, # If a numbered list starts at e.g. 4, show the <ol> there
@@ -100,6 +141,14 @@ def render_markdown(body, html_escape=True):
     )
     if html_escape:
         args["safe_mode"] = "escape"
+
+    # Additional extensions?
+    if extensions is not None:
+        for ext in extensions:
+            args["extensions"].append(ext)
+    if blacklist is not None:
+        for ext in blacklist:
+            args["extensions"].remove(str(ext))
 
     return markdown.markdown(body, **args)
 
