@@ -5,6 +5,7 @@ from flask_sslify import SSLify
 import jinja2
 import os.path
 import time
+import sys
 
 import config
 import rophako.utils
@@ -67,6 +68,7 @@ def before_request():
         "app": {
             "name": "Rophako",
             "version": __version__,
+            "python_version": "{}.{}".format(sys.version_info.major, sys.version_info.minor),
             "author": "Noah Petherbridge",
             "photo_url": config.PHOTO_ROOT_PUBLIC,
         },
