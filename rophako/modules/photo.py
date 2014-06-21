@@ -6,7 +6,7 @@ from flask import Blueprint, g, request, redirect, url_for, session, flash
 
 import rophako.model.user as User
 import rophako.model.photo as Photo
-from rophako.utils import template, pretty_time, login_required
+from rophako.utils import template, pretty_time, login_required, ajax_response
 from rophako.log import logger
 from config import *
 
@@ -68,7 +68,15 @@ def upload():
     """Upload a photo."""
 
     if request.method == "POST":
-        # We're posting the upload. What source is the pic from?
+        # We're posting the upload.
+
+        # Is this an ajax post or a direct post?
+        is_ajax = request.form.get("__ajax", "false") == "true"
+
+        # Album name.
+        album = request.form.get("album") or request.form.get("new-album")
+
+        # What source is the pic from?
         result = None
         location = request.form.get("location")
         if location == "pc":
@@ -83,9 +91,24 @@ def upload():
 
         # How'd it go?
         if result["success"] is not True:
-            flash("The upload has failed: {}".format(result["error"]))
-            return redirect(url_for(".upload"))
-        return redirect(url_for(".crop", photo=result["photo"]))
+            if is_ajax:
+                return ajax_response(False, result["error"])
+            else:
+                flash("The upload has failed: {}".format(result["error"]))
+                return redirect(url_for(".upload"))
+
+        # Good!
+        if is_ajax:
+            # Was it a multiple upload?
+            if result["multi"]:
+                return ajax_response(True, url_for(".album_index", name=album))
+            else:
+                return ajax_response(True, url_for(".crop", photo=result["photo"]))
+        else:
+            if result["multi"]:
+                return redirect(url_for(".album_index", name=album))
+            else:
+                return redirect(url_for(".crop", photo=result["photo"]))
 
     # Get the list of available albums.
     g.info["album_list"] = [

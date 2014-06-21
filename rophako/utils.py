@@ -10,6 +10,7 @@ import re
 import importlib
 import smtplib
 import markdown
+import json
 
 from rophako.log import logger
 from config import *
@@ -43,6 +44,15 @@ def admin_required(f):
 
         return f(*args, **kwargs)
     return decorated_function
+
+
+def ajax_response(status, msg):
+    """Return a standard JSON response."""
+    status = "ok" if status else "error"
+    return json.dumps(dict(
+        status=status,
+        msg=msg,
+    ))
 
 
 def template(name, **kwargs):

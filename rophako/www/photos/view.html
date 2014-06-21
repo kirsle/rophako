@@ -42,6 +42,7 @@ Uploaded by {{ author["name"] }} on {{ photo["pretty_time"] }}.
         <li><a href="{{ url_for('photo.set_cover', album=photo['album'], key=photo['key']) }}">Set Album Cover</a></li>
         <li><a href="{{ url_for('photo.set_profile', key=photo['key']) }}">Set as my Profile Picture</a></li>
         <li><a href="{{ url_for('photo.edit', key=photo['key']) }}">Edit this photo</a></li>
+        <li><a href="{{ url_for('photo.crop', photo=photo['key']) }}">Change Thumbnail</a></li>
         <li><a href="{{ url_for('photo.delete', key=photo['key']) }}">Delete this photo</a></li>
     </ul>
 {% endif %}

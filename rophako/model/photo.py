@@ -293,16 +293,32 @@ def upload_from_pc(request):
     """
 
     form   = request.form
-    upload = request.files["file"]
+    count  = 0
+    status = None
+    for upload in request.files.getlist("file"):
+        count += 1
 
-    # Make a temp filename for it.
-    filetype = upload.filename.rsplit(".", 1)[1]
-    tempfile = "{}/rophako-photo-{}.{}".format(config.TEMPDIR, int(time.time()), filetype)
-    logger.debug("Save incoming photo to: {}".format(tempfile))
-    upload.save(tempfile)
+        # Make a temp filename for it.
+        filetype = upload.filename.rsplit(".", 1)[-1]
+        if not allowed_filetype(upload.filename):
+            return dict(success=False, error="Unsupported file extension.")
 
-    # All good so far. Process the photo.
-    return process_photo(form, tempfile)
+        tempfile = "{}/rophako-photo-{}.{}".format(config.TEMPDIR, int(time.time()), filetype)
+        logger.debug("Save incoming photo to: {}".format(tempfile))
+        upload.save(tempfile)
+
+        # All good so far. Process the photo.
+        status = process_photo(form, tempfile)
+        if not status["success"]:
+            return status
+
+    # Multi upload?
+    if count > 1:
+        status["multi"] = True
+    else:
+        status["multi"] = False
+
+    return status
 
 
 def upload_from_www(form):

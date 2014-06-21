@@ -7,7 +7,7 @@
 You can upload a photo from your computer or by pasting in the URL to a photo
 somewhere else on the Internet.
 
-<form name="upload" action="{{ url_for('photo.upload') }}" method="POST" enctype="multipart/form-data">
+<form id="upload-form" action="{{ url_for('photo.upload') }}" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="token" value="{{ csrf_token() }}">
 
     <fieldset>
@@ -22,7 +22,10 @@ somewhere else on the Internet.
 
         <div id="pic-pc" class="location-div">
             <strong>Upload a picture from my computer</strong><br>
-            <input type="file" size="30" name="file">
+            <input type="file" size="30" name="file" id="file-picker" accept="image/*" multiple><p>
+
+            <strong>Or, drag images here:</strong><br>
+            <div id="dropbox" class="photo-upload-dropbox">Drag and drop images into this box</div>
         </div>
 
         <div id="pic-www" class="location-div">
@@ -34,6 +37,7 @@ somewhere else on the Internet.
         Only jpeg, gif and png images are supported. There is no maximum file size
         limit, but be reasonable.
     </fieldset>
+    <p>
 
     <fieldset>
         <legend>Photo Options</legend>
@@ -58,13 +62,23 @@ somewhere else on the Internet.
     </fieldset>
     <p>
 
-    <button type="submit">Upload Picture</button>
+    <fieldset id="upload-progress" style="display: none">
+        <legend>Upload Progress</legend>
+
+        <div class="upload-trough">
+            <div id="upload-progress-bar" class="upload-progress-bar"></div>
+        </div>
+    </fieldset>
+    <p>
+
+    <button type="submit" id="upload-button">Upload Picture</button>
 
 </form>
 
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript" src="/rophako/multiupload.js"></script>
 <script>
     $(document).ready(function() {
         $("#pic-www").hide();
