@@ -100,7 +100,7 @@ def upload():
         # Good!
         if is_ajax:
             # Was it a multiple upload?
-            if result["multi"]:
+            if result.get("multi"):
                 return ajax_response(True, url_for(".album_index", name=album))
             else:
                 return ajax_response(True, url_for(".crop", photo=result["photo"]))

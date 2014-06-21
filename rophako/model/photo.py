@@ -295,7 +295,7 @@ def upload_from_pc(request):
     form   = request.form
     count  = 0
     status = None
-    for upload in request.files.getlist("file"):
+    for upload in reversed(request.files.getlist("file")):
         count += 1
 
         # Make a temp filename for it.
