@@ -245,6 +245,27 @@ def arrange_albums():
     return template("photos/arrange_albums.html")
 
 
+@mod.route("/delete_album/<album>", methods=["GET", "POST"])
+@login_required
+def delete_album(album):
+    """Delete an entire album."""
+    photos = Photo.list_photos(album)
+    if photos is None:
+        flash("That album doesn't exist.")
+        return redirect(url_for(".albums"))
+
+    if request.method == "POST":
+        # Do it.
+        for photo in photos:
+            Photo.delete_photo(photo["key"])
+        flash("The album has been deleted.")
+        return redirect(url_for(".albums"))
+
+    g.info["album"] = album
+
+    return template("photos/delete_album.html")
+
+
 @mod.route("/arrange_photos/<album>", methods=["GET", "POST"])
 @login_required
 def arrange_photos(album):

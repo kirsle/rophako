@@ -26,7 +26,10 @@
 
     <ul>
         <li><a href="{{ url_for('photo.upload') }}">Upload a Photo</a></li>
-        {% if photos|length > 0 %}<li><a href="{{ url_for('photo.arrange_photos', album=album) }}">Rearrange Photos</a></li>{% endif %}
+        {% if photos|length > 0 %}
+            <li><a href="{{ url_for('photo.arrange_photos', album=album) }}">Rearrange Photos</a></li>
+            <li><a href="{{ url_for('photo.delete_album', album=album) }}">Delete Album</a></li>
+        {% endif %}
     </ul>
 {% endif %}
 

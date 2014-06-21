@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Delete Album{% endblock %}
+{% block content %}
+
+<h1>Delete Album</h1>
+
+<form name="delete" action="{{ url_for('photo.delete_album', album=album) }}" method="POST">
+    <input type="hidden" name="token" value="{{ csrf_token() }}">
+    Are you <strong>sure</strong> you want to delete the album <strong>{{ album }}</strong>?<p>
+
+    <button type="submit">Yes, Delete This Album</button>
+</form>
+
+{% endblock %}
