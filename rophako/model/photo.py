@@ -195,10 +195,45 @@ def edit_photo(key, data):
 
     album = index["map"][key]
 
-    logger.info("Completely deleting the photo {} from album {}".format(key, album))
+    logger.info("Updating data for the photo {} from album {}".format(key, album))
     index["albums"][album][key].update(data)
 
     write_index(index)
+
+
+def rotate_photo(key, rotate):
+    """Rotate a photo 90 degrees to the left or right."""
+    photo = get_photo(key)
+    if not photo: return
+
+    # Degrees to rotate.
+    degrees = None
+    if rotate == "left":
+        degrees = 90
+    elif rotate == "right":
+        degrees = -90
+    else:
+        degrees = 180
+
+    new_names = dict()
+    for size in ["large", "thumb", "avatar"]:
+        fname = os.path.join(config.PHOTO_ROOT_PRIVATE, photo[size])
+        logger.info("Rotating image {} by {} degrees.".format(fname, degrees))
+
+        # Give it a new name.
+        filetype = fname.split(".")[-1]
+        outfile = random_name(filetype)
+        new_names[size] = outfile
+
+        img = Image.open(fname)
+        img = img.rotate(degrees)
+        img.save(os.path.join(config.PHOTO_ROOT_PRIVATE, outfile))
+
+        # Delete the old name.
+        os.unlink(fname)
+
+    # Save the new image names.
+    edit_photo(key, new_names)
 
 
 def delete_photo(key):
@@ -216,7 +251,9 @@ def delete_photo(key):
     # Delete all the images.
     for size in ["large", "thumb", "avatar"]:
         logger.info("Delete: {}".format(photo[size]))
-        os.unlink(os.path.join(config.PHOTO_ROOT_PRIVATE, photo[size]))
+        fname = os.path.join(config.PHOTO_ROOT_PRIVATE, photo[size])
+        if os.path.isfile(fname):
+            os.unlink(fname)
 
     # Delete it from the sort list.
     index["photo-order"][album].remove(key)
@@ -543,6 +580,7 @@ def write_index(index):
 
 def random_name(filetype):
     """Get a random available file name to save a new photo."""
+    filetype = filetype.lower()
     outfile = random_hash() + "." + filetype
     while os.path.isfile(os.path.join(config.PHOTO_ROOT_PRIVATE, outfile)):
         outfile = random_hash() + "." + filetype

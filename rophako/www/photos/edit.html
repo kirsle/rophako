@@ -12,6 +12,20 @@
     <strong>Photo Caption:</strong><br>
     <input type="text" size="40" name="caption" value="{{ photo['caption'] }}"><p>
 
+    Rotate:
+    <label>
+        <input type="radio" name="rotate" value="" checked> Leave alone
+    </label>
+    <label>
+        <input type="radio" name="rotate" value="left"> Left 90&deg;
+    </label>
+    <label>
+        <input type="radio" name="rotate" value="right"> Right 90&deg;
+    </label>
+    <label>
+        <input type="radio" name="rotate" value="180"> 180&deg;
+    </label><p>
+
     <button type="submit">Save Changes</button>
 </form>
 

@@ -195,7 +195,13 @@ def edit(key):
 
     if request.method == "POST":
         caption = request.form.get("caption", "")
+        rotate  = request.form.get("rotate", "")
         Photo.edit_photo(key, dict(caption=caption))
+
+        # Rotating the photo?
+        if rotate in ["left", "right", "180"]:
+            Photo.rotate_photo(key, rotate)
+
         flash("The photo has been updated.")
         return redirect(url_for(".view_photo", key=key))
 
