@@ -98,6 +98,10 @@ function RophakoUpload() {
                     window.location = data.msg;
                 }
             },
+            error: function() {
+                window.alert("Upload error!");
+                $("#upload-button").removeAttr("disabled");
+            },
         });
     };
 
