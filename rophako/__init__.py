@@ -56,12 +56,6 @@ Emoticons.load_theme()
 def before_request():
     """Called before all requests. Initialize global template variables."""
 
-    # CSRF protection.
-    if request.method == "POST":
-        token = session.pop("_csrf", None)
-        if not token or str(token) != str(request.form.get("token")):
-            abort(403)
-
     # Default template vars.
     g.info = {
         "time": time.time(),
@@ -85,6 +79,12 @@ def before_request():
     # Default session vars.
     if not "login" in session:
         session.update(g.info["session"])
+
+    # CSRF protection.
+    if request.method == "POST":
+        token = session.pop("_csrf", None)
+        if not token or str(token) != str(request.form.get("token")):
+            abort(403)
 
     # Refresh their login status from the DB.
     if session["login"]:
@@ -149,6 +149,11 @@ def index():
 @app.errorhandler(404)
 def not_found(error):
     return render_template('errors/404.html', **g.info), 404
+
+
+@app.errorhandler(403)
+def forbidden(error):
+    return render_template('errors/403.html', **g.info), 403
 
 
 # Domain specific endpoints.

@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %}Forbidden{% endblock %}
+{% block content %}
+
+<h1>Forbidden</h1>
+
+Access to this page was denied. Most likely, this error was caused because a
+check to prevent <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">Cross-site
+request forgery</a> has failed. This will sometimes happen if you had this site
+open in two different browser tabs, and you submitted a form in one tab (on a
+"newer" page) and then tried submitting a form on an older page.<p>
+
+If this is the case, click your browser's "Back" button and then reload the
+page you came from and try again (you may want to copy your message before
+reloading in case your browser clears it out).
+
+{% endblock %}
