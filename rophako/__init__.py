@@ -18,7 +18,7 @@ app.secret_key = config.SECRET_KEY
 
 # Security?
 if config.FORCE_SSL:
-    app.SESSION_COOKIE_SECURE = True
+    app.config['SESSION_COOKIE_SECURE'] = True
     sslify = SSLify(app)
 
 # Load all the blueprints!

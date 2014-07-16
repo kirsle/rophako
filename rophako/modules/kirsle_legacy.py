@@ -5,7 +5,9 @@
 from flask import g, request, redirect, url_for, flash
 import re
 import os
+import json
 
+import config
 from rophako import app
 from rophako.utils import template, login_required
 import rophako.model.blog as Blog
@@ -99,10 +101,14 @@ def legacy_url(page):
 @app.route("/ssl_test")
 @login_required
 def ssl_test():
-    criteria = [
-        request.is_secure,
-        app.debug,
-        request.headers.get("X-Forwarded-Proto", "http") == "https"
-    ]
-
-    return str(criteria)
+    return "<pre>{}</pre>".format(json.dumps({
+        "SSLify criteria": {
+            "request.is_secure": request.is_secure,
+            "app.debug": app.debug,
+            "X-Forwarded-Proto is http": request.headers.get("X-Forwarded-Proto", "http") == "https",
+        },
+        "App Configuration": {
+            "Session cookies secure": app.config["SESSION_COOKIE_SECURE"],
+            "config.FORCE_SSL": config.FORCE_SSL,
+        },
+    }))
