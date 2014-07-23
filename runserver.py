@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import sys
 import argparse
 
-from rophako import app
+from rophako.app import app
 
 parser = argparse.ArgumentParser(description="Rophako")
 parser.add_argument(
