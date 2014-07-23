@@ -12,6 +12,6 @@ sys.path.append(".")
 activate_this = os.environ['HOME']+'/.virtualenv/rophako/bin/activate_this.py'
 execfile(activate_this, dict(__file__=activate_this))
 
-from rophako import app as application
+from rophako.app import app as application
 
 # vim:ft=python
