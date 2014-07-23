@@ -32,6 +32,49 @@ its contents to set up your site. It's very important that you change the
 prevent people from tampering with them. The config script is well-documented
 with comments explaining what all the options do.
 
+## Plugins
+
+The various site features in Rophako are delegated out into pluggable
+modules. Your `config.py` should call a `load_plugin()` method for each
+plugin you want your site to use.
+
+The core plugins `admin` and `accounts` are *always* loaded automatically.
+The other built-in plugins like `blog`, `photo`, and `comment` are optional
+but are enabled by default in the sample config file.
+
+Each of the built-in plugins are loaded as Flask blueprints, and the plugin
+specifies where it attaches its endpoint to within its own code, i.e. the
+blog plugin will attach to the `/blog` URI. For loading the built-in plugins
+in your site, just refer to them by name:
+
+```python
+load_plugin("rophako.modules.blog")
+```
+
+Plugins are assumed to be Flask blueprint modules, which use the variable
+name `mod` to hold their Blueprint object. If your plugin isn't a blueprint,
+and you simply want it to be imported and run (i.e. perhaps it manipulates
+the `app` object directly to specify its endpoints), use the parameter
+`as_blueprint=False`. An example of this is with `kirsle_legacy.py` which
+defines legacy endpoints for kirsle.net for backwards compatible URIs:
+
+```python
+load_plugin("kirsle_legacy", as_blueprint=False)
+```
+
+Finally, blueprint plugins can keep their own templates bundled within their
+module's folder. All of the built-in plugins do this -- it means that, for
+example, if you elect *not* to include the `photo` plugin, that the endpoints
+for its URIs (i.e. `/photos/album`) will give 404 responses.
+
+You can specify the template path for your blueprint's templates as a
+`template_path` parameter to `load_plugin()`. By default, the module's name
+is converted into a path and a `/templates` folder is appended. So for
+example, the blog's template path becomes `rophako/modules/blog/templates`.
+This works fine for built-in modules (as your working directory will be the
+root of your Flask application), but hasn't been tested for third party
+modules.
+
 # Create the Admin User
 
 Once the web app is up and running, navigate to the `/account/setup` URL

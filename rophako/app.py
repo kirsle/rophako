@@ -39,20 +39,6 @@ if config.FORCE_SSL:
 # Load all the built-in essential plugins.
 load_plugin("rophako.modules.admin")
 load_plugin("rophako.modules.account")
-# from rophako.modules.admin import mod as AdminModule
-# from rophako.modules.account import mod as AccountModule
-# from rophako.modules.blog import mod as BlogModule
-# from rophako.modules.photo import mod as PhotoModule
-# from rophako.modules.comment import mod as CommentModule
-# from rophako.modules.emoticons import mod as EmoticonsModule
-# from rophako.modules.contact import mod as ContactModule
-# app.register_blueprint(AdminModule)
-# app.register_blueprint(AccountModule)
-# app.register_blueprint(BlogModule)
-# app.register_blueprint(PhotoModule)
-# app.register_blueprint(CommentModule)
-# app.register_blueprint(EmoticonsModule)
-# app.register_blueprint(ContactModule)
 
 # Custom Jinja handler to support custom- and default-template folders for
 # rendering templates.
