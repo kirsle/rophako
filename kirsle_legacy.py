@@ -8,7 +8,7 @@ import os
 import json
 
 import config
-from rophako import app
+from rophako.app import app
 from rophako.utils import template, login_required
 import rophako.model.blog as Blog
 import rophako.jsondb as JsonDB

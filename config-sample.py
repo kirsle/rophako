@@ -5,6 +5,7 @@
 import os
 _basedir = os.path.abspath(os.path.dirname(__file__))
 import datetime
+from rophako.plugin import load_plugin
 
 DEBUG = True
 
@@ -116,3 +117,21 @@ COMMENT_TIME_FORMAT = "%A, %B %d %Y @ %I:%M %p"
 # We use Gravatar for comments if the user provides an e-mail address. Specify
 # the URL to a fallback image to use in case they don't have a gravatar.
 COMMENT_DEFAULT_AVATAR = ""
+
+################################################################################
+## Enabled Plugins                                                            ##
+################################################################################
+
+# Place all the load_plugin calls down here. Some of the plugins need to refer
+# to config params above so those need to get declared before the plugin begins
+# to initialize itself.
+#
+# Some plugins will automatically load others as dependencies, i.e. the blog
+# and photo will load comment, and comment will load emoticons. But it doesn't
+# hurt to list them all out here to be explicit anyway.
+
+load_plugin("rophako.modules.blog")
+load_plugin("rophako.modules.photo")
+load_plugin("rophako.modules.comment")
+load_plugin("rophako.modules.emoticons")
+load_plugin("rophako.modules.contact")

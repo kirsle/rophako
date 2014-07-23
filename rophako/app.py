@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+
+"""Flask app for Rophako."""
+
 from flask import Flask, g, request, session, render_template, send_file, abort
 from flask_sslify import SSLify
 import jinja2
@@ -5,13 +9,25 @@ import os.path
 import time
 import sys
 
-import config
-from rophako import __version__
-import rophako.utils
-
+# Get the Flask app object ready right away so other modules can import it
+# without getting a circular import error.
 app = Flask(__name__,
     static_url_path="/.static",
 )
+
+# We use a custom Jinja loader to support multiple template paths for custom
+# and default templates. The base list of template paths to check includes
+# your custom path (from config.SITE_ROOT), the "rophako/www" path for normal
+# pages, and then the blueprint paths for all imported plugins. This list will
+# be extended while blueprints are being loaded and passed in below to the
+# jinja2.ChoiceLoader.
+BLUEPRINT_PATHS = []
+
+import config
+from rophako import __version__
+from rophako.plugin import load_plugin
+import rophako.utils
+
 app.DEBUG      = config.DEBUG
 app.secret_key = config.SECRET_KEY
 
@@ -20,28 +36,32 @@ if config.FORCE_SSL:
     app.config['SESSION_COOKIE_SECURE'] = True
     sslify = SSLify(app)
 
-# Load all the blueprints!
-from rophako.modules.admin import mod as AdminModule
-from rophako.modules.account import mod as AccountModule
-from rophako.modules.blog import mod as BlogModule
-from rophako.modules.photo import mod as PhotoModule
-from rophako.modules.comment import mod as CommentModule
-from rophako.modules.emoticons import mod as EmoticonsModule
-from rophako.modules.contact import mod as ContactModule
-app.register_blueprint(AdminModule)
-app.register_blueprint(AccountModule)
-app.register_blueprint(BlogModule)
-app.register_blueprint(PhotoModule)
-app.register_blueprint(CommentModule)
-app.register_blueprint(EmoticonsModule)
-app.register_blueprint(ContactModule)
+# Load all the built-in essential plugins.
+load_plugin("rophako.modules.admin")
+load_plugin("rophako.modules.account")
+# from rophako.modules.admin import mod as AdminModule
+# from rophako.modules.account import mod as AccountModule
+# from rophako.modules.blog import mod as BlogModule
+# from rophako.modules.photo import mod as PhotoModule
+# from rophako.modules.comment import mod as CommentModule
+# from rophako.modules.emoticons import mod as EmoticonsModule
+# from rophako.modules.contact import mod as ContactModule
+# app.register_blueprint(AdminModule)
+# app.register_blueprint(AccountModule)
+# app.register_blueprint(BlogModule)
+# app.register_blueprint(PhotoModule)
+# app.register_blueprint(CommentModule)
+# app.register_blueprint(EmoticonsModule)
+# app.register_blueprint(ContactModule)
 
 # Custom Jinja handler to support custom- and default-template folders for
 # rendering templates.
-app.jinja_loader = jinja2.ChoiceLoader([
-    jinja2.FileSystemLoader(config.SITE_ROOT), # Site specific.
-    jinja2.FileSystemLoader("rophako/www"),    # Default/fall-back
-])
+template_paths = [
+   config.SITE_ROOT, # Site specific.
+   "rophako/www",    # Default/fall-back
+]
+template_paths.extend(BLUEPRINT_PATHS)
+app.jinja_loader = jinja2.ChoiceLoader([ jinja2.FileSystemLoader(x) for x in template_paths])
 
 app.jinja_env.globals["csrf_token"] = rophako.utils.generate_csrf_token
 app.jinja_env.globals["include_page"] = rophako.utils.include
@@ -153,8 +173,3 @@ def not_found(error):
 @app.errorhandler(403)
 def forbidden(error):
     return render_template('errors/403.html', **g.info), 403
-
-
-# Domain specific endpoints.
-if config.SITE_NAME == "kirsle.net":
-    import rophako.modules.kirsle_legacy

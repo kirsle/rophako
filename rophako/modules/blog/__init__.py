@@ -14,10 +14,12 @@ import rophako.model.blog as Blog
 import rophako.model.comment as Comment
 import rophako.model.emoticons as Emoticons
 from rophako.utils import template, render_markdown, pretty_time, login_required
+from rophako.plugin import load_plugin
 from rophako.log import logger
 from config import *
 
 mod = Blueprint("blog", __name__, url_prefix="/blog")
+load_plugin("rophako.modules.comment")
 
 @mod.route("/")
 def index():

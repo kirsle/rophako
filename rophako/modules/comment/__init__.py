@@ -9,10 +9,12 @@ import time
 import rophako.model.user as User
 import rophako.model.comment as Comment
 from rophako.utils import template, pretty_time, login_required, sanitize_name
+from rophako.plugin import load_plugin
 from rophako.log import logger
 from config import *
 
 mod = Blueprint("comment", __name__, url_prefix="/comments")
+load_plugin("rophako.modules.emoticons")
 
 
 @mod.route("/")

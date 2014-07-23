@@ -7,10 +7,12 @@ from flask import Blueprint, g, request, redirect, url_for, session, flash
 import rophako.model.user as User
 import rophako.model.photo as Photo
 from rophako.utils import template, pretty_time, login_required, ajax_response
+from rophako.plugin import load_plugin
 from rophako.log import logger
 from config import *
 
 mod = Blueprint("photo", __name__, url_prefix="/photos")
+load_plugin("rophako.modules.comment")
 
 @mod.route("/")
 def index():
