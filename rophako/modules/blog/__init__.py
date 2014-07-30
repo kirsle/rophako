@@ -134,8 +134,9 @@ def update():
             g.info["post"] = post
 
             # Copy fields.
-            for field in ["author", "fid", "subject", "format", "body", "avatar",
-                          "categories", "privacy", "emoticons", "comments"]:
+            for field in ["author", "fid", "subject", "format", "format",
+                          "body", "avatar", "categories", "privacy",
+                          "emoticons", "comments"]:
                 g.info[field] = post[field]
 
             # Dissect the time.
@@ -155,7 +156,7 @@ def update():
 
         # Get all the fields from the posted params.
         g.info["post_id"] = request.form.get("id")
-        for field in ["fid", "subject", "body", "avatar", "categories", "privacy"]:
+        for field in ["fid", "subject", "format", "body", "avatar", "categories", "privacy"]:
             g.info[field] = request.form.get(field)
         for boolean in ["emoticons", "comments"]:
             g.info[boolean] = True if request.form.get(boolean, None) == "true" else False
