@@ -26,6 +26,49 @@ def index():
     return template("blog/index.html")
 
 
+@mod.route("/archive")
+def archive():
+    """List all blog posts over time on one page."""
+    index = Blog.get_index()
+
+    # Group by calendar month, and keep track of friendly versions of months.
+    groups = dict()
+    friendly_months = dict()
+    for post_id, data in index.items():
+        time = datetime.datetime.fromtimestamp(data["time"])
+        date = time.strftime("%Y-%m")
+        if not date in groups:
+            groups[date] = dict()
+            friendly = time.strftime("%B %Y")
+            friendly_months[date] = friendly
+
+        # Get author's profile && Pretty-print the time.
+        data["profile"] = User.get_user(uid=data["author"])
+        data["pretty_time"] = pretty_time(BLOG_TIME_FORMAT, data["time"])
+        groups[date][post_id] = data
+
+    # Sort by calendar month.
+    sort_months = sorted(groups.keys(), reverse=True)
+
+    # Prepare the results.
+    result = list()
+    for month in sort_months:
+        data = dict(
+            month=month,
+            month_friendly=friendly_months[month],
+            posts=list()
+        )
+
+        # Sort the posts by time created, descending.
+        for post_id in sorted(groups[month].keys(), key=lambda x: groups[month][x]["time"], reverse=True):
+            data["posts"].append(groups[month][post_id])
+
+        result.append(data)
+
+    g.info["archive"] = result
+    return template("blog/archive.html")
+
+
 @mod.route("/category/<category>")
 def category(category):
     g.info["url_category"] = category

@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}Blog Archive{% endblock %}
+{% block content %}
+
+{% for date in archive %}
+    <h1>{{ date["month_friendly"] }}</h1>
+
+    <ul>
+    {% for post in date["posts"] %}
+        <li>
+            <a href="{{ url_for('blog.entry', fid=post['fid']) }}">{{ post["subject"] }}</a>
+            &mdash; <em>{{ post['pretty_time'] }} by {{ post['profile']['name'] }}</em>
+        </li>
+    {% endfor %}
+    </ul>
+{% endfor %}
+
+{% endblock %}
