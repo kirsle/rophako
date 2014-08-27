@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}Edit Captions{% endblock %}
+{% block content %}
+
+<h1>Edit Captions in {{ album }}</h1>
+
+All captions use <a href="/markdown">Markdown</a> syntax.<p>
+
+<form id="caption-editor" action="{{ url_for('photo.bulk_captions', album=album) }}" method="POST">
+    <input type="hidden" name="token" value="{{ csrf_token() }}">
+
+    <table width="100%" border="0" cellspacing="4" cellpadding="4">
+    {% for photo in photos %}
+        <tr>
+            <td width="100" align="center" valign="top">
+                <img src="{{ app['photo_url'] }}/{{ photo['data']['avatar'] }}" alt="Photo">
+            </td>
+            <td align="left" valign="top">
+                <strong>Caption:</strong><br>
+                <input type="text" size="40" name="{{ photo['key'] }}:caption" value="{{ photo['data']['caption'] }}"><p>
+
+                <strong>Description:</strong><br>
+                <textarea cols="50" rows="6" name="{{ photo['key'] }}:description">{{ photo['data']['description'] }}</textarea>
+            </td>
+        </tr>
+    {% endfor %}
+    </table><p>
+
+    <button type="submit">Save Changes</button>
+
+</form>
+
+{% endblock %}

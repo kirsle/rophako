@@ -50,15 +50,17 @@ somewhere else on the Internet.
             {% endfor %}
             </optgroup>
             <option value="">Create a new album</option>
-        </select><p>
+        </select>
 
         <blockquote id="create-album">
             <strong>New album:</strong><br>
-            <input type="text" size="20" id="new-album" name="new-album">
-        </blockquote>
+            <input type="text" size="20" id="new-album" name="new-album"><p>
 
-        <strong>Caption:</strong><br>
-        <input type="text" size="40" name="caption">
+            <strong>Album Description:</strong><br>
+            <textarea cols="50" rows="6" name="new-description"></textarea><br>
+            <small>Shows up at the top of the album.
+            Use <a href="/markdown" target="_blank">Markdown</a> formatting.</small>
+        </blockquote>
     </fieldset>
     <p>
 

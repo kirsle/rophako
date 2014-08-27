@@ -6,7 +6,8 @@ from flask import Blueprint, g, request, redirect, url_for, session, flash
 
 import rophako.model.user as User
 import rophako.model.photo as Photo
-from rophako.utils import template, pretty_time, login_required, ajax_response
+from rophako.utils import (template, pretty_time, render_markdown,
+    login_required, ajax_response)
 from rophako.plugin import load_plugin
 from rophako.log import logger
 from config import *
@@ -40,8 +41,15 @@ def album_index(name):
         flash("That album doesn't exist.")
         return redirect(url_for(".albums"))
 
-    g.info["album"]  = name
-    g.info["photos"] = photos
+    g.info["album"]      = name
+    g.info["album_info"] = Photo.get_album(name)
+    g.info["markdown"]   = render_markdown(g.info["album_info"]["description"])
+    g.info["photos"]     = photos
+
+    # Render Markdown descriptions for photos.
+    for photo in g.info["photos"]:
+        photo["data"]["markdown"] = render_markdown(photo["data"].get("description", ""))
+
     return template("photos/album.html")
 
 
@@ -61,6 +69,7 @@ def view_photo(key):
     g.info["photo"] = photo
     g.info["photo"]["key"] = key
     g.info["photo"]["pretty_time"] = pretty_time(PHOTO_TIME_FORMAT, photo["uploaded"])
+    g.info["photo"]["markdown"] = render_markdown(photo.get("description", ""))
     return template("photos/view.html")
 
 
@@ -196,9 +205,10 @@ def edit(key):
         return redirect(url_for(".albums"))
 
     if request.method == "POST":
-        caption = request.form.get("caption", "")
-        rotate  = request.form.get("rotate", "")
-        Photo.edit_photo(key, dict(caption=caption))
+        caption     = request.form.get("caption", "")
+        description = request.form.get("description", "")
+        rotate      = request.form.get("rotate", "")
+        Photo.edit_photo(key, dict(caption=caption, description=description))
 
         # Rotating the photo?
         if rotate in ["left", "right", "180"]:
@@ -234,6 +244,43 @@ def delete(key):
     return template("photos/delete.html")
 
 
+@mod.route("/edit_album/<album>", methods=["GET", "POST"])
+@login_required
+def edit_album(album):
+    photos = Photo.list_photos(album)
+    if photos is None:
+        flash("That album doesn't exist.")
+        return redirect(url_for(".albums"))
+
+    if request.method == "POST":
+        # Collect the form details.
+        new_name    = request.form["name"]
+        description = request.form["description"]
+        layout      = request.form["format"]
+
+        # Renaming the album?
+        if new_name != album:
+            ok = Photo.rename_album(album, new_name)
+            if not ok:
+                flash("Failed to rename album: already exists?")
+                return redirect(url_for(".edit_album", album=album))
+            album = new_name
+
+        # Update album settings.
+        Photo.edit_album(album, dict(
+            description=description,
+            format=layout,
+        ))
+
+        return redirect(url_for(".albums"))
+
+    g.info["album"] = album
+    g.info["album_info"] = Photo.get_album(album)
+    g.info["photos"] = photos
+
+    return template("photos/edit_album.html")
+
+
 @mod.route("/arrange_albums", methods=["GET", "POST"])
 @login_required
 def arrange_albums():
@@ -251,6 +298,34 @@ def arrange_albums():
 
     g.info["albums"] = albums
     return template("photos/arrange_albums.html")
+
+
+@mod.route("/edit_captions/<album>", methods=["GET", "POST"])
+@login_required
+def bulk_captions(album):
+    """Bulk edit captions and titles in an album."""
+    photos = Photo.list_photos(album)
+    if photos is None:
+        flash("That album doesn't exist.")
+        return redirect(url_for(".albums"))
+
+    if request.method == "POST":
+        # Do it.
+        for photo in photos:
+            caption_key = "{}:caption".format(photo["key"])
+            desc_key    = "{}:description".format(photo["key"])
+            if caption_key in request.form and desc_key in request.form:
+                caption     = request.form[caption_key]
+                description = request.form[desc_key]
+                Photo.edit_photo(photo['key'], dict(caption=caption, description=description))
+
+        flash("The photos have been updated.")
+        return redirect(url_for(".albums"))
+
+    g.info["album"] = album
+    g.info["photos"] = photos
+
+    return template("photos/edit_captions.html")
 
 
 @mod.route("/delete_album/<album>", methods=["GET", "POST"])

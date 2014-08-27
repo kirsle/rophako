@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title %}Edit Album{% endblock %}
+{% block content %}
+
+<h1>Edit Album: {{ album }}</h1>
+
+<form id="album-editor" action="{{ url_for('photo.edit_album', album=album) }}" method="POST">
+    <input type="hidden" name="token" value="{{ csrf_token() }}">
+
+    <strong>Album Title:</strong><br>
+    <input type="text" size="40" name="name" value="{{ album }}"><p>
+
+    <strong>Description:</strong><br>
+    <textarea cols="50" rows="6" name="description">{{ album_info["description"] }}</textarea><br>
+    <small>Use <a href="/markdown" target="_blank">Markdown</a> syntax.</small><p>
+
+    <strong>Display Format:</strong><br>
+    <label>
+        <input type="radio" name="format" value="classic"{% if album_info["format"] == "classic" %} checked{% endif %}>
+        <strong>Classic:</strong> Display a grid of thumbnails that must be clicked to view full size images.
+    </label><br>
+    <label>
+        <input type="radio" name="format" value="vertical"{% if album_info["format"] == "vertical" %} checked{% endif %}>
+        <strong>Vertical:</strong> Display all full size photos in one vertical view.
+    </label><p>
+
+    <button type="submit">Save Changes</button>
+
+</form>
+
+{% endblock %}

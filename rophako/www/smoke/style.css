@@ -219,6 +219,18 @@ ul.photo-grid li .dummy {
     box-shadow: 0px 0px 4px #FF4444;
 }
 
+/* Photo description blocks */
+.photo-description {
+    display: block;
+    border: 1px solid #000000;
+    box-shadow: 0px 0px 4px #000000;
+    padding: 10px;
+    margin: 20px 0px;
+    background-color: #646464;
+    color: #FFFFFF;
+    width: 790px;
+}
+
 /* Blog titles when shown on index view */
 a.blog-title-index:link, a.blog-title-index:visited {
     font-size: 32pt;

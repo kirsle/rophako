@@ -22,15 +22,17 @@
 
 {{ nav_links() }}
 
-<div class="center">
-    <a href="{{ url_for('photo.view_photo', key=photo['next']) }}">
-        <img src="{{ app['photo_url'] }}/{{ photo['large'] }}" class="portrait">
-    </a><br>
-    <strong>{{ photo["caption"] }}</strong>
-</div>
-<p>
+{% if photo["caption"] %}
+    <h2>{{ photo["caption"] }}</h2>
+{% endif %}
+<a href="{{ url_for('photo.view_photo', key=photo['next']) }}">
+    <img src="{{ app['photo_url'] }}/{{ photo['large'] }}" class="portrait">
+</a><p>
+{% if photo["markdown"] %}
+    <div class="photo-description">{{ photo["markdown"]|safe }}</div>
+{% endif %}
 
-Uploaded by {{ author["name"] }} on {{ photo["pretty_time"] }}.
+<em>Uploaded by {{ author["name"] }} on {{ photo["pretty_time"] }}.</em>
 
 {{ nav_links() }}
 

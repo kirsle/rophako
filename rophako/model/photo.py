@@ -28,16 +28,92 @@ def list_albums():
     index = get_index()
     result = []
 
+    # Missing settings?
+    if not "settings" in index:
+        index["settings"] = dict()
+
     for album in index["album-order"]:
+        if not album in index["settings"]:
+            # Need to initialize its settings.
+            index["settings"][album] = dict(
+                format="classic",
+                description="",
+            )
+            write_index(index)
+
         cover = index["covers"][album]
         pic = index["albums"][album][cover]["thumb"]
         result.append(dict(
             name=album,
+            format=index["settings"][album]["format"],
+            description=index["settings"][album]["description"],
             cover=pic,
             data=index["albums"][album],
         ))
 
     return result
+
+
+def get_album(name):
+    """Get details about an album."""
+    index = get_index()
+    result = []
+
+    if not name in index["albums"]:
+        return None
+
+    album = index["albums"][name]
+    cover = index["covers"][name]
+
+    return dict(
+        name=name,
+        format=index["settings"][name]["format"],
+        description=index["settings"][name]["description"],
+        cover=album[cover]["thumb"],
+    )
+
+
+def rename_album(old_name, new_name):
+    """Rename an existing photo album.
+
+    Returns True on success, False if the new name conflicts with another
+    album's name."""
+    old_name = sanitize_name(old_name)
+    newname  = sanitize_name(new_name)
+    index = get_index()
+
+    # New name is unique?
+    if new_name in index["albums"]:
+        logger.error("Can't rename album: new name already exists!")
+        return False
+
+    def transfer_key(obj, old_key, new_key):
+        # Reusable function to do a simple move on a dict key.
+        obj[new_key] = obj[old_key]
+        del obj[old_key]
+
+    # Simple moves.
+    transfer_key(index["albums"], old_name, new_name)
+    transfer_key(index["covers"], old_name, new_name)
+    transfer_key(index["photo-order"], old_name, new_name)
+    transfer_key(index["settings"], old_name, new_name)
+
+    # Update the photo -> album maps.
+    for photo in index["map"]:
+        if index["map"][photo] == old_name:
+            index["map"][photo] = new_name
+
+    # Fix the album ordering.
+    new_order = list()
+    for name in index["album-order"]:
+        if name == old_name:
+            name = new_name
+        new_order.append(name)
+    index["album-order"] = new_order
+
+    # And save.
+    write_index(index)
+    return True
 
 
 def list_photos(album):
@@ -125,18 +201,18 @@ def get_image_dimensions(pic):
     return img.size
 
 
-def update_photo(album, key, data):
-    """Update photo meta-data in the album."""
-    index = get_index()
+# def update_photo(album, key, data):
+#     """Update photo meta-data in the album."""
+#     index = get_index()
 
-    if not album in index["albums"]:
-        index["albums"][album] = {}
-    if not key in index["albums"][album]:
-        index["albums"][album][key] = {}
+#     if not album in index["albums"]:
+#         index["albums"][album] = {}
+#     if not key in index["albums"][album]:
+#         index["albums"][album][key] = {}
 
-    # Update!
-    index["albums"][album][key].update(data)
-    write_index(index)
+#     # Update!
+#     index["albums"][album][key].update(data)
+#     write_index(index)
 
 
 def crop_photo(key, x, y, length):
@@ -198,6 +274,18 @@ def edit_photo(key, data):
     logger.info("Updating data for the photo {} from album {}".format(key, album))
     index["albums"][album][key].update(data)
 
+    write_index(index)
+
+
+def edit_album(album, data):
+    """Update an album's settings (description, format, etc.)"""
+    album = sanitize_name(album)
+    index = get_index()
+    if not album in index["albums"]:
+        logger.error("Failed to edit album: not found!")
+        return
+
+    index["settings"][album].update(data)
     write_index(index)
 
 
@@ -404,6 +492,7 @@ def process_photo(form, filename):
     # What album are the photos going to?
     album     = form.get("album", "")
     new_album = form.get("new-album", None)
+    new_desc  = form.get("new-description", None)
     if album == "" and new_album:
         album = new_album
 
@@ -425,12 +514,18 @@ def process_photo(form, filename):
     # Update the photo data.
     if not album in index["albums"]:
         index["albums"][album] = {}
+    if not album in index["settings"]:
+        index["settings"][album] = {
+            "format": "classic",
+            "description": new_desc,
+        }
 
     index["albums"][album][key] = dict(
         ip=request.remote_addr,
         author=g.info["session"]["uid"],
         uploaded=int(time.time()),
         caption=form.get("caption", ""),
+        description=form.get("description", ""),
         **sizes
     )
 

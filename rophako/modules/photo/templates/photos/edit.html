@@ -12,6 +12,10 @@
     <strong>Photo Caption:</strong><br>
     <input type="text" size="40" name="caption" value="{{ photo['caption'] }}"><p>
 
+    <strong>Description:</strong><br>
+    <textarea cols="50" rows="6" name="description">{{ photo['description'] }}</textarea><br>
+    <small>Use <a href="/markdown">Markdown</a> syntax.</small><p>
+
     Rotate:
     <label>
         <input type="radio" name="rotate" value="" checked> Leave alone
