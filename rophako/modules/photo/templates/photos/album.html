@@ -5,7 +5,7 @@
 <h1>Album: {{ album }}</h1>
 
 {% if markdown %}
-    {{ markdown|safe }}<p>
+    <div class="photo-description">{{ markdown|safe }}</div><p>
 {% endif %}
 
 {% if album_info["format"] == "vertical" %}
