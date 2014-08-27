@@ -514,6 +514,8 @@ def process_photo(form, filename):
     # Update the photo data.
     if not album in index["albums"]:
         index["albums"][album] = {}
+    if not "settings" in index:
+        index["settings"] = dict()
     if not album in index["settings"]:
         index["settings"][album] = {
             "format": "classic",
