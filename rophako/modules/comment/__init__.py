@@ -86,6 +86,45 @@ def delete(thread, cid):
     return redirect(url or url_for("index"))
 
 
+@mod.route("/edit/<thread>/<cid>", methods=["GET", "POST"])
+@login_required
+def edit(thread, cid):
+    """Edit an existing comment."""
+    url = request.args.get("url")
+    comment = Comment.get_comment(thread, cid)
+    if not comment:
+        flash("The comment wasn't found!")
+        return redirect(url or url_for("index"))
+
+    # Submitting?
+    if request.method == "POST":
+        action  = request.form.get("action")
+        message = request.form.get("message")
+        url     = request.form.get("url") # Preserve the URL!
+        if len(message) == 0:
+            flash("The comment must have a message!")
+            return redirect(url_for(".edit", thread=thread, cid=cid, url=url))
+
+        # Update the real comment data with the submitted message (for preview),
+        # if they clicked Save it will then be saved back to disk.
+        comment["message"] = message
+
+        if action == "save":
+            # Saving the changes!
+            Comment.update_comment(thread, cid, comment)
+            flash("Comment updated successfully!")
+            return redirect(url or url_for("index"))
+
+    # Render the Markdown.
+    comment["formatted_message"] = Comment.format_message(comment["message"])
+
+    g.info["thread"]  = thread
+    g.info["cid"]     = cid
+    g.info["comment"] = comment
+    g.info["url"]     = url or ""
+    return template("comment/edit.html")
+
+
 @mod.route("/privacy")
 def privacy():
     """The privacy policy and global unsubscribe page."""

@@ -112,6 +112,20 @@ URL: {unsub}""".format(
         )
 
 
+def get_comment(thread, cid):
+    """Look up a specific comment."""
+    comments = get_comments(thread)
+    return comments.get(cid, None)
+
+
+def update_comment(thread, cid, data):
+    """Update the data for a comment."""
+    comments = get_comments(thread)
+    if cid in comments:
+        comments[cid].update(data)
+        write_comments(thread, comments)
+
+
 def delete_comment(thread, cid):
     """Delete a comment from a thread."""
     comments = get_comments(thread)
