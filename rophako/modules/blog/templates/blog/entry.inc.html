@@ -14,11 +14,11 @@
 
     <div class="blog-author">
         {% if post["avatar"] %}
-            <img src="/static/avatars/{{ post['avatar'] }}" alt="{{ post['profile']['name'] }}">
+            <img src="/static/avatars/{{ post['avatar'] }}" alt="{{ post['profile']['name'] }}" width="96" height="96">
         {% elif post["photo"] %}
-            <img src="{{ post['photo_url'] }}/{{ post['photo'] }}" alt="{{ post['profile']['name'] }}">
+            <img src="{{ post['photo_url'] }}/{{ post['photo'] }}" alt="{{ post['profile']['name'] }}" width="96" height="96">
         {% else %}
-            <img src="/static/avatars/default.png" alt="{{ post['profile']['name'] }}">
+            <img src="/static/avatars/default.png" alt="{{ post['profile']['name'] }}" width="96" height="96">
         {% endif %}
         <br>
 
