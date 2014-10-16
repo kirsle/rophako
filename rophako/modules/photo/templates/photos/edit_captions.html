@@ -17,16 +17,16 @@ All captions use <a href="/markdown">Markdown</a> syntax.<p>
             </td>
             <td align="left" valign="top">
                 <strong>Caption:</strong><br>
-                <input type="text" size="40" name="{{ photo['key'] }}:caption" value="{{ photo['data']['caption'] }}"><p>
+                <input type="text" class="form-control" size="40" name="{{ photo['key'] }}:caption" value="{{ photo['data']['caption'] }}"><p>
 
                 <strong>Description:</strong><br>
-                <textarea cols="50" rows="6" name="{{ photo['key'] }}:description">{{ photo['data']['description'] }}</textarea>
+                <textarea class="form-control" cols="50" rows="6" name="{{ photo['key'] }}:description">{{ photo['data']['description'] }}</textarea>
             </td>
         </tr>
     {% endfor %}
     </table><p>
 
-    <button type="submit">Save Changes</button>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
 
 </form>
 

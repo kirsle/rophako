@@ -30,7 +30,7 @@ somewhere else on the Internet.
 
         <div id="pic-www" class="location-div">
             <strong>Upload a picture from the Internet</strong><br>
-            <input type="text" size="40" name="url" placeholder="http://" autocomplete="off">
+            <input type="text" class="form-control" size="40" name="url" placeholder="http://" autocomplete="off">
         </div>
         <p>
 
@@ -43,7 +43,7 @@ somewhere else on the Internet.
         <legend>Photo Options</legend>
 
         <strong>Photo album:</strong><br>
-        <select id="album" name="album">
+        <select id="album" name="album" class="form-control">
             <optgroup label="Albums">
             {% for album in album_list %}
                 <option value="{{ album }}"{% if album == selected %} selected{% endif %}>{{ album }}</option>
@@ -54,10 +54,10 @@ somewhere else on the Internet.
 
         <blockquote id="create-album">
             <strong>New album:</strong><br>
-            <input type="text" size="20" id="new-album" name="new-album"><p>
+            <input type="text" class="form-control" size="20" id="new-album" name="new-album"><p>
 
             <strong>Album Description:</strong><br>
-            <textarea cols="50" rows="6" name="new-description"></textarea><br>
+            <textarea cols="50" class="form-control" rows="6" name="new-description"></textarea><br>
             <small>Shows up at the top of the album.
             Use <a href="/markdown" target="_blank">Markdown</a> formatting.</small>
         </blockquote>
@@ -73,7 +73,7 @@ somewhere else on the Internet.
     </fieldset>
     <p>
 
-    <button type="submit" id="upload-button">Upload Picture</button>
+    <button type="submit" class="btn btn-primary" id="upload-button">Upload Picture</button>
 
 </form>
 

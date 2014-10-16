@@ -18,12 +18,12 @@
     <input type="hidden" name="token" value="{{ csrf_token() }}">
 
     <strong>Subject:</strong><br>
-    <input type="text" size="80" name="subject" value="{{ subject }}"><p>
+    <input type="text" class="form-control" size="80" name="subject" value="{{ subject }}"><p>
 
     <strong>Friendly ID:</strong><br>
     You can leave this blank if this is a new post. It defaults to be based
     on the subject.<br>
-    <input type="text" size="80" name="fid" value="{{ fid }}"><p>
+    <input type="text" class="form-control" size="80" name="fid" value="{{ fid }}"><p>
 
     <strong>Body:</strong><br>
     <label>
@@ -32,12 +32,12 @@
     <label>
         <input type="radio" name="format" value="html"{% if format == "html" %} checked{% endif %}> HTML
     </label><br>
-    <textarea cols="80" rows="12" name="body">{{ body }}</textarea><br>
+    <textarea class="form-control input-lg" cols="80" rows="12" name="body">{{ body }}</textarea><br>
     <a href="{{ url_for('emoticons.index') }}" target="_blank">Emoticon reference</a> (opens in new window)<p>
 
     <strong>Avatar:</strong><br>
     <span id="avatar-preview"></span>
-    <select name="avatar" id="avatar">
+    <select name="avatar" id="avatar" class="form-control">
         <option value=""{% if avatar == "" %} selected{% endif %}>Use my profile picture</option>
         {% for pic in avatars %}
         <option value="{{ pic }}"{% if avatar == pic %} selected{% endif %}>{{ pic }}</option>
@@ -46,10 +46,10 @@
 
     <strong>Categories:</strong><br>
     <small>Comma-separated list, e.g. General, HTML, Perl, Web Design</small><br>
-    <input type="text" size="40" name="categories" value="{{ categories }}"><p>
+    <input type="text" class="form-control" size="40" name="categories" value="{{ categories }}"><p>
 
     <strong>Privacy:</strong><br>
-    <select name="privacy">
+    <select name="privacy" class="form-control">
         <option value="public"{% if privacy == "public" %} selected{% endif %}>
             Public: everybody can see this blog entry
         </option>
@@ -69,20 +69,20 @@
     </label><p>
 
     <strong>Time Stamp:</strong><br>
-    <input type="text" size="2" name="month" id="month" value="{{ month }}"> /
-    <input type="text" size="2" name="day" id="day" value="{{ day }}"> /
-    <input type="text" size="4" name="year" id="year" value="{{ year }}"> @
-    <input type="text" size="2" name="hour" id="hour" value="{{ hour }}"> :
-    <input type="text" size="2" name="min" id="min" value="{{ min }}"> :
-    <input type="text" size="2" name="sec" id="sec" value="{{ sec }}"><br>
+    <input type="text" class="form-control input-sm inline" size="2" name="month" id="month" value="{{ month }}"> /
+    <input type="text" class="form-control input-sm inline" size="2" name="day" id="day" value="{{ day }}"> /
+    <input type="text" class="form-control input-sm inline" size="4" name="year" id="year" value="{{ year }}"> @
+    <input type="text" class="form-control input-sm inline" size="2" name="hour" id="hour" value="{{ hour }}"> :
+    <input type="text" class="form-control input-sm inline" size="2" name="min" id="min" value="{{ min }}"> :
+    <input type="text" class="form-control input-sm inline" size="2" name="sec" id="sec" value="{{ sec }}"><br>
     mm / dd / yyyy @ hh:mm:ss<br>
     <label>
         <input type="checkbox" id="autoup" value="yes"{% if post_id == "" %} checked{% endif %}>
         Automatically update
     </label><p>
 
-    <button type="submit" name="action" value="preview">Preview</button>
-    <button type="submit" name="action" value="publish">Publish Entry</button>
+    <button type="submit" class="btn btn-default" name="action" value="preview">Preview</button>
+    <button type="submit" class="btn btn-primary" name="action" value="publish">Publish Entry</button>
 </form>
 
 {% endblock %}

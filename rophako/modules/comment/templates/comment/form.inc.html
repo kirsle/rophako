@@ -14,7 +14,7 @@
             {% if session["login"] %}
                 <strong>{{ session["name"] }}</strong>
             {% else %}
-                <input type="text" size="40" name="name" value="{{ name }}">
+                <input type="text" class="form-control" size="40" name="name" value="{{ name }}">
             {% endif %}
         </td>
     </tr>
@@ -23,8 +23,7 @@
             Your Email:
         </td>
         <td align="left" valign="middle">
-            <input type="text" size="40" name="contact" value="{{ contact }}">
-            <small>(optional)</small>
+            <input type="text" class="form-control" size="40" name="contact" value="{{ contact }}" placeholder="(optional)">
         </td>
     </tr>
     <tr>
@@ -32,7 +31,7 @@
             Message:
         </td>
         <td align="left" valign="top">
-            <textarea cols="40" rows="8" name="message" style="width: 100%">{{ message }}</textarea><br>
+            <textarea class="form-control" cols="40" rows="8" name="message" style="width: 100%">{{ message }}</textarea><br>
             <small>Comments can be formatted with <a href="/markdown" target="_blank">Markdown</a>,
             and you can use<br><a href="{{ url_for('emoticons.index') }}" target="_blank">emoticons</a>
             in your comment.</small>
@@ -51,15 +50,15 @@
 
 <div style="display: none">
     If you can see this, don't touch the following fields.<br>
-    <input type="text" name="website" value="http://"><br>
-    <input type="text" name="email" value="">
+    <input type="text" class="form-control" name="website" value="http://"><br>
+    <input type="text" class="form-control" name="email" value="">
 </div>
 
 {% if preview %}
-    <button type="submit" name="action" value="preview">Refresh Preview</button>
-    <button type="submit" name="action" value="submit">Submit Comment</button>
+    <button class="btn btn-default" type="submit" name="action" value="preview">Refresh Preview</button>
+    <button class="btn btn-primary" type="submit" name="action" value="submit">Submit Comment</button>
 {% else %}
-    <button type="submit" name="action" value="preview">Leave Comment</button>
+    <button class="btn btn-primary" type="submit" name="action" value="preview">Leave Comment</button>
 {% endif %}
 
 </form>

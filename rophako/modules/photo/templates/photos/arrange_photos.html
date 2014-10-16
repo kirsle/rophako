@@ -9,7 +9,7 @@ Drag and drop your photos in the positions you want them in.<p>
 <form name="arrange" id="arrange-form" action="{{ url_for('photo.arrange_photos', album=album) }}" method="POST">
     <input type="hidden" name="token" value="{{ csrf_token() }}">
     <input type="hidden" name="order" id="order" value="">
-    <button type="submit">Save Changes</button>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
 <p>
 

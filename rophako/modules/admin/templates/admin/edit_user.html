@@ -21,23 +21,23 @@ $(document).ready(function() {
     <legend>User Details</legend>
 
     <strong>Username:</strong><br>
-    <input type="text" size="20" name="username" value="{{ info['username'] }}"><p>
+    <input type="text" class="form-control" size="20" name="username" value="{{ info['username'] }}"><p>
 
     <strong>Real name:</strong><br>
-    <input type="text" size="20" name="name" value="{{ info['name'] }}"><p>
+    <input type="text" class="form-control" size="20" name="name" value="{{ info['name'] }}"><p>
 
     <strong>Reset Password:</strong><br>
-    <input type="password" size="20" name="password1"><br>
-    <input type="password" size="20" name="password2"><p>
+    <input type="password" class="form-control" size="20" name="password1"><br>
+    <input type="password" class="form-control" size="20" name="password2"><p>
 
     <strong>Role:</strong><br>
-    <select name="role">
+    <select name="role" class="form-control">
         <option value="user"{% if info["role"] == "user" %} selected{% endif %}>User</option>
         <option value="admin"{% if info["role"] == "admin" %} selected{% endif %}>Admin</option>
     </select><p>
 
-    <button type="submit" name="action" value="save">Save Changes</button>
-    <button type="submit" name="action" id="delete_button" value="delete">Delete User</button>
+    <button type="submit" class="btn btn-primary" name="action" value="save">Save Changes</button>
+    <button type="submit" class="btn btn-warning" name="action" id="delete_button" value="delete">Delete User</button>
 </fieldset>
 </form>
 

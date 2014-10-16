@@ -8,10 +8,10 @@
     <input type="hidden" name="token" value="{{ csrf_token() }}">
 
     <strong>Album Title:</strong><br>
-    <input type="text" size="40" name="name" value="{{ album }}"><p>
+    <input type="text" class="form-control" size="40" name="name" value="{{ album }}"><p>
 
     <strong>Description:</strong><br>
-    <textarea cols="50" rows="6" name="description">{{ album_info["description"] }}</textarea><br>
+    <textarea class="form-control" cols="50" rows="6" name="description">{{ album_info["description"] }}</textarea><br>
     <small>Use <a href="/markdown" target="_blank">Markdown</a> syntax.</small><p>
 
     <strong>Display Format:</strong><br>
@@ -24,7 +24,7 @@
         <strong>Vertical:</strong> Display all full size photos in one vertical view.
     </label><p>
 
-    <button type="submit">Save Changes</button>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
 
 </form>
 
