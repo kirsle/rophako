@@ -163,7 +163,7 @@ def render_markdown(body, html_escape=True, extensions=None, blacklist=None):
     return markdown.markdown(body, **args)
 
 
-def send_email(to, subject, message, sender=None):
+def send_email(to, subject, message, sender=None, reply_to=None):
     """Send an e-mail out."""
     if sender is None:
         sender = MAIL_SENDER
@@ -175,13 +175,18 @@ def send_email(to, subject, message, sender=None):
     if MAIL_METHOD == "smtp":
         # Send mail with SMTP.
         for email in to:
-            server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT)
-            server.set_debuglevel(1)
-            msg = """From: {}
-To: {}
-Subject: {}
+            # Construct the mail headers.
+            headers = [
+                "From: {}".format(sender),
+                "To: {}".format(email),
+            ]
+            if reply_to is not None:
+                headers.append("Reply-To: {}".format(reply_to))
+            headers.append("Subject: {}".format(subject))
 
-{}""".format(sender, email, subject, message)
+            # Prepare the mail for transport.
+            server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT)
+            msg = "\n".join(headers) + "\n\n" + message
             server.sendmail(sender, email, msg)
             server.quit()
 

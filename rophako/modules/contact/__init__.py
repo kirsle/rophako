@@ -38,9 +38,15 @@ def send():
         flash("The message is required.")
         return redirect(url_for(".index"))
 
+    # Email looks valid?
+    reply_to = None
+    if "@" in email and "." in email:
+        reply_to = email
+
     # Send the e-mail.
     send_email(
         to=NOTIFY_ADDRESS,
+        reply_to=reply_to,
         subject="Contact Form on {}: {}".format(SITE_NAME, subject),
         message="""A visitor to {site_name} has sent you a message!
 
