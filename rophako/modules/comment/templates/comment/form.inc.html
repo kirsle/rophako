@@ -23,7 +23,7 @@
             Your Email:
         </td>
         <td align="left" valign="middle">
-            <input type="text" class="form-control" size="40" name="contact" value="{{ contact }}" placeholder="(optional)">
+            <input type="text" class="form-control" size="40" name="contact" value="{{ contact }}" placeholder="(optional; used for Gravatar icons and subscribing)">
         </td>
     </tr>
     <tr>
@@ -31,10 +31,12 @@
             Message:
         </td>
         <td align="left" valign="top">
-            <textarea class="form-control" cols="40" rows="8" name="message" style="width: 100%">{{ message }}</textarea><br>
-            <small>Comments can be formatted with <a href="/markdown" target="_blank">Markdown</a>,
-            and you can use<br><a href="{{ url_for('emoticons.index') }}" target="_blank">emoticons</a>
-            in your comment.</small>
+            <textarea class="form-control" cols="40" rows="8" name="message" style="width: 100%">{{ message }}</textarea>
+            <div>
+                <small>Comments can be formatted with <a href="/markdown" target="_blank">Markdown</a>,
+                and you can use<br><a href="{{ url_for('emoticons.index') }}" target="_blank">emoticons</a>
+                in your comment.</small>
+            </div>
         </td>
     </tr>
     <tr>
