@@ -308,6 +308,23 @@ ul.blog-categories li:last-child:after {
     font-size: 9pt;
 }
 
+/* Visitor history page */
+.visitor-graph {
+	height: 16px;
+	width: 100%;
+	border: 1px outset;
+}
+.visitor-graph.unique {
+	background-color: #0099FF;
+	background-image: url("/static/images/blue-clearlooks.png");
+	border-color: #0099FF;
+}
+.visitor-graph.hits {
+	background-color: #FF99FF;
+	background-image: url("/static/images/pink-clearlooks.png");
+	border-color: #FF99FF;
+}
+
 /*********************
  * Smoke Theme UI
  *********************/
