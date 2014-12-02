@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block title %}Visitor History{% endblock %}
+
+{% block content %}
+
+<h1>Visitor History</h1>
+
+Unique visitors and hit counts have been logged on this site since
+{{ history["oldest"] }}.<p>
+
+The most unique visitors on this site in one day has been
+{{ history["most_unique"][1] }} on {{ history["most_unique"][0] }}. The most
+hits total in one day has been {{ history["most_hits"][1] }} on
+{{ history["most_hits"][0] }}.<p>
+
+Here is a full list of hits over time. Percentages are relative to the current
+records.<p>
+
+<table class="table" width="100%" border="0" cellspacing="2" cellpadding="2">
+    <thead>
+        <tr>
+            <th width="20">Date</th>
+            <th>Graph</th>
+            <th width="250">Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for date in history["traffic"]|reverse %}
+        <tr>
+            <td align="center" valign="middle" rowspan="2">
+                {{ date["date"] }}
+            </td>
+            <td align="left" valign="middle">
+                {% set pct = (date["unique"] / history["most_unique"][1]) * 100 %}
+                <div class="visitor-graph unique" style="width: {{ pct|int }}%"></div>
+            </td>
+            <td align="left" valign="middle">
+                Unique: {{ date["unique"] }} ({{ pct|int }}%)
+            </td>
+        </tr>
+        <tr>
+            <td align="left" valign="middle">
+                {% set pct = (date["unique"] / history["most_unique"][1]) * 100 %}
+                <div class="visitor-graph hits" style="width: {{ pct|int }}%"></div>
+            </td>
+            <td align="left" valign="middle">
+                Hits: {{ date["hits"] }} ({{ pct|int }}%)
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

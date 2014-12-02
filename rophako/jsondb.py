@@ -19,7 +19,7 @@ redis_client = None
 cache_lifetime = 60*60 # 1 hour
 
 
-def get(document):
+def get(document, cache=True):
     """Get a specific document from the DB."""
     logger.debug("JsonDB: GET {}".format(document))
 
@@ -32,7 +32,7 @@ def get(document):
     stat = os.stat(path)
 
     # Do we have it cached?
-    data = get_cache(document)
+    data = get_cache(document) if cache else None
     if data:
         # Check if the cache is fresh.
         if stat.st_mtime > get_cache(document+"_mtime"):
@@ -45,12 +45,13 @@ def get(document):
     data = read_json(path)
 
     # Cache and return it.
-    set_cache(document, data, expires=cache_lifetime)
-    set_cache(document+"_mtime", stat.st_mtime, expires=cache_lifetime)
+    if cache:
+        set_cache(document, data, expires=cache_lifetime)
+        set_cache(document+"_mtime", stat.st_mtime, expires=cache_lifetime)
     return data
 
 
-def commit(document, data):
+def commit(document, data, cache=True):
     """Insert/update a document in the DB."""
 
     # Need to create the file?
@@ -69,8 +70,9 @@ def commit(document, data):
                 os.mkdir(segment, 0o755)
 
     # Update the cached document.
-    set_cache(document, data, expires=cache_lifetime)
-    set_cache(document+"_mtime", time.time(), expires=cache_lifetime)
+    if cache:
+        set_cache(document, data, expires=cache_lifetime)
+        set_cache(document+"_mtime", time.time(), expires=cache_lifetime)
 
     # Write the JSON.
     write_json(path, data)
@@ -82,6 +84,7 @@ def delete(document):
     if os.path.isfile(path):
         logger.info("Delete DB document: {}".format(path))
         os.unlink(path)
+        del_cache(document)
 
 
 def exists(document):

@@ -3,7 +3,6 @@
 """Endpoints for admin functions."""
 
 from flask import g, Blueprint, request, redirect, url_for, session, flash
-import re
 
 import rophako.model.user as User
 from rophako.modules.account import validate_create_form

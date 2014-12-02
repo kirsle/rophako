@@ -8,7 +8,8 @@ import time
 
 import rophako.model.user as User
 import rophako.model.comment as Comment
-from rophako.utils import template, pretty_time, login_required, sanitize_name
+from rophako.utils import (template, pretty_time, login_required, sanitize_name,
+    remote_addr)
 from rophako.plugin import load_plugin
 from rophako.log import logger
 from config import *
@@ -48,7 +49,7 @@ def preview():
         Comment.add_comment(
             thread=thread,
             uid=g.info["session"]["uid"],
-            ip=request.remote_addr,
+            ip=remote_addr(),
             time=int(time.time()),
             image=gravatar,
             name=form["name"],

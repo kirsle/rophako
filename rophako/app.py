@@ -26,6 +26,7 @@ BLUEPRINT_PATHS = []
 import config
 from rophako import __version__
 from rophako.plugin import load_plugin
+import rophako.model.tracking as Tracking
 import rophako.utils
 
 app.DEBUG      = config.DEBUG
@@ -78,7 +79,8 @@ def before_request():
             "uid": 0,
             "name": "Guest",
             "role": "user",
-        }
+        },
+        "tracking": Tracking.track_visit(request, session),
     }
 
     # Default session vars.

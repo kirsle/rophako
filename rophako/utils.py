@@ -11,6 +11,7 @@ import importlib
 import smtplib
 import markdown
 import json
+import urlparse
 
 from rophako.log import logger
 from config import *
@@ -209,6 +210,20 @@ def include(endpoint, *args, **kwargs):
     html = getattr(m, function)(*args, **kwargs)
 
     return html
+
+
+def remote_addr():
+    """Retrieve the end user's remote IP address."""
+
+    # TODO: eventually support configurations with X-Forwarded-For, but for
+    # now at least we're centralizing this in one spot.
+    return request.remote_addr
+
+
+def server_name():
+    """Get the server's hostname."""
+    urlparts = list(urlparse.urlparse(request.url_root))
+    return urlparts[1]
 
 
 def pretty_time(time_format, unix):

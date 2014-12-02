@@ -3,7 +3,7 @@
 """Photo album models."""
 
 import os
-from flask import g, request
+from flask import g
 import time
 import requests
 from PIL import Image
@@ -12,7 +12,7 @@ import random
 
 import config
 import rophako.jsondb as JsonDB
-from rophako.utils import sanitize_name
+from rophako.utils import sanitize_name, remote_addr
 from rophako.log import logger
 
 # Maps the friendly names of photo sizes with their pixel values from config.
@@ -523,7 +523,7 @@ def process_photo(form, filename):
         }
 
     index["albums"][album][key] = dict(
-        ip=request.remote_addr,
+        ip=remote_addr(),
         author=g.info["session"]["uid"],
         uploaded=int(time.time()),
         caption=form.get("caption", ""),

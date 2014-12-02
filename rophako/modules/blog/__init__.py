@@ -2,10 +2,8 @@
 
 """Endpoints for the web blog."""
 
-from flask import Blueprint, g, request, redirect, url_for, session, flash, make_response
-import re
+from flask import Blueprint, g, request, redirect, url_for, flash, make_response
 import datetime
-import calendar
 import time
 from xml.dom.minidom import Document
 
@@ -13,7 +11,8 @@ import rophako.model.user as User
 import rophako.model.blog as Blog
 import rophako.model.comment as Comment
 import rophako.model.emoticons as Emoticons
-from rophako.utils import template, render_markdown, pretty_time, login_required
+from rophako.utils import (template, render_markdown, pretty_time,
+    login_required, remote_addr)
 from rophako.plugin import load_plugin
 from rophako.log import logger
 from config import *
@@ -264,7 +263,7 @@ def update():
                     avatar     = g.info["avatar"],
                     categories = tags,
                     privacy    = g.info["privacy"],
-                    ip         = request.remote_addr,
+                    ip         = remote_addr(),
                     emoticons  = g.info["emoticons"],
                     comments   = g.info["comments"],
                     format     = g.info["format"],

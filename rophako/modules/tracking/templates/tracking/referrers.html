@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title %}Referring URLs{% endblock %}
+
+{% block content %}
+
+<h1>Referring URLs</h1>
+
+This table lists the HTTP referrers to this site, in order of popularity. For
+the most recent 25 links, see <a href="#recent">the end of this page</a>.<p>
+
+<div style="height: 450px; overflow: auto">
+<table class="table" width="100%">
+    <thead>
+        <tr>
+            <th width="40">Hits</th>
+            <th>Query</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for link in referrers["referrers"] %}
+            {% if link %}
+                <tr>
+                    <td align="center" valign="top">
+                        {{ link[1] }}
+                    </td>
+                    <td align="left" valign="top" style="position: relative">
+                        {{ link[0]|safe }}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<h2 id="recent">25 Most Recent Links</h2>
+
+<ol>
+{% for item in referrers["recent"] %}
+    <li>{{ item }}</li>
+{% endfor %}
+</ol>
+
+{% endblock %}

@@ -2,12 +2,9 @@
 
 """Endpoints for contacting the site owner."""
 
-from flask import Blueprint, g, request, redirect, url_for, session, flash
-import re
-import time
+from flask import Blueprint, request, redirect, url_for, flash
 
-from rophako.utils import template, send_email
-from rophako.log import logger
+from rophako.utils import template, send_email, remote_addr
 from config import *
 
 mod = Blueprint("contact", __name__, url_prefix="/contact")
@@ -59,7 +56,7 @@ Subject: {subject}
 
 {message}""".format(
             site_name=SITE_NAME,
-            ip=request.remote_addr,
+            ip=remote_addr(),
             ua=request.user_agent.string,
             referer=request.headers.get("Referer", ""),
             name=name,
