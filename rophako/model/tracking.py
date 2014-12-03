@@ -37,6 +37,8 @@ def track_visit(request, session):
             db = dict(hits=0)
             if JsonDB.exists(dbfile):
                 db = JsonDB.get(dbfile)
+                if db is None:
+                    db = dict(hits=0)
 
             # Update it?
             if not cookie:
@@ -50,6 +52,8 @@ def track_visit(request, session):
             db = dict()
             if JsonDB.exists(dbfile):
                 db = JsonDB.get(dbfile)
+                if db is None:
+                    db = dict()
 
             # Update with their IP?
             if not cookie and not addr in db:
