@@ -80,8 +80,9 @@ def log_referrer(request, link):
     """Double check the referring URL."""
 
     # Ignore if same domain.
-    if link.startswith(request.url_root):
-        print "Referrer is same host!"
+    hostname = server_name()
+    if link.startswith("http://{}".format(hostname)) or \
+       link.startswith("https://{}".format(hostname)):
         return None
 
     # See if the URL really links back to us.
