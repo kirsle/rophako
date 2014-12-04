@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from flask import g, session, request, render_template, flash, redirect, url_for
+from flask import (g, session, request, render_template, flash, redirect,
+    url_for, current_app)
 from functools import wraps
 import codecs
 import uuid
@@ -12,6 +13,7 @@ import smtplib
 import markdown
 import json
 import urlparse
+import traceback
 
 from rophako.log import logger
 from rophako.settings import Config
@@ -190,6 +192,61 @@ def send_email(to, subject, message, sender=None, reply_to=None):
             msg = "\n".join(headers) + "\n\n" + message
             server.sendmail(sender, email, msg)
             server.quit()
+
+
+def handle_exception(error):
+    """Send an e-mail to the site admin when an exception occurs."""
+    if current_app.config.get("DEBUG"):
+        print traceback.format_exc()
+        raise
+
+    import rophako.jsondb as JsonDB
+
+    # Don't spam too many e-mails in a short time frame.
+    cache = JsonDB.get_cache("exception_catcher")
+    if cache:
+        last_exception = int(cache)
+        if int(time.time()) - last_exception < 120:
+            # Only one e-mail per 2 minutes, minimum
+            logger.error("RAPID EXCEPTIONS, DROPPING")
+            return
+    JsonDB.set_cache("exception_catcher", int(time.time()))
+
+    username = "anonymous"
+    try:
+        if "username" in g.info["session"]:
+            username = g.info["session"]["username"]
+    except:
+        pass
+
+    # Get the timestamp.
+    timestamp = time.ctime(time.time())
+
+    # Exception's traceback.
+    error = str(error.__class__.__name__) + ": " + str(error)
+    stacktrace = error + "\n\n" \
+        + "==== Start Traceback ====\n" \
+        + traceback.format_exc() \
+        + "==== End Traceback ====\n"
+
+    # Construct the subject and message
+    subject = "Internal Server Error on {} - {} - {}".format(
+        Config.site.site_name,
+        username,
+        timestamp,
+    )
+    message = "{} has experienced an exception on the route: {}".format(
+        username,
+        request.path,
+    )
+    message += "\n\n" + stacktrace
+
+    # Send the e-mail.
+    send_email(
+        to=Config.site.notify_address,
+        subject=subject,
+        message=message,
+    )
 
 
 def generate_csrf_token():

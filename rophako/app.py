@@ -29,6 +29,7 @@ Config.load_plugins()
 
 from rophako import __version__
 from rophako.plugin import load_plugin
+from rophako.log import logger
 import rophako.model.tracking as Tracking
 import rophako.utils
 
@@ -154,6 +155,16 @@ def catchall(path):
 @app.route("/")
 def index():
     return catchall("index")
+
+
+@app.errorhandler(Exception)
+def catch_exception(error):
+    """Catch unexpected Python exceptions and e-mail them out."""
+    logger.error("INTERNAL SERVER ERROR: {}".format(str(error)))
+
+    # E-mail it out.
+    rophako.utils.handle_exception(error)
+    return rophako.utils.template("errors/500.html")
 
 
 @app.errorhandler(404)

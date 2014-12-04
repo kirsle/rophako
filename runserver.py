@@ -25,12 +25,17 @@ parser.add_argument(
     type=str,
     help="SSL certificate file.",
 )
+parser.add_argument(
+    "--production",
+    help="Turns off debug mode, runs as if in production.",
+    action="store_true",
+)
 args = parser.parse_args()
 
 if __name__ == '__main__':
     flask_options = dict(
         host='0.0.0.0',
-        debug=True,
+        debug=not args.production,
         port=args.port,
         threaded=True,
     )

@@ -13,6 +13,7 @@ import json
 import time
 
 from rophako.settings import Config
+from rophako.utils import handle_exception
 from rophako.log import logger
 
 redis_client = None
@@ -137,7 +138,10 @@ def read_json(path):
         data = json.loads(text)
     except:
         logger.error("Couldn't decode JSON data from {}".format(path))
-        logger.error(text)
+        handle_exception(Exception("Couldn't decode JSON from {}\n{}".format(
+            path,
+            text,
+        )))
         data = None
 
     return data
