@@ -2,7 +2,7 @@
 
 """Commenting models."""
 
-from flask import g, url_for
+from flask import url_for
 import time
 import hashlib
 import urllib
@@ -10,7 +10,7 @@ import random
 import re
 import sys
 
-import config
+from rophako.settings import Config
 import rophako.jsondb as JsonDB
 import rophako.model.user as User
 import rophako.model.emoticons as Emoticons
@@ -58,7 +58,7 @@ def add_comment(thread, uid, name, subject, message, url, time, ip, image=None):
 
     # Send the e-mail to the site admins.
     send_email(
-        to=config.NOTIFY_ADDRESS,
+        to=Config.site.notify_address,
         subject="New comment: {}".format(subject),
         message="""{name} has left a comment on: {subject}
 
@@ -230,7 +230,7 @@ def gravatar(email):
     """Generate a Gravatar link for an email address."""
     if "@" in email:
         # Default avatar?
-        default = config.COMMENT_DEFAULT_AVATAR
+        default = Config.comment.default_avatar
 
         # Construct the URL.
         params = {

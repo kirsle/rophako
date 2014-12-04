@@ -7,7 +7,7 @@ import re
 import os
 import json
 
-import config
+from rophako.settings import Config
 from rophako.app import app
 from rophako.utils import template, login_required
 import rophako.model.blog as Blog
@@ -109,6 +109,6 @@ def ssl_test():
         },
         "App Configuration": {
             "Session cookies secure": app.config["SESSION_COOKIE_SECURE"],
-            "config.FORCE_SSL": config.FORCE_SSL,
+            "config.FORCE_SSL": Config.security.force_ssl,
         },
     }))

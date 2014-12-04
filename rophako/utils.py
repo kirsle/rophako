@@ -14,7 +14,7 @@ import json
 import urlparse
 
 from rophako.log import logger
-from config import *
+from rophako.settings import Config
 
 
 def login_required(f):
@@ -167,13 +167,13 @@ def render_markdown(body, html_escape=True, extensions=None, blacklist=None):
 def send_email(to, subject, message, sender=None, reply_to=None):
     """Send an e-mail out."""
     if sender is None:
-        sender = MAIL_SENDER
+        sender = Config.mail.sender
 
     if type(to) != list:
         to = [to]
 
     logger.info("Send email to {}".format(to))
-    if MAIL_METHOD == "smtp":
+    if Config.mail.method == "smtp":
         # Send mail with SMTP.
         for email in to:
             # Construct the mail headers.
@@ -186,7 +186,7 @@ def send_email(to, subject, message, sender=None, reply_to=None):
             headers.append("Subject: {}".format(subject))
 
             # Prepare the mail for transport.
-            server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT)
+            server = smtplib.SMTP(Config.mail.server, Config.mail.port)
             msg = "\n".join(headers) + "\n\n" + message
             server.sendmail(sender, email, msg)
             server.quit()

@@ -23,17 +23,20 @@ app = Flask(__name__,
 # jinja2.ChoiceLoader.
 BLUEPRINT_PATHS = []
 
-import config
+from rophako.settings import Config
+Config.load_settings()
+Config.load_plugins()
+
 from rophako import __version__
 from rophako.plugin import load_plugin
 import rophako.model.tracking as Tracking
 import rophako.utils
 
-app.DEBUG      = config.DEBUG
-app.secret_key = config.SECRET_KEY
+app.DEBUG      = Config.site.debug == "true"
+app.secret_key = Config.security.secret_key.decode("string_escape")
 
 # Security?
-if config.FORCE_SSL:
+if Config.security.force_ssl == "true":
     app.config['SESSION_COOKIE_SECURE'] = True
     sslify = SSLify(app)
 
@@ -44,8 +47,8 @@ load_plugin("rophako.modules.account")
 # Custom Jinja handler to support custom- and default-template folders for
 # rendering templates.
 template_paths = [
-   config.SITE_ROOT, # Site specific.
-   "rophako/www",    # Default/fall-back
+   Config.site.site_root, # Site specific.
+   "rophako/www",         # Default/fall-back
 ]
 template_paths.extend(BLUEPRINT_PATHS)
 app.jinja_loader = jinja2.ChoiceLoader([ jinja2.FileSystemLoader(x) for x in template_paths])
@@ -70,7 +73,7 @@ def before_request():
             "version": __version__,
             "python_version": "{}.{}".format(sys.version_info.major, sys.version_info.minor),
             "author": "Noah Petherbridge",
-            "photo_url": config.PHOTO_ROOT_PUBLIC,
+            "photo_url": Config.photo.root_public,
         },
         "uri": request.path,
         "session": {
@@ -125,7 +128,7 @@ def catchall(path):
     otherwise we give the 404 error page."""
 
     # Search for this file.
-    for root in [config.SITE_ROOT, "rophako/www"]:
+    for root in [Config.site.site_root, "rophako/www"]:
         abspath = os.path.abspath("{}/{}".format(root, path))
         if os.path.isfile(abspath):
             return send_file(abspath)

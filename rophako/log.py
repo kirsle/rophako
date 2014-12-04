@@ -7,7 +7,7 @@ from __future__ import print_function
 from flask import g, request
 import logging
 
-import config
+from rophako.settings import Config
 
 class LogHandler(logging.Handler):
     """A custom logging handler."""
@@ -29,7 +29,7 @@ handler.setFormatter(logging.Formatter("[%(asctime)s] [%(levelname)s] $prefix$%(
 logger.addHandler(handler)
 
 # Log level.
-if config.DEBUG:
+if Config.site.debug == "true":
     logger.setLevel(logging.DEBUG)
 else:
     logger.setLevel(logging.INFO)

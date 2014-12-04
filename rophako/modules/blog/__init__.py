@@ -14,8 +14,8 @@ import rophako.model.emoticons as Emoticons
 from rophako.utils import (template, render_markdown, pretty_time,
     login_required, remote_addr)
 from rophako.plugin import load_plugin
+from rophako.settings import Config
 from rophako.log import logger
-from config import *
 
 mod = Blueprint("blog", __name__, url_prefix="/blog")
 load_plugin("rophako.modules.comment")
@@ -34,16 +34,16 @@ def archive():
     groups = dict()
     friendly_months = dict()
     for post_id, data in index.items():
-        time = datetime.datetime.fromtimestamp(data["time"])
-        date = time.strftime("%Y-%m")
+        ts = datetime.datetime.fromtimestamp(data["time"])
+        date = ts.strftime("%Y-%m")
         if not date in groups:
             groups[date] = dict()
-            friendly = time.strftime("%B %Y")
+            friendly = ts.strftime("%B %Y")
             friendly_months[date] = friendly
 
         # Get author's profile && Pretty-print the time.
         data["profile"] = User.get_user(uid=data["author"])
-        data["pretty_time"] = pretty_time(BLOG_TIME_FORMAT, data["time"])
+        data["pretty_time"] = pretty_time(Config.blog.time_format, data["time"])
         groups[date][post_id] = data
 
     # Sort by calendar month.
@@ -101,10 +101,10 @@ def entry(fid):
     # Get the author's information.
     post["profile"] = User.get_user(uid=post["author"])
     post["photo"]   = User.get_picture(uid=post["author"])
-    post["photo_url"] = PHOTO_ROOT_PUBLIC
+    post["photo_url"] = Config.photo.root_public
 
     # Pretty-print the time.
-    post["pretty_time"] = pretty_time(BLOG_TIME_FORMAT, post["time"])
+    post["pretty_time"] = pretty_time(Config.blog.time_format, post["time"])
 
     # Count the comments for this post
     post["comment_count"] = Comment.count_comments("blog-{}".format(post_id))
@@ -153,9 +153,9 @@ def update():
         format="markdown",
         avatar="",
         categories="",
-        privacy=BLOG_DEFAULT_PRIVACY,
+        privacy=Config.blog.default_privacy,
         emoticons=True,
-        comments=BLOG_ALLOW_COMMENTS,
+        comments=Config.blog.allow_comments,
         month="",
         day="",
         year="",
@@ -328,14 +328,14 @@ def rss():
     today = time.strftime(rss_time, time.gmtime())
 
     xml_add_text_tags(doc, channel, [
-        ["title", RSS_TITLE],
-        ["link", RSS_LINK],
-        ["description", RSS_DESCRIPTION],
-        ["language", RSS_LANGUAGE],
-        ["copyright", RSS_COPYRIGHT],
+        ["title", Config.blog.title],
+        ["link", Config.blog.link],
+        ["description", Config.blog.description],
+        ["language", Config.blog.language],
+        ["copyright", Config.blog.copyright],
         ["pubDate", today],
         ["lastBuildDate", today],
-        ["webmaster", RSS_WEBMASTER],
+        ["webmaster", Config.blog.webmaster],
     ])
 
     ######
@@ -345,12 +345,12 @@ def rss():
     image = doc.createElement("image")
     channel.appendChild(image)
     xml_add_text_tags(doc, image, [
-        ["title", RSS_IMAGE_TITLE],
-        ["url", RSS_IMAGE_URL],
-        ["link", RSS_LINK],
-        ["width", RSS_IMAGE_WIDTH],
-        ["height", RSS_IMAGE_HEIGHT],
-        ["description", RSS_IMAGE_DESCRIPTION],
+        ["title", Config.blog.image_title],
+        ["url", Config.blog.image_url],
+        ["link", Config.blog.link],
+        ["width", Config.blog.image_width],
+        ["height", Config.blog.image_height],
+        ["description", Config.blog.image_description],
     ])
 
     ######
@@ -359,7 +359,7 @@ def rss():
 
     index = Blog.get_index()
     posts = get_index_posts(index)
-    for post_id in posts[:BLOG_ENTRIES_PER_RSS]:
+    for post_id in posts[:int(Config.blog.entries_per_feed)]:
         post = Blog.get_entry(post_id)
         item = doc.createElement("item")
         channel.appendChild(item)
@@ -432,8 +432,8 @@ def partial_index():
     # Handle the offsets, and get those for the "older" and "earlier" posts.
     # "earlier" posts count down (towards index 0), "older" counts up.
     g.info["offset"]  = offset
-    g.info["earlier"] = offset - BLOG_ENTRIES_PER_PAGE if offset > 0 else 0
-    g.info["older"]   = offset + BLOG_ENTRIES_PER_PAGE
+    g.info["earlier"] = offset - int(Config.blog.entries_per_page) if offset > 0 else 0
+    g.info["older"]   = offset + int(Config.blog.entries_per_page)
     if g.info["earlier"] < 0:
         g.info["earlier"] = 0
     if g.info["older"] < 0 or g.info["older"] > len(posts):
@@ -446,7 +446,7 @@ def partial_index():
 
     # Load the selected posts.
     selected = []
-    stop = offset + BLOG_ENTRIES_PER_PAGE
+    stop = offset + int(Config.blog.entries_per_page)
     if stop > len(posts): stop = len(posts)
     index = 1 # Let each post know its position on-page.
     for i in range(offset, stop):
@@ -468,9 +468,9 @@ def partial_index():
         # Get the author's information.
         post["profile"] = User.get_user(uid=post["author"])
         post["photo"]   = User.get_picture(uid=post["author"])
-        post["photo_url"] = PHOTO_ROOT_PUBLIC
+        post["photo_url"] = Config.photo.root_public
 
-        post["pretty_time"] = pretty_time(BLOG_TIME_FORMAT, post["time"])
+        post["pretty_time"] = pretty_time(Config.blog.time_format, post["time"])
 
         # Count the comments for this post
         post["comment_count"] = Comment.count_comments("blog-{}".format(post_id))

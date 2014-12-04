@@ -5,7 +5,7 @@
 from flask import Blueprint, request, redirect, url_for, flash
 
 from rophako.utils import template, send_email, remote_addr
-from config import *
+from rophako.settings import Config
 
 mod = Blueprint("contact", __name__, url_prefix="/contact")
 
@@ -42,9 +42,9 @@ def send():
 
     # Send the e-mail.
     send_email(
-        to=NOTIFY_ADDRESS,
+        to=Config.site.notify_address,
         reply_to=reply_to,
-        subject="Contact Form on {}: {}".format(SITE_NAME, subject),
+        subject="Contact Form on {}: {}".format(Config.site.site_name, subject),
         message="""A visitor to {site_name} has sent you a message!
 
 IP Address: {ip}
@@ -55,7 +55,7 @@ E-mail: {email}
 Subject: {subject}
 
 {message}""".format(
-            site_name=SITE_NAME,
+            site_name=Config.site.site_name,
             ip=remote_addr(),
             ua=request.user_agent.string,
             referer=request.headers.get("Referer", ""),

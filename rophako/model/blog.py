@@ -8,7 +8,7 @@ import re
 import glob
 import os
 
-import config
+from rophako.settings import Config
 import rophako.jsondb as JsonDB
 from rophako.log import logger
 
@@ -206,7 +206,7 @@ def list_avatars():
         # Load avatars from both locations. We check the built-in set first,
         # so if you have matching names in your local site those will override.
         "rophako/www/static/avatars/*.*",
-        os.path.join(config.SITE_ROOT, "static", "avatars", "*.*"),
+        os.path.join(Config.site.site_root, "static", "avatars", "*.*"),
     ]
     for path in paths:
         for filename in glob.glob(path):

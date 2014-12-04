@@ -5,7 +5,7 @@
 import bcrypt
 import time
 
-import config
+from rophako.settings import Config
 import rophako.jsondb as JsonDB
 import rophako.model.photo as Photo
 from rophako.log import logger
@@ -147,7 +147,7 @@ def exists(uid=None, username=None):
 
 
 def hash_password(password):
-    return bcrypt.hashpw(str(password).encode("utf-8"), bcrypt.gensalt(config.BCRYPT_ITERATIONS)).decode("utf-8")
+    return bcrypt.hashpw(str(password).encode("utf-8"), bcrypt.gensalt(int(Config.security.bcrypt_iterations))).decode("utf-8")
 
 
 def check_auth(username, password):

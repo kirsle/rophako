@@ -12,7 +12,7 @@ import redis
 import json
 import time
 
-import config
+from rophako.settings import Config
 from rophako.log import logger
 
 redis_client = None
@@ -111,7 +111,7 @@ def mkpath(document):
     if document.endswith(".json"):
         # Let's not do that.
         raise Exception("mkpath: document path already includes .json extension!")
-    return "{}/{}.json".format(config.DB_ROOT, str(document))
+    return "{}/{}.json".format(Config.db.db_root, str(document))
 
 
 def read_json(path):
@@ -137,6 +137,7 @@ def read_json(path):
         data = json.loads(text)
     except:
         logger.error("Couldn't decode JSON data from {}".format(path))
+        logger.error(text)
         data = None
 
     return data
@@ -179,16 +180,16 @@ def get_redis():
     global redis_client
     if not redis_client:
         redis_client = redis.StrictRedis(
-            host = config.REDIS_HOST,
-            port = config.REDIS_PORT,
-            db   = config.REDIS_DB,
+            host = Config.db.redis_host,
+            port = Config.db.redis_port,
+            db   = Config.db.redis_db,
         )
     return redis_client
 
 
 def set_cache(key, value, expires=None):
     """Set a key in the Redis cache."""
-    key = config.REDIS_PREFIX + key
+    key = Config.db.redis_prefix + key
     try:
         client = get_redis()
         client.set(key, json.dumps(value))
@@ -202,7 +203,7 @@ def set_cache(key, value, expires=None):
 
 def get_cache(key):
     """Get a cached item."""
-    key = config.REDIS_PREFIX + key
+    key = Config.db.redis_prefix + key
     value = None
     try:
         client = get_redis()
@@ -217,6 +218,6 @@ def get_cache(key):
 
 def del_cache(key):
     """Delete a cached item."""
-    key = config.REDIS_PREFIX + key
+    key = Config.db.redis_prefix + key
     client = get_redis()
     client.delete(key)

@@ -10,16 +10,16 @@ from PIL import Image
 import hashlib
 import random
 
-import config
+from rophako.settings import Config
 import rophako.jsondb as JsonDB
 from rophako.utils import sanitize_name, remote_addr
 from rophako.log import logger
 
 # Maps the friendly names of photo sizes with their pixel values from config.
 PHOTO_SCALES = dict(
-    large=config.PHOTO_WIDTH_LARGE,
-    thumb=config.PHOTO_WIDTH_THUMB,
-    avatar=config.PHOTO_WIDTH_AVATAR,
+    large=int(Config.photo.width_large),
+    thumb=int(Config.photo.width_thumb),
+    avatar=int(Config.photo.width_avatar),
 )
 
 
@@ -57,7 +57,6 @@ def list_albums():
 def get_album(name):
     """Get details about an album."""
     index = get_index()
-    result = []
 
     if not name in index["albums"]:
         return None
@@ -79,7 +78,7 @@ def rename_album(old_name, new_name):
     Returns True on success, False if the new name conflicts with another
     album's name."""
     old_name = sanitize_name(old_name)
-    newname  = sanitize_name(new_name)
+    new_name = sanitize_name(new_name)
     index = get_index()
 
     # New name is unique?
@@ -196,7 +195,7 @@ def get_photo(key):
 
 def get_image_dimensions(pic):
     """Use PIL to get the image's true dimensions."""
-    filename = os.path.join(config.PHOTO_ROOT_PRIVATE, pic["large"])
+    filename = os.path.join(Config.photo.root_private, pic["large"])
     img = Image.open(filename)
     return img.size
 
@@ -233,11 +232,11 @@ def crop_photo(key, x, y, length):
     for size in ["thumb", "avatar"]:
         pic = index["albums"][album][key][size]
         logger.debug("Delete {} size: {}".format(size, pic))
-        os.unlink(os.path.join(config.PHOTO_ROOT_PRIVATE, pic))
+        os.unlink(os.path.join(Config.photo.root_private, pic))
 
     # Regenerate all the thumbnails.
     large = index["albums"][album][key]["large"]
-    source = os.path.join(config.PHOTO_ROOT_PRIVATE, large)
+    source = os.path.join(Config.photo.root_private, large)
     for size in ["thumb", "avatar"]:
         pic = resize_photo(source, size, crop=dict(
             x=x,
@@ -305,7 +304,7 @@ def rotate_photo(key, rotate):
 
     new_names = dict()
     for size in ["large", "thumb", "avatar"]:
-        fname = os.path.join(config.PHOTO_ROOT_PRIVATE, photo[size])
+        fname = os.path.join(Config.photo.root_private, photo[size])
         logger.info("Rotating image {} by {} degrees.".format(fname, degrees))
 
         # Give it a new name.
@@ -315,7 +314,7 @@ def rotate_photo(key, rotate):
 
         img = Image.open(fname)
         img = img.rotate(degrees)
-        img.save(os.path.join(config.PHOTO_ROOT_PRIVATE, outfile))
+        img.save(os.path.join(Config.photo.root_private, outfile))
 
         # Delete the old name.
         os.unlink(fname)
@@ -339,7 +338,7 @@ def delete_photo(key):
     # Delete all the images.
     for size in ["large", "thumb", "avatar"]:
         logger.info("Delete: {}".format(photo[size]))
-        fname = os.path.join(config.PHOTO_ROOT_PRIVATE, photo[size])
+        fname = os.path.join(Config.photo.root_private, photo[size])
         if os.path.isfile(fname):
             os.unlink(fname)
 
@@ -428,7 +427,7 @@ def upload_from_pc(request):
         if not allowed_filetype(upload.filename):
             return dict(success=False, error="Unsupported file extension.")
 
-        tempfile = "{}/rophako-photo-{}.{}".format(config.TEMPDIR, int(time.time()), filetype)
+        tempfile = "{}/rophako-photo-{}.{}".format(Config.site.tempdir, int(time.time()), filetype)
         logger.debug("Save incoming photo to: {}".format(tempfile))
         upload.save(tempfile)
 
@@ -461,7 +460,7 @@ def upload_from_www(form):
 
     # Make a temp filename for it.
     filetype = url.rsplit(".", 1)[1]
-    tempfile = "{}/rophako-photo-{}.{}".format(config.TEMPDIR, int(time.time()), filetype)
+    tempfile = "{}/rophako-photo-{}.{}".format(Config.site.tempdir, int(time.time()), filetype)
     logger.debug("Save incoming photo to: {}".format(tempfile))
 
     # Grab the file.
@@ -500,7 +499,7 @@ def process_photo(form, filename):
     album = sanitize_name(album)
     if album == "":
         logger.warning("Album name didn't pass sanitization! Fall back to default album name.")
-        album = config.PHOTO_DEFAULT_ALBUM
+        album = Config.photo.default_album
 
     # Make up a unique public key for this set of photos.
     key = random_hash()
@@ -574,7 +573,7 @@ def resize_photo(filename, size, crop=None):
 
     # Make up a unique filename.
     outfile = random_name(filetype)
-    target  = os.path.join(config.PHOTO_ROOT_PRIVATE, outfile)
+    target  = os.path.join(Config.photo.root_private, outfile)
     logger.debug("Output file for {} scale: {}".format(size, target))
 
     # Get the image's dimensions.
@@ -679,7 +678,7 @@ def random_name(filetype):
     """Get a random available file name to save a new photo."""
     filetype = filetype.lower()
     outfile = random_hash() + "." + filetype
-    while os.path.isfile(os.path.join(config.PHOTO_ROOT_PRIVATE, outfile)):
+    while os.path.isfile(os.path.join(Config.photo.root_private, outfile)):
         outfile = random_hash() + "." + filetype
     return outfile
 

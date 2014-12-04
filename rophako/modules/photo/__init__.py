@@ -2,15 +2,14 @@
 
 """Endpoints for the photo albums."""
 
-from flask import Blueprint, g, request, redirect, url_for, session, flash
+from flask import Blueprint, g, request, redirect, url_for, flash
 
 import rophako.model.user as User
 import rophako.model.photo as Photo
 from rophako.utils import (template, pretty_time, render_markdown,
     login_required, ajax_response)
 from rophako.plugin import load_plugin
-from rophako.log import logger
-from config import *
+from rophako.settings import Config
 
 mod = Blueprint("photo", __name__, url_prefix="/photos")
 load_plugin("rophako.modules.comment")
@@ -68,7 +67,7 @@ def view_photo(key):
 
     g.info["photo"] = photo
     g.info["photo"]["key"] = key
-    g.info["photo"]["pretty_time"] = pretty_time(PHOTO_TIME_FORMAT, photo["uploaded"])
+    g.info["photo"]["pretty_time"] = pretty_time(Config.photo.time_format, photo["uploaded"])
     g.info["photo"]["markdown"] = render_markdown(photo.get("description", ""))
     return template("photos/view.html")
 
@@ -125,10 +124,10 @@ def upload():
     g.info["album_list"] = [
         "My Photos", # the default
     ]
-    g.info["selected"] = PHOTO_DEFAULT_ALBUM
+    g.info["selected"] = Config.photo.default_album
     albums = Photo.list_albums()
     if len(albums):
-        g.info["album_list"] = [ album["name"] for album in albums ]
+        g.info["album_list"] = [ x["name"] for x in albums ]
         g.info["selected"] = albums[0]
 
     return template("photos/upload.html")

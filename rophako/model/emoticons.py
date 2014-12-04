@@ -2,14 +2,12 @@
 
 """Emoticon models."""
 
-from flask import g, url_for
 import os
 import codecs
 import json
 import re
 
-import config
-import rophako.jsondb as JsonDB
+from rophako.settings import Config
 from rophako.log import logger
 
 
@@ -18,7 +16,7 @@ _cache = {}
 
 def load_theme():
     """Pre-load and cache the emoticon theme. This happens on startup."""
-    theme = config.EMOTICON_THEME
+    theme = Config.emoticons.theme
     global _cache
 
     # Cached?
@@ -26,13 +24,13 @@ def load_theme():
         return _cache
 
     # Only if the theme file exists.
-    settings = os.path.join(config.EMOTICON_ROOT_PRIVATE, theme, "emoticons.json")
+    settings = os.path.join(Config.emoticons.root_private, theme, "emoticons.json")
     if not os.path.isfile(settings):
         logger.error("Failed to load smiley theme {}: not found!")
 
         # Try the default (tango).
         theme = "tango"
-        settings = os.path.join(config.EMOTICON_ROOT_PRIVATE, theme, "emoticons.json")
+        settings = os.path.join(Config.emoticons.root_private, theme, "emoticons.json")
         if os.path.isfile(settings):
             logger.info("Falling back to default theme: tango")
         else:
@@ -71,7 +69,7 @@ def render(message):
             if trigger in message:
                 # Substitute it.
                 sub = """<img src="{url}" alt="{trigger}" title="{trigger}">""".format(
-                    url="/static/smileys/{}/{}".format(config.EMOTICON_THEME, img),
+                    url="/static/smileys/{}/{}".format(Config.emoticons.theme, img),
                     trigger=trigger,
                 )
                 pattern = r'([^A-Za-z0-9:\-]|^){}([^A-Za-z0-9:\-]|$)'.format(re.escape(trigger))

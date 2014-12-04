@@ -2,8 +2,7 @@
 
 """Endpoints for the commenting subsystem."""
 
-from flask import Blueprint, g, request, redirect, url_for, session, flash
-import re
+from flask import Blueprint, g, request, redirect, url_for, flash
 import time
 
 import rophako.model.user as User
@@ -11,8 +10,7 @@ import rophako.model.comment as Comment
 from rophako.utils import (template, pretty_time, login_required, sanitize_name,
     remote_addr)
 from rophako.plugin import load_plugin
-from rophako.log import logger
-from config import *
+from rophako.settings import Config
 
 mod = Blueprint("comment", __name__, url_prefix="/comments")
 load_plugin("rophako.modules.emoticons")
@@ -71,7 +69,7 @@ def preview():
     # Gravatar.
     g.info["gravatar"]    = gravatar
     g.info["preview"]     = Comment.format_message(form["message"])
-    g.info["pretty_time"] = pretty_time(COMMENT_TIME_FORMAT, time.time())
+    g.info["pretty_time"] = pretty_time(Config.comment.time_format, time.time())
 
     g.info.update(form)
     return template("comment/preview.html")
@@ -191,7 +189,7 @@ def partial_index(thread, subject, header=True):
             comment["image"] = avatar
 
         # Add the pretty time.
-        comment["pretty_time"] = pretty_time(COMMENT_TIME_FORMAT, comment["time"])
+        comment["pretty_time"] = pretty_time(Config.comment.time_format, comment["time"])
 
         # Format the message for display.
         comment["formatted_message"] = Comment.format_message(comment["message"])
@@ -203,7 +201,7 @@ def partial_index(thread, subject, header=True):
     g.info["subject"] = subject
     g.info["url"] = request.url
     g.info["comments"] = sorted_comments
-    g.info["photo_url"] = PHOTO_ROOT_PUBLIC
+    g.info["photo_url"] = Config.photo.root_public
     return template("comment/index.inc.html")
 
 
