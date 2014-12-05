@@ -2,7 +2,8 @@
 
 """Flask app for Rophako."""
 
-from flask import Flask, g, request, session, render_template, send_file, abort
+from flask import (Flask, g, request, session, render_template, send_file,
+    abort, redirect)
 from flask_sslify import SSLify
 import jinja2
 import os.path
@@ -127,6 +128,10 @@ def after_request():
 def catchall(path):
     """The catch-all path handler. If it exists in the www folders, it's sent,
     otherwise we give the 404 error page."""
+
+    if path.endswith("/"):
+        path = path.strip("/") # Remove trailing slashes.
+        return redirect(path)
 
     # Search for this file.
     for root in [Config.site.site_root, "rophako/www"]:
