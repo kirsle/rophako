@@ -214,7 +214,7 @@ def handle_exception(error):
 
     username = "anonymous"
     try:
-        if "username" in g.info["session"]:
+        if hasattr(g, "info") and "session" in g.info and "username" in g.info["session"]:
             username = g.info["session"]["username"]
     except:
         pass
@@ -227,7 +227,12 @@ def handle_exception(error):
     stacktrace = error + "\n\n" \
         + "==== Start Traceback ====\n" \
         + traceback.format_exc() \
-        + "==== End Traceback ====\n"
+        + "==== End Traceback ====\n\n" \
+        + "Request Information\n" \
+        + "-------------------\n" \
+        + "Address: " + remote_addr() + "\n" \
+        + "User Agent: " + request.user_agent.string + "\n" \
+        + "Referrer: " + request.referrer
 
     # Construct the subject and message
     subject = "Internal Server Error on {} - {} - {}".format(

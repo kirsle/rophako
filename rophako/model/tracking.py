@@ -6,7 +6,8 @@ import time
 import requests
 
 import rophako.jsondb as JsonDB
-from rophako.utils import remote_addr, pretty_time, server_name
+from rophako.utils import (remote_addr, pretty_time, server_name,
+    handle_exception)
 
 def track_visit(request, session):
     """Main logic to track and log visitor details."""
@@ -91,16 +92,23 @@ def log_referrer(request, link):
 
     # See if the URL really links back to us.
     hostname = server_name()
-    r = requests.get(link)
-    if hostname in r.text:
-        # Log it.
-        db = list()
-        if JsonDB.exists("traffic/referrers"):
-            # Don't cache the result -- the list can get huge!
-            db = JsonDB.get("traffic/referrers", cache=False)
-        db.append(link)
-        JsonDB.commit("traffic/referrers", db, cache=False)
-        return link
+    try:
+        r = requests.get(link,
+            timeout=5,
+            verify=False, # Don't do SSL verification
+        )
+        if hostname in r.text:
+            # Log it.
+            db = list()
+            if JsonDB.exists("traffic/referrers"):
+                # Don't cache the result -- the list can get huge!
+                db = JsonDB.get("traffic/referrers", cache=False)
+            db.append(link)
+            JsonDB.commit("traffic/referrers", db, cache=False)
+            return link
+    except Exception as e:
+        handle_exception(e)
+        return None
 
     return None
 
