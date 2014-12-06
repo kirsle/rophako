@@ -55,6 +55,10 @@ def get(document, cache=True):
 def commit(document, data, cache=True):
     """Insert/update a document in the DB."""
 
+    # Only allow one commit at a time.
+    if not lock_cache(document):
+        return
+
     # Need to create the file?
     path = mkpath(document)
     if not os.path.isfile(path):
@@ -77,6 +81,9 @@ def commit(document, data, cache=True):
 
     # Write the JSON.
     write_json(path, data)
+
+    # Release the lock.
+    unlock_cache(document)
 
 
 def delete(document):
@@ -225,3 +232,34 @@ def del_cache(key):
     key = Config.db.redis_prefix + key
     client = get_redis()
     client.delete(key)
+
+
+def lock_cache(key, timeout=5, expire=20):
+    """Cache level 'file locking' implementation.
+
+    The `key` will be automatically suffixed with `_lock`.
+    The `timeout` is the max amount of time to wait for a lock.
+    The `expire` is how long a lock may exist before it's considered stale.
+
+    Returns True on success, None on failure to acquire lock."""
+    lock_key = key + "_lock"
+    begin    = int(time.time())
+
+    lock = get_cache(lock_key)
+    while lock:
+        time.sleep(0.2)
+        lock = get_cache(lock_key)
+        if int(time.time()) - begin >= timeout:
+            handle_exception(
+                Exception("Redis key lock timed out waiting for {}".format(key))
+            )
+            return None
+
+    # Take the lock.
+    set_cache(lock_key, time.time(), expire)
+    return True
+
+
+def unlock_cache(key):
+    """Release the lock on a cache key."""
+    del_cache(key + "_lock")
