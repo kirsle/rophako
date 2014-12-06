@@ -113,6 +113,28 @@ def log_referrer(request, link):
     return None
 
 
+def rebuild_visitor_stats():
+    """Recalculate the total unique/hits based on daily info."""
+    total_unique = {}
+    total_hits   = 0
+
+    # Tally them all up!
+    for date in JsonDB.list_docs("traffic/unique"):
+        if date == "total":
+            continue
+        db = JsonDB.get("traffic/unique/{}".format(date), cache=False)
+        total_unique.update(db)
+    for date in JsonDB.list_docs("traffic/hits"):
+        if date == "total":
+            continue
+        db = JsonDB.get("traffic/hits/{}".format(date), cache=False)
+        total_hits += db.get("hits", 0)
+
+    # Write the outputs.
+    JsonDB.commit("traffic/unique/total", total_unique)
+    JsonDB.commit("traffic/hits/total", dict(hits=total_hits))
+
+
 def get_visitor_details():
     """Retrieve detailed visitor information for the frontend."""
     result = {

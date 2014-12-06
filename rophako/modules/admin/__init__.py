@@ -5,6 +5,7 @@
 from flask import g, Blueprint, request, redirect, url_for, session, flash
 
 import rophako.model.user as User
+import rophako.model.tracking as Tracking
 from rophako.modules.account import validate_create_form
 from rophako.utils import template, admin_required
 
@@ -180,3 +181,11 @@ def unimpersonate():
 
     flash("No longer impersonating.")
     return redirect(url_for("index"))
+
+@mod.route("/maint/rebuild_visitor_counts")
+@admin_required
+def rebuild_visitor_counts():
+    """Rebuild visitor counts."""
+    Tracking.rebuild_visitor_stats()
+    flash("Visitor counts recalculated.")
+    return redirect(url_for(".index"))
