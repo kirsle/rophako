@@ -74,13 +74,13 @@ def commit(document, data, cache=True):
                 logger.debug("JsonDB: mkdir {}".format(segment))
                 os.mkdir(segment, 0o755)
 
+    # Write the JSON.
+    write_json(path, data)
+
     # Update the cached document.
     if cache:
         set_cache(document, data, expires=cache_lifetime)
         set_cache(document+"_mtime", time.time(), expires=cache_lifetime)
-
-    # Write the JSON.
-    write_json(path, data)
 
     # Release the lock.
     unlock_cache(document)
@@ -257,9 +257,11 @@ def lock_cache(key, timeout=5, expire=20):
 
     # Take the lock.
     set_cache(lock_key, time.time(), expire)
+    logger.debug("Cache lock acquired: {}, expires in {}s".format(key, expire))
     return True
 
 
 def unlock_cache(key):
     """Release the lock on a cache key."""
     del_cache(key + "_lock")
+    logger.debug("Cache lock released: {}".format(key))
