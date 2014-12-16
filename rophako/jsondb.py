@@ -42,13 +42,20 @@ def get(document, cache=True):
         else:
             return data
 
+    # Get a lock for reading.
+    lock = lock_cache(document)
+
     # Get the JSON data.
     data = read_json(path)
+
+    # Unlock!
+    unlock_cache(lock)
 
     # Cache and return it.
     if cache:
         set_cache(document, data, expires=cache_lifetime)
         set_cache(document+"_mtime", stat.st_mtime, expires=cache_lifetime)
+
     return data
 
 
@@ -56,8 +63,7 @@ def commit(document, data, cache=True):
     """Insert/update a document in the DB."""
 
     # Only allow one commit at a time.
-    if not lock_cache(document):
-        return
+    lock = lock_cache(document)
 
     # Need to create the file?
     path = mkpath(document)
@@ -83,7 +89,7 @@ def commit(document, data, cache=True):
         set_cache(document+"_mtime", time.time(), expires=cache_lifetime)
 
     # Release the lock.
-    unlock_cache(document)
+    unlock_cache(lock)
 
 
 def delete(document):
@@ -166,15 +172,10 @@ def write_json(path, data):
     logger.debug("JsonDB: WRITE > {}".format(path))
 
     # Open and lock the file.
-    fh = None
-    if os.path.isfile(path):
-        fh = codecs.open(path, 'r+', 'utf-8')
-    else:
-        fh = codecs.open(path, 'w', 'utf-8')
+    fh = codecs.open(path, 'w', 'utf-8')
     flock(fh, LOCK_EX)
 
     # Write it.
-    fh.truncate(0)
     fh.write(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
 
     # Unlock and close.
@@ -243,25 +244,16 @@ def lock_cache(key, timeout=5, expire=20):
 
     Returns True on success, None on failure to acquire lock."""
     lock_key = key + "_lock"
-    begin    = int(time.time())
-
-    lock = get_cache(lock_key)
-    while lock:
-        time.sleep(0.2)
-        lock = get_cache(lock_key)
-        if int(time.time()) - begin >= timeout:
-            handle_exception(
-                Exception("Redis key lock timed out waiting for {}".format(key))
-            )
-            return None
+    client   = get_redis()
 
     # Take the lock.
-    set_cache(lock_key, time.time(), expire)
+    lock = client.lock(key, timeout=expire)
+    lock.acquire()
     logger.debug("Cache lock acquired: {}, expires in {}s".format(key, expire))
-    return True
+    return lock
 
 
-def unlock_cache(key):
+def unlock_cache(lock):
     """Release the lock on a cache key."""
-    del_cache(key + "_lock")
-    logger.debug("Cache lock released: {}".format(key))
+    lock.release()
+    logger.debug("Cache lock released")

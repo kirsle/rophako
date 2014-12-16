@@ -163,7 +163,9 @@ def render_markdown(body, html_escape=True, extensions=None, blacklist=None):
         for ext in blacklist:
             args["extensions"].remove(str(ext))
 
-    return markdown.markdown(body, **args)
+    return '<div class="markdown">{}</div>'.format(
+        markdown.markdown(body, **args)
+    )
 
 
 def send_email(to, subject, message, sender=None, reply_to=None):

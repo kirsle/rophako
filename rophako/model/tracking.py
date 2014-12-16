@@ -97,6 +97,15 @@ def log_referrer(request, link):
             timeout=5,
             verify=False, # Don't do SSL verification
         )
+
+        # Make sure the request didn't just redirect back to our main site
+        # (e.g. http://whatever.example.com wildcard may redirect back to
+        # http://example.com, and if that's us, don't log that!
+        if r.url.startswith("http://{}".format(hostname)) or \
+           r.url.startswith("https://{}".format(hostname)):
+            return None
+
+        # Look for our hostname in their page.
         if hostname in r.text:
             # Log it.
             db = list()
@@ -106,9 +115,8 @@ def log_referrer(request, link):
             db.append(link)
             JsonDB.commit("traffic/referrers", db, cache=False)
             return link
-    except Exception as e:
-        handle_exception(e)
-        return None
+    except:
+        pass
 
     return None
 
@@ -206,5 +214,6 @@ def get_referrers(recent=25):
 
     recent = 0 - recent
     result["recent"] = db[recent:]
+    result["recent"].reverse()
 
     return result
