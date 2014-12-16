@@ -181,9 +181,6 @@ def format_message(message):
     # Comments use Markdown formatting, and HTML tags are escaped by default.
     message = render_markdown(message)
 
-    # Don't allow commenters to use images.
-    message = re.sub(r'<img.+?/>', '', message)
-
     # Process emoticons.
     message = Emoticons.render(message)
     return message

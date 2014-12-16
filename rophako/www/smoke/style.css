@@ -77,6 +77,12 @@ pre, code {
     font-size: 10pt;
 }
 
+/* Use responsive images in Markdown code. */
+.markdown img {
+	max-width: 100%;
+	height: auto;
+}
+
 /*********************
  * Classes used by core Rophako pages. You'll want to
  * implement these in your custom layout.
