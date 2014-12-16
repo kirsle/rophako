@@ -163,7 +163,7 @@ def render_markdown(body, html_escape=True, extensions=None, blacklist=None):
         for ext in blacklist:
             args["extensions"].remove(str(ext))
 
-    return '<div class="markdown">{}</div>'.format(
+    return u'<div class="markdown">{}</div>'.format(
         markdown.markdown(body, **args)
     )
 
