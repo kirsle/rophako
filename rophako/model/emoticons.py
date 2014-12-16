@@ -68,7 +68,7 @@ def render(message):
         for trigger in smileys["map"][img]:
             if trigger in message:
                 # Substitute it.
-                sub = """<img src="{url}" alt="{trigger}" title="{trigger}">""".format(
+                sub = """<img src="{url}" class="rophako-emoticon" alt="{trigger}" title="{trigger}">""".format(
                     url="/static/smileys/{}/{}".format(Config.emoticons.theme, img),
                     trigger=trigger,
                 )
