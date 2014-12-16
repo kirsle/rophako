@@ -2,6 +2,7 @@
 
 """Emoticon models."""
 
+from flask import request
 import os
 import codecs
 import json
@@ -69,7 +70,7 @@ def render(message):
             if trigger in message:
                 # Substitute it.
                 sub = """<img src="{url}" class="rophako-emoticon" alt="{trigger}" title="{trigger}">""".format(
-                    url="/static/smileys/{}/{}".format(Config.emoticons.theme, img),
+                    url="{}/static/smileys/{}/{}".format(request.url_root.strip("/"), Config.emoticons.theme, img),
                     trigger=trigger,
                 )
                 pattern = r'([^A-Za-z0-9:\-]|^){}([^A-Za-z0-9:\-]|$)'.format(re.escape(trigger))
