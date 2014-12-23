@@ -187,23 +187,35 @@ def write_json(path, data):
 # Redis Caching Functions                                                  #
 ############################################################################
 
+disable_redis = False
 def get_redis():
     """Connect to Redis or return the existing connection."""
     global redis_client
-    if not redis_client:
-        redis_client = redis.StrictRedis(
-            host = Config.db.redis_host,
-            port = Config.db.redis_port,
-            db   = Config.db.redis_db,
-        )
+    global disable_redis
+
+    if not redis_client and not disable_redis:
+        try:
+            redis_client = redis.StrictRedis(
+                host = Config.db.redis_host,
+                port = Config.db.redis_port,
+                db   = Config.db.redis_db,
+            )
+            redis_client.ping()
+        except Exception as e:
+            logger.error("Couldn't connect to Redis; memory caching will be disabled! {}".format(e.message))
+            redis_client  = None
+            disable_redis = True
     return redis_client
 
 
 def set_cache(key, value, expires=None):
     """Set a key in the Redis cache."""
     key = Config.db.redis_prefix + key
+    client = get_redis()
+    if not client:
+        return
+
     try:
-        client = get_redis()
         client.set(key, json.dumps(value))
 
         # Expiration date?
@@ -217,8 +229,11 @@ def get_cache(key):
     """Get a cached item."""
     key = Config.db.redis_prefix + key
     value = None
+    client = get_redis()
+    if not client:
+        return
+
     try:
-        client = get_redis()
         value  = client.get(key)
         if value:
             value = json.loads(value)
@@ -232,6 +247,8 @@ def del_cache(key):
     """Delete a cached item."""
     key = Config.db.redis_prefix + key
     client = get_redis()
+    if not client:
+        return
     client.delete(key)
 
 
@@ -243,8 +260,9 @@ def lock_cache(key, timeout=5, expire=20):
     The `expire` is how long a lock may exist before it's considered stale.
 
     Returns True on success, None on failure to acquire lock."""
-    lock_key = key + "_lock"
-    client   = get_redis()
+    client = get_redis()
+    if not client:
+        return
 
     # Take the lock.
     lock = client.lock(key, timeout=expire)
@@ -255,5 +273,6 @@ def lock_cache(key, timeout=5, expire=20):
 
 def unlock_cache(lock):
     """Release the lock on a cache key."""
-    lock.release()
-    logger.debug("Cache lock released")
+    if lock:
+        lock.release()
+        logger.debug("Cache lock released")
