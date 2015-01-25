@@ -31,7 +31,7 @@ Config.load_plugins()
 from rophako import __version__
 from rophako.plugin import load_plugin
 from rophako.log import logger
-import rophako.model.tracking as Tracking
+#import rophako.model.tracking as Tracking
 import rophako.utils
 
 app.DEBUG      = Config.site.debug == "true"
@@ -85,7 +85,7 @@ def before_request():
             "name": "Guest",
             "role": "user",
         },
-        "tracking": Tracking.track_visit(request, session),
+        #"tracking": Tracking.track_visit(request, session),
     }
 
     # Default session vars.
