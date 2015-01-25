@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+
+<h1>{{ title }}</h1>
+
+This wiki page does not exist yet (that means it's a 404 error!)
+
+{% if session["login"] %}
+<ul>
+    <li><a href="{{ url_for('wiki.edit', name=title, note='Created initial page.') }}">Create This Page</a></li>
+</ul>
+{% endif %}
+
+{% endblock %}

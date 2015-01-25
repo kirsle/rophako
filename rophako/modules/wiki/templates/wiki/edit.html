@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block title %}Edit Wiki{% endblock %}
+{% block content %}
+
+{% if preview %}
+    <h1>Preview: {{ subject }}</h1>
+
+    {{ rendered_body|safe }}
+
+    <hr>
+{% endif %}
+
+<h1>Edit Wiki</h1>
+
+<form name="editor" action="{{ url_for('wiki.edit') }}" method="POST">
+    <input type="hidden" name="token" value="{{ csrf_token() }}">
+
+    <strong>Title:</strong><br>
+    <input type="text" class="form-control" size="80" name="name" value="{{ title }}"><p>
+
+    <strong>Body:</strong><br>
+    <textarea class="form-control input-lg" cols="80" rows="20" name="body">{{ body }}</textarea><br>
+    Markdown syntax.
+    <a href="{{ url_for('emoticons.index') }}" target="_blank">Emoticon reference</a> (opens in new window)<p>
+
+    <strong>Revision Note (optional):</strong><br>
+    <input type="text" size="80" name="note" value="{{ note }}"><p>
+
+    <strong>Options:</strong><br>
+    <label>
+        <input type="checkbox" name="history" value="true"{% if history %} checked{% endif %}> Add this revision to the page history
+            (if unchecked, it will replace the most recent version with this version)
+    </label><p>
+
+    <button type="submit" class="btn btn-default" name="action" value="preview">Preview</button>
+    <button type="submit" class="btn btn-primary" name="action" value="publish">Publish</button>
+</form>
+
+{% endblock %}

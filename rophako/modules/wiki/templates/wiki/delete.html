@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Confirm Deletion{% endblock %}
+{% block content %}
+
+<h1>Delete {% if type == "revision" %}Revision{% else %}Page{% endif %}: {{ title }}</h1>
+
+Are you sure you want to delete this {{ type }}?<p>
+
+<form name="confirm" action="{{ confirm_url }}" method="POST">
+    <input type="hidden" name="token" value="{{ csrf_token() }}">
+    <button type="submit" name="confirm" value="true">Confirm Deletion</button>
+</form>
+
+{% endblock %}

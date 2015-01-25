@@ -107,15 +107,27 @@ def exists(document):
     return os.path.isfile(path)
 
 
-def list_docs(path):
+def list_docs(path, recursive=False):
     """List all the documents at the path."""
-    path = mkpath("{}/*".format(path))
+    root = os.path.join(Config.db.db_root, path)
     docs = list()
 
-    for item in glob.glob(path):
-        name = re.sub(r'\.json$', '', item)
-        name = name.split("/")[-1]
-        docs.append(name)
+    for item in sorted(os.listdir(root)):
+        target = os.path.join(root, item)
+        db_path = os.path.join(path, item)
+
+        # Descend into subdirectories?
+        if os.path.isdir(target):
+            if recursive:
+                docs += [
+                    os.path.join(item, name) for name in list_docs(db_path)
+                ]
+            else:
+                continue
+
+        if target.endswith(".json"):
+            name = re.sub(r'\.json$', '', item)
+            docs.append(name)
 
     return docs
 
