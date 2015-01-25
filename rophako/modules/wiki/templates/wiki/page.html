@@ -7,6 +7,7 @@
 
     [ <a href="{{ url_for('wiki.history', name=link) }}">History</a>
     | <a href="{{ url_for('wiki.list_pages') }}">Index</a>
+    | <a href="{{ url_for('wiki.view_page', name=link, source='1') }}">Source</a>
     {% if session["login"] %}
             | <a href="{{ url_for('wiki.edit', name=title) }}">Edit</a>
             | <a href="{{ url_for('wiki.edit') }}">New Page</a>
@@ -15,6 +16,8 @@
 </div>
 
 <h1>{{ title }}</h1>
+
+<hr>
 
 {{ rendered_body|safe }}
 

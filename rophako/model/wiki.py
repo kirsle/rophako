@@ -2,12 +2,44 @@
 
 """Wiki models."""
 
+from flask import url_for
 import time
 import re
 import hashlib
 
 import rophako.jsondb as JsonDB
+from rophako.utils import render_markdown
 from rophako.log import logger
+
+def render_page(content):
+    """Render the Markdown content of a Wiki page, and support inter-page
+    linking with [[double braces]].
+
+    For simple links, just use the [[Page Name]]. To have a different link text
+    than the page name, use [[Link Text|Page Name]]."""
+    html = render_markdown(content)
+
+    # Look for [[double brackets]]
+    links = re.findall(r'\[\[(.+?)\]\]', html)
+    for match in links:
+        label = page = match
+        if "|" in match:
+            label, page = match.split("|", 2)
+
+        # Does the page exist?
+        output = '''<a href="{url}">{label}</a>'''
+        if not JsonDB.exists("wiki/pages/{}".format(page)):
+            output = '''<a href="{url}" class="wiki-broken">{label}</a>'''
+
+        html = html.replace("[[{}]]".format(match),
+            output.format(
+                url=url_for("wiki.view_page", name=name_to_url(page)),
+                label=label,
+            )
+        )
+
+    return html
+
 
 def get_page(name):
     """Get a Wiki page. Returns `None` if the page isn't found."""

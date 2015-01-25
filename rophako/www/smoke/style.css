@@ -314,6 +314,11 @@ ul.blog-categories li:last-child:after {
     font-size: 9pt;
 }
 
+/* Wiki styles */
+a.wiki-broken {
+    text-decoration: line-through;
+}
+
 /* Visitor history page */
 .visitor-graph {
 	height: 16px;

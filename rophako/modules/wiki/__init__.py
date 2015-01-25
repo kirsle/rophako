@@ -7,8 +7,7 @@ from flask import Blueprint, g, request, redirect, url_for, flash
 import rophako.model.user as User
 import rophako.model.wiki as Wiki
 import rophako.model.emoticons as Emoticons
-from rophako.utils import (template, render_markdown, pretty_time,
-    login_required)
+from rophako.utils import template, pretty_time, render_markdown, login_required
 from rophako.settings import Config
 
 mod = Blueprint("wiki", __name__, url_prefix="/wiki")
@@ -33,7 +32,11 @@ def list_pages():
 @mod.route("/<path:name>")
 def view_page(name):
     """Show a specific wiki page."""
+    link = name
     name = Wiki.url_to_name(name)
+
+    g.info["link"] = link
+    g.info["title"] = name
 
     # Look up the page.
     page = Wiki.get_page(name)
@@ -59,10 +62,19 @@ def view_page(name):
         # Show the latest one.
         rev = page["revisions"][0]
 
+    # Getting the plain text source?
+    if request.args.get("source", None):
+        g.info["markdown"] = render_markdown("\n".join([
+            "# Source: {}".format(name),
+            "",
+            "```markdown",
+            rev["body"],
+            "```"
+        ]))
+        return template("markdown.inc.html")
+
     # Render it!
-    g.info["link"] = Wiki.name_to_url(name)
-    g.info["title"] = name
-    g.info["rendered_body"] = render_markdown(rev["body"])
+    g.info["rendered_body"] = Wiki.render_page(rev["body"])
     g.info["rendered_body"] = Emoticons.render(g.info["rendered_body"])
     g.info["pretty_time"] = pretty_time(Config.wiki.time_format, rev["time"])
 
@@ -131,7 +143,7 @@ def edit():
             g.info["preview"] = True
 
             # Render markdown
-            g.info["rendered_body"] = render_markdown(body)
+            g.info["rendered_body"] = Wiki.render_page(body)
 
             # Render emoticons.
             g.info["rendered_body"] = Emoticons.render(g.info["rendered_body"])
