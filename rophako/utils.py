@@ -14,6 +14,7 @@ import markdown
 import json
 import urlparse
 import traceback
+import socket
 
 from rophako.log import logger
 from rophako.settings import Config
@@ -190,10 +191,13 @@ def send_email(to, subject, message, sender=None, reply_to=None):
             headers.append("Subject: {}".format(subject))
 
             # Prepare the mail for transport.
-            server = smtplib.SMTP(Config.mail.server, Config.mail.port)
-            msg = "\n".join(headers) + "\n\n" + message
-            server.sendmail(sender, email, msg)
-            server.quit()
+            try:
+                server = smtplib.SMTP(Config.mail.server, Config.mail.port)
+                msg = "\n".join(headers) + "\n\n" + message
+                server.sendmail(sender, email, msg)
+                server.quit()
+            except socket.error:
+                pass
 
 
 def handle_exception(error):

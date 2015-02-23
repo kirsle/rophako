@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import unicode_literals
 
 """Migrate blog database files from a PerlSiikir site to Rophako.
 

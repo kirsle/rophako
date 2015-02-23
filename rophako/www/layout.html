@@ -54,15 +54,6 @@
 
     {% block content %}{% endblock %}
 
-    <hr>
-    <p class="right">
-        <strong>Visitor Information:</strong><br>
-        Unique Visitors: {{ tracking["unique_today"] }} today/{{ tracking["unique_total"] }} total<br>
-        Page Hits: {{ tracking["hits_today"] }} today/{{ tracking["hits_total"] }} total<br>
-        <a href="{{ url_for('tracking.visitors') }}">Visitor Details</a> |
-        <a href="{{ url_for('tracking.referrers') }}">Referring URLs</a>
-    </p>
-
     <footer>
         <div>
             &copy; 2014 Noah Petherbridge. Web design released along with the Rophako CMS
