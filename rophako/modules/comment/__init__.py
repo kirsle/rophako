@@ -168,8 +168,13 @@ def unsubscribe():
     return template("comment/unsubscribed.html")
 
 
-def partial_index(thread, subject, header=True):
-    """Partial template for including the index view of a comment thread."""
+def partial_index(thread, subject, header=True, addable=True):
+    """Partial template for including the index view of a comment thread.
+
+    * thread: unique name for the comment thread
+    * subject: subject name for the comment thread
+    * header: show the Comments h1 header
+    * addable: boolean, can new comments be added to the thread"""
 
     comments = Comment.get_comments(thread)
 
@@ -199,6 +204,7 @@ def partial_index(thread, subject, header=True):
     g.info["header"] = header
     g.info["thread"] = thread
     g.info["subject"] = subject
+    g.info["commenting_disabled"] = not addable
     g.info["url"] = request.url
     g.info["comments"] = sorted_comments
     g.info["photo_url"] = Config.photo.root_public
