@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 from flask import (g, session, request, render_template, flash, redirect,
     url_for, current_app)
 from functools import wraps
@@ -15,6 +17,8 @@ import json
 import urlparse
 import traceback
 import socket
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 from rophako.log import logger
 from rophako.settings import Config
@@ -181,22 +185,23 @@ def send_email(to, subject, message, sender=None, reply_to=None):
     if Config.mail.method == "smtp":
         # Send mail with SMTP.
         for email in to:
-            # Construct the mail headers.
-            headers = [
-                "From: {}".format(sender),
-                "To: {}".format(email),
-            ]
-            if reply_to is not None:
-                headers.append("Reply-To: {}".format(reply_to))
-            headers.append("Subject: {}".format(subject))
+            msg = MIMEMultipart("alternative")
+            msg.set_charset("utf-8")
 
-            # Prepare the mail for transport.
+            msg["Subject"] = subject
+            msg["From"] = sender
+            msg["To"] = email
+            if reply_to is not None:
+                msg["Reply-To"] = reply_to
+
+            text = MIMEText(message, "plain", "utf-8")
+            msg.attach(text)
+
+            # Send the e-mail.
             try:
                 server = smtplib.SMTP(Config.mail.server, Config.mail.port)
-                msg = "\n".join(headers) + "\n\n" + message
-                server.sendmail(sender, email, msg)
-                server.quit()
-            except socket.error:
+                server.sendmail(sender, [email], msg.as_string())
+            except:
                 pass
 
 
