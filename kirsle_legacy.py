@@ -98,6 +98,12 @@ def legacy_download():
 def legacy_url(page):
     return redirect("/{}".format(page), code=301)
 
+
+@app.route("/metacity")
+def legacy_metacity():
+    return redirect("https://github.com/kirsle/linux-themes", code=301)
+
+
 @app.route("/ssl_test")
 @login_required
 def ssl_test():
