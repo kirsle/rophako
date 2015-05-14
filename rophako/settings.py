@@ -27,7 +27,8 @@ class ConfigHandler(object):
         self.settings.set("DEFAULT", "_year", str(datetime.datetime.now().strftime("%Y")))
 
         # Read the defaults and then apply the custom settings on top.
-        self.settings.read(["defaults.ini", "settings.ini"])
+        settings_file = os.environ.get("ROPHAKO_SETTINGS", "settings.ini")
+        self.settings.read(["defaults.ini", settings_file])
 
     def print_settings(self):
         """Pretty-print the contents of the configuration as JSON."""
