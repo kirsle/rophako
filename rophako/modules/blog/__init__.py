@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 from flask import Blueprint, g, request, redirect, url_for, flash, make_response
 import datetime
 import time
+import re
 from xml.dom.minidom import Document
 
 import rophako.model.user as User
@@ -88,6 +89,10 @@ def entry(fid):
     # Look up the post.
     post = Blog.get_entry(post_id)
     post["post_id"] = post_id
+
+    # Body has a snipped section?
+    if "<snip>" in post["body"]:
+        post["body"] = re.sub(r'\s*<snip>\s*', '\n\n', post["body"])
 
     # Render the body.
     if post["format"] == "markdown":
@@ -455,6 +460,11 @@ def partial_index():
         post    = Blog.get_entry(post_id)
 
         post["post_id"] = post_id
+
+        # Body has a snipped section?
+        if "<snip>" in post["body"]:
+            post["body"] = post["body"].split("<snip>")[0]
+            post["snipped"] = True
 
         # Render the body.
         if post["format"] == "markdown":

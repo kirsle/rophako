@@ -33,7 +33,10 @@
         <input type="radio" name="format" value="html"{% if format == "html" %} checked{% endif %}> HTML
     </label><br>
     <textarea class="form-control input-lg" cols="80" rows="12" name="body">{{ body }}</textarea><br>
-    <a href="{{ url_for('emoticons.index') }}" target="_blank">Emoticon reference</a> (opens in new window)<p>
+    <a href="/markdown" target="_blank">Markdown cheatsheet</a> /
+    <a href="{{ url_for('emoticons.index') }}" target="_blank">Emoticon reference</a> (opens in new window)<br>
+    Optional: separate your summary from the rest of the post by typing <code>&lt;snip&gt;</code>
+    where you want the division to appear.<p>
 
     <strong>Avatar:</strong><br>
     <span id="avatar-preview"></span>
