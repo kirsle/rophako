@@ -4,7 +4,7 @@
 
 <h1>Album: {{ album }}</h1>
 
-{% if markdown %}
+{% if album_info["description"] %}
     <div class="photo-description">{{ markdown|safe }}</div><p>
 {% endif %}
 

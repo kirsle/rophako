@@ -28,11 +28,17 @@
 <a href="{{ url_for('photo.view_photo', key=photo['next']) }}">
     <img src="{{ app['photo_url'] }}/{{ photo['large'] }}" class="portrait">
 </a><p>
-{% if photo["markdown"] %}
+{% if photo["description"] %}
     <div class="photo-description">{{ photo["markdown"]|safe }}</div>
 {% endif %}
 
 <em>Uploaded by {{ author["name"] }} on {{ photo["pretty_time"] }}.</em>
+
+{% if session["login"] %}
+    <p>Embed this image in a blog post:<br>
+    <input type="text" class="form-input" readonly value="![{{ photo['caption'] }}]({{ app['photo_url'] }}/{{ photo['large'] }})"> (Markdown)<br>
+    <input type="text" class="form-input" readonly value='<a href="{{ app['photo_url'] }}/{{ photo['large'] }}\" alt=\"{{ photo['caption'] }}">'> (HTML)
+{% endif %}
 
 {{ nav_links() }}
 
