@@ -403,7 +403,7 @@ def xml_add_text_tags(doc, root_node, tags):
         root_node.appendChild(channelTag)
 
 
-def partial_index():
+def partial_index(template_name="blog/index.inc.html"):
     """Partial template for including the index view of the blog."""
 
     # Get the blog index.
@@ -494,7 +494,7 @@ def partial_index():
     g.info["category"] = category
     g.info["posts"] = selected
 
-    return template("blog/index.inc.html")
+    return template(template_name)
 
 
 def get_index_posts(index):
