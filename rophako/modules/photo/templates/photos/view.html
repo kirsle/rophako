@@ -36,8 +36,8 @@
 
 {% if session["login"] %}
     <p>Embed this image in a blog post:<br>
-    <input type="text" class="form-control" readonly value="![{{ photo['caption'] }}]({{ app['photo_url'] }}/{{ photo['large'] }})"> (Markdown)<br>
-    <input type="text" class="form-control" readonly value='<a href="{{ app['photo_url'] }}/{{ photo['large'] }}" alt="{{ photo['caption'] }}">'> (HTML)
+    <input type="text" class="form-control inline" readonly value="![{{ photo['caption'] }}]({{ app['photo_url'] }}/{{ photo['large'] }})"> (Markdown)<br>
+    <input type="text" class="form-control inline" readonly value='<img src="{{ app['photo_url'] }}/{{ photo['large'] }}" alt="{{ photo['caption'] }}">'> (HTML)
 {% endif %}
 
 {{ nav_links() }}
