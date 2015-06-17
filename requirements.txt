@@ -7,3 +7,4 @@ requests
 Markdown
 Pygments
 attrdict
+gunicorn
