@@ -70,8 +70,11 @@ def render(message):
         for trigger in smileys["map"][img]:
             if trigger in message:
                 # Substitute it.
+                url = request.url_root.strip("/") \
+                      .replace("http:", "") \
+                      .replace("https:", "")
                 sub = """<img src="{url}" class="rophako-emoticon" alt="{trigger}" title="{trigger}">""".format(
-                    url="{}/static/smileys/{}/{}".format(request.url_root.strip("/"), Config.emoticons.theme, img),
+                    url="{}/static/smileys/{}/{}".format(url, Config.emoticons.theme, img),
                     trigger=trigger,
                 )
                 pattern = r'([^A-Za-z0-9:\-]|^){}([^A-Za-z0-9:\-]|$)'.format(re.escape(trigger))
