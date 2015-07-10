@@ -8,6 +8,11 @@ import time
 import re
 import glob
 import os
+import sys
+
+if sys.version_info[0] > 2:
+    def unicode(s):
+        return s
 
 from rophako.settings import Config
 import rophako.jsondb as JsonDB

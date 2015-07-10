@@ -188,7 +188,7 @@ def write_json(path, data):
     flock(fh, LOCK_EX)
 
     # Write it.
-    fh.write(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
+    fh.write(json.dumps(data, indent=4, separators=(',', ': ')))
 
     # Unlock and close.
     flock(fh, LOCK_UN)

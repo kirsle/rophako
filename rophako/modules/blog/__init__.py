@@ -19,6 +19,11 @@ from rophako.plugin import load_plugin
 from rophako.settings import Config
 from rophako.log import logger
 
+import sys
+if sys.version_info[0] > 2:
+    def unicode(s):
+        return str(s)
+
 mod = Blueprint("blog", __name__, url_prefix="/blog")
 load_plugin("rophako.modules.comment")
 
