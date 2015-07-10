@@ -1,5 +1,6 @@
 # Don't check in site specific settings.
 settings.ini
+settings.yml
 
 # Compiled Python
 *.pyc
