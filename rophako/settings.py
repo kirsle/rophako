@@ -29,6 +29,9 @@ class ConfigHandler(object):
             basedir=basedir
         )
         self.photo.root_private = self.photo.root_private.format(basedir=basedir)
+        self.blog.copyright = self.blog.copyright.format(
+            year=datetime.datetime.utcnow().strftime("%Y")
+        )
 
     def print_settings(self):
         """Pretty-print the contents of the configuration."""
