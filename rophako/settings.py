@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function, absolute_import
 
 import os
 import datetime
@@ -33,7 +33,7 @@ class ConfigHandler(object):
 
     def print_settings(self):
         """Pretty-print the contents of the configuration."""
-        print self.settings
+        print(self.settings)
 
     def load_plugins(self):
         """Load all the plugins specified by the config file."""

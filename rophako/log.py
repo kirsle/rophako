@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function, absolute_import
 
 """Debug and logging functions."""
 
-from __future__ import print_function
-
-from flask import g, request
 import logging
 
 from rophako.settings import Config
@@ -16,9 +13,6 @@ class LogHandler(logging.Handler):
     def emit(self, record):
         # The initial log line, which has the $prefix$ in it.
         line = self.format(record)
-
-        # Is the user logged in?
-        name = "-nobody-"
 
         line = line.replace('$prefix$', '')
         print(line)

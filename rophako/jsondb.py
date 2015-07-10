@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function, absolute_import
 
 """JSON flat file database system."""
 
 import codecs
 import os
 import os.path
-import glob
 import re
 from fcntl import flock, LOCK_EX, LOCK_SH, LOCK_UN
 import redis
@@ -215,7 +214,7 @@ def get_redis():
             )
             redis_client.ping()
         except Exception as e:
-            logger.error("Couldn't connect to Redis; memory caching will be disabled! {}".format(e.message))
+            logger.error("Couldn't connect to Redis; memory caching will be disabled! {}".format(e))
             redis_client  = None
             disable_redis = True
     return redis_client

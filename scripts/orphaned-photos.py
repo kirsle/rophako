@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function, absolute_import
 
 """Locate any orphaned photos.
 
@@ -12,11 +12,14 @@ import json
 import glob
 
 sys.path.append(".")
+from rophako.settings import Config
+Config.load_settings()
+
 import rophako.jsondb as JsonDB
 
 def main():
     if len(sys.argv) == 1:
-        print "Usage: {} <path/to/static/photos>".format(__file__)
+        print("Usage: {} <path/to/static/photos>".format(__file__))
         sys.exit(1)
 
     photo_root = sys.argv[1]
@@ -32,7 +35,7 @@ def main():
     for img in glob.glob("{}/*.*".format(photo_root)):
         fname = img.split("/")[-1]
         if not fname in photos:
-            print "Orphan:", fname
+            print("Orphan:", fname)
 
 if __name__ == "__main__":
     main()

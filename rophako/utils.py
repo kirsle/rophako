@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function, absolute_import
 
 from flask import (g, session, request, render_template, flash, redirect,
     url_for, current_app)
@@ -14,7 +14,10 @@ import importlib
 import smtplib
 import markdown
 import json
-import urlparse
+try:
+    import urlparse
+except ImportError:
+    from urllib import parse as urlparse
 import traceback
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -207,7 +210,7 @@ def send_email(to, subject, message, sender=None, reply_to=None):
 def handle_exception(error):
     """Send an e-mail to the site admin when an exception occurs."""
     if current_app.config.get("DEBUG"):
-        print traceback.format_exc()
+        print(traceback.format_exc())
         raise
 
     import rophako.jsondb as JsonDB

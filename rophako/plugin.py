@@ -1,11 +1,10 @@
 #!/usr/bin/env python
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import
 
 """Dynamic CMS plugin loader."""
 
 import os
 from importlib import import_module
-from rophako.app import app, BLUEPRINT_PATHS
 
 def load_plugin(name, as_blueprint=True, template_path=None):
     """Load a Rophako CMS plugin.
@@ -17,6 +16,7 @@ def load_plugin(name, as_blueprint=True, template_path=None):
     * `template_path` is a filesystem path where the blueprint's templates
       can be found. If not provided, the path is automatically determined
       based on the module name, which is suitable for the built-in plugins."""
+    from rophako.app import app, BLUEPRINT_PATHS
     module = import_module(name)
     if as_blueprint:
         mod = getattr(module, "mod")

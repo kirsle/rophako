@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import
 
-import sys
 import argparse
 
 from rophako.app import app
@@ -49,4 +48,3 @@ if __name__ == '__main__':
         flask_options["ssl_context"] = context
 
     app.run(**flask_options)
-

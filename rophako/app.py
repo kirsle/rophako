@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import
 
 """Flask app for Rophako."""
 
@@ -35,8 +35,14 @@ from rophako.log import logger
 #import rophako.model.tracking as Tracking
 import rophako.utils
 
+# String escaping for the secret key (processes \ escapes properly), the
+# escape encoding name varies between Python 2 and 3.
+string_escape = "string_escape" if sys.version_info[0] == 2 \
+                else "unicode_escape"
+
 app.DEBUG      = Config.site.debug == "true"
-app.secret_key = Config.security.secret_key.decode("string_escape")
+app.secret_key = bytes(Config.security.secret_key.encode("utf-8")) \
+                 .decode(string_escape)
 
 # Security?
 if Config.security.force_ssl == "true":
