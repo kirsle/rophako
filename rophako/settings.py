@@ -3,8 +3,6 @@ from __future__ import unicode_literals
 
 import os
 import datetime
-from attrdict import AttrDict
-from ConfigParser import ConfigParser
 from yamlsettings import YamlSettings
 
 from rophako.plugin import load_plugin

@@ -16,7 +16,6 @@ import markdown
 import json
 import urlparse
 import traceback
-import socket
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
