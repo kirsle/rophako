@@ -73,6 +73,13 @@ rophako:
     # Password strength: number of iterations for bcrypt password.
     bcrypt_iterations: 12
 
+    # Proxy support. If you *KNOW* your web app will be behind a trusted proxy,
+    # such as a load balancer, you can make the app accept the X-Forwarded-For
+    # header to provide the user's real IP address. Do NOT set this if you are
+    # not behind a proxy, otherwise a malicious user could "spoof" their address
+    # by using this header.
+    use_forwarded_for: false
+
   ###
   # Mail Settings
   ###

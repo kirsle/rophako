@@ -286,10 +286,10 @@ def include(endpoint, *args, **kwargs):
 
 
 def remote_addr():
-    """Retrieve the end user's remote IP address."""
-
-    # TODO: eventually support configurations with X-Forwarded-For, but for
-    # now at least we're centralizing this in one spot.
+    """Retrieve the end user's remote IP address. If the site is configured
+    to honor X-Forwarded-For and this header is present, it's returned."""
+    if Config.security.use_forwarded_for:
+        return request.access_route[0]
     return request.remote_addr
 
 
