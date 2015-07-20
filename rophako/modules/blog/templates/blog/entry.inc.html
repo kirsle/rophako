@@ -39,7 +39,9 @@
     <div class="clear">
         <strong>Categories:</strong>
         {% if post["categories"]|length == 0 or (post["categories"]|length == 1 and post["categories"][0] == "") %}
-            <a href="{{ url_for('blog.category', category=Uncategorized) }}">Uncategorized</a>{# TODO hardcoded name #}
+            <a href="{{ url_for('blog.category', category=settings().blog.default_category) }}">
+                {{ settings().blog.default_category }}
+            </a>
         {% else %}
             <ul class="blog-categories">
                 {% for tag in post["categories"] %}

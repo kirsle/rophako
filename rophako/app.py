@@ -8,7 +8,6 @@ from flask import (Flask, g, request, session, render_template, send_file,
 from flask_sslify import SSLify
 import jinja2
 import os.path
-import time
 import sys
 
 # Get the Flask app object ready right away so other modules can import it
@@ -29,7 +28,6 @@ from rophako.settings import Config
 Config.load_settings()
 Config.load_plugins()
 
-from rophako import __version__
 from rophako.plugin import load_plugin
 from rophako.log import logger
 #import rophako.model.tracking as Tracking
@@ -64,6 +62,7 @@ app.jinja_loader = jinja2.ChoiceLoader([ jinja2.FileSystemLoader(x) for x in tem
 
 app.jinja_env.globals["csrf_token"] = rophako.utils.generate_csrf_token
 app.jinja_env.globals["include_page"] = rophako.utils.include
+app.jinja_env.globals["settings"] = lambda: Config
 
 # Preload the emoticon data.
 import rophako.model.emoticons as Emoticons
@@ -75,25 +74,7 @@ def before_request():
     """Called before all requests. Initialize global template variables."""
 
     # Default template vars.
-    g.info = {
-        "time": time.time(),
-        "app": {
-            "name": "Rophako",
-            "version": __version__,
-            "python_version": "{}.{}".format(sys.version_info.major, sys.version_info.minor),
-            "author": "Noah Petherbridge",
-            "photo_url": Config.photo.root_public,
-        },
-        "uri": request.path,
-        "session": {
-            "login": False, # Not logged in, until proven otherwise.
-            "username": "guest",
-            "uid": 0,
-            "name": "Guest",
-            "role": "user",
-        },
-        #"tracking": Tracking.track_visit(request, session),
-    }
+    g.info = rophako.utils.default_vars()
 
     # Default session vars.
     if not "login" in session:

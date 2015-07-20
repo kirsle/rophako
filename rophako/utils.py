@@ -14,6 +14,7 @@ import importlib
 import smtplib
 import markdown
 import json
+import sys
 try:
     import urlparse
 except ImportError:
@@ -22,6 +23,7 @@ import traceback
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from rophako import __version__
 from rophako.log import logger
 from rophako.settings import Config
 
@@ -63,6 +65,30 @@ def ajax_response(status, msg):
         status=status,
         msg=msg,
     ))
+
+
+def default_vars():
+    """Default template variables."""
+    return {
+        "time": time.time(),
+        "app": {
+            "name": "Rophako",
+            "version": __version__,
+            "python_version": "{}.{}".format(sys.version_info.major, sys.version_info.minor),
+            "author": "Noah Petherbridge",
+            "photo_url": Config.photo.root_public,
+            "config": Config,
+        },
+        "uri": request.path,
+        "session": {
+            "login": False, # Not logged in, until proven otherwise.
+            "username": "guest",
+            "uid": 0,
+            "name": "Guest",
+            "role": "user",
+        },
+        #"tracking": Tracking.track_visit(request, session),
+    }
 
 
 def template(name, **kwargs):

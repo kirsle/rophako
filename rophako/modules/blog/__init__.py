@@ -416,9 +416,11 @@ def partial_index(template_name="blog/index.inc.html"):
     pool  = {} # The set of blog posts to show.
 
     category = g.info.get("url_category", None)
+    if category == Config.blog.default_category:
+        category = ""
 
     # Are we narrowing by category?
-    if category:
+    if category is not None:
         # Narrow down the index to just those that match the category.
         for post_id, data in index.items():
             if not category in data["categories"]:
