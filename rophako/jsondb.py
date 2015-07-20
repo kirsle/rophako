@@ -112,6 +112,9 @@ def list_docs(path, recursive=False):
     root = os.path.join(Config.db.db_root, path)
     docs = list()
 
+    if not os.path.isdir(root):
+        return []
+
     for item in sorted(os.listdir(root)):
         target = os.path.join(root, item)
         db_path = os.path.join(path, item)
