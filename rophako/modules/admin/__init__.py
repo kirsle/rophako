@@ -6,6 +6,7 @@ from __future__ import unicode_literals, absolute_import
 from flask import g, Blueprint, request, redirect, url_for, session, flash
 
 import rophako.model.user as User
+import rophako.model.blog as Blog
 import rophako.model.tracking as Tracking
 from rophako.modules.account import validate_create_form
 from rophako.utils import template, admin_required
@@ -189,4 +190,12 @@ def rebuild_visitor_counts():
     """Rebuild visitor counts."""
     Tracking.rebuild_visitor_stats()
     flash("Visitor counts recalculated.")
+    return redirect(url_for(".index"))
+
+@mod.route("/maint/rebuild_blog_index")
+@admin_required
+def rebuild_blog_index():
+    """Rebuild the blog index."""
+    Blog.rebuild_index()
+    flash("Blog index rebuilt.")
     return redirect(url_for(".index"))

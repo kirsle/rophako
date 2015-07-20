@@ -41,7 +41,7 @@ def get_index():
 
     # Index doesn't exist?
     if not JsonDB.exists("blog/index"):
-        return {}
+        return rebuild_index()
     db = JsonDB.get("blog/index")
 
     # Hide any private posts if we aren't logged in.
@@ -51,6 +51,43 @@ def get_index():
                 del db[post_id]
 
     return db
+
+
+def rebuild_index():
+    """Rebuild the index.json if it goes missing."""
+    index = {}
+
+    entries = JsonDB.list_docs("blog/entries")
+    for post_id in entries:
+        db = JsonDB.get("blog/entries/{}".format(post_id))
+        update_index(post_id, db, index, False)
+
+    JsonDB.commit("blog/index", index)
+    return index
+
+
+def update_index(post_id, post, index=None, commit=True):
+    """Update a post's meta-data in the index. This is also used for adding a
+    new post to the index for the first time.
+
+    * post_id: The ID number for the post
+    * post: The DB object for a blog post
+    * index: If you already have the index open, you can pass it here
+    * commit: Write the DB after updating the index (default True)"""
+    if index is None:
+        index = get_index()
+
+    index[post_id] = dict(
+        fid        = post["fid"],
+        time       = post["time"] or int(time.time()),
+        categories = post["categories"],
+        sticky     = False, # TODO
+        author     = post["author"],
+        privacy    = post["privacy"] or "public",
+        subject    = post["subject"],
+    )
+    if commit:
+        JsonDB.commit("blog/index", index)
 
 
 def get_categories():
@@ -136,8 +173,8 @@ def post_entry(post_id, fid, epoch, author, subject, avatar, categories,
             break
         fid = test
 
-    # Write the post.
-    JsonDB.commit("blog/entries/{}".format(post_id), dict(
+    # DB body for the post.
+    db = dict(
         fid        = fid,
         ip         = ip,
         time       = epoch or int(time.time()),
@@ -151,19 +188,13 @@ def post_entry(post_id, fid, epoch, author, subject, avatar, categories,
         subject    = subject,
         format     = format,
         body       = body,
-    ))
+    )
+
+    # Write the post.
+    JsonDB.commit("blog/entries/{}".format(post_id), db)
 
     # Update the index cache.
-    index[post_id] = dict(
-        fid        = fid,
-        time       = epoch or int(time.time()),
-        categories = categories,
-        sticky     = False, # TODO
-        author     = author,
-        privacy    = privacy or "public",
-        subject    = subject,
-    )
-    JsonDB.commit("blog/index", index)
+    update_index(post_id, db, index)
 
     return post_id, fid
 
