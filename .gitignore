@@ -1,9 +1,11 @@
 # Don't check in site specific settings.
 settings.ini
 settings.yml
+/db
 
 # Compiled Python
 *.pyc
+__pycache__
 
 /site/www/static/photos/*.jpg
 /site/www/static/photos/*.png

@@ -1,6 +1,7 @@
 flask
 flask-sslify
 redis
+pytz
 bcrypt
 pillow
 requests

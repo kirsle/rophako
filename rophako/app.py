@@ -8,6 +8,7 @@ from flask import (Flask, g, request, session, render_template, send_file,
 from flask_sslify import SSLify
 import jinja2
 import os.path
+import datetime
 import sys
 
 # Get the Flask app object ready right away so other modules can import it
@@ -63,6 +64,7 @@ app.jinja_loader = jinja2.ChoiceLoader([ jinja2.FileSystemLoader(x) for x in tem
 app.jinja_env.globals["csrf_token"] = rophako.utils.generate_csrf_token
 app.jinja_env.globals["include_page"] = rophako.utils.include
 app.jinja_env.globals["settings"] = lambda: Config
+app.jinja_env.globals["strftime"] = lambda x: datetime.datetime.utcnow().strftime(x)
 
 # Preload the emoticon data.
 import rophako.model.emoticons as Emoticons

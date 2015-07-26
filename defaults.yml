@@ -29,6 +29,10 @@ rophako:
     # by other spots in this config file, for easy overriding).
     _date_format: &DATE_FORMAT '%A, %B %d %Y @ %I:%M:%S %p'
 
+    # Preferred time zone to present datetimes in. See `pytz.all_timezones` for
+    # valid options here. Examples: "US/Eastern", "America/Los_Angeles" etc.
+    timezone: US/Pacific
+
     # Where to save temp files for photo uploads etc.
     tempdir: /tmp
 

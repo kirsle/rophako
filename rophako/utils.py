@@ -9,6 +9,7 @@ import codecs
 import uuid
 import datetime
 import time
+import pytz
 import re
 import importlib
 import smtplib
@@ -329,8 +330,9 @@ def server_name():
 
 def pretty_time(time_format, unix):
     """Pretty-print a time stamp."""
-    date = datetime.datetime.fromtimestamp(unix)
-    return date.strftime(time_format)
+    tz   = pytz.timezone(Config.site.timezone)
+    date = datetime.datetime.fromtimestamp(unix, pytz.utc)
+    return date.astimezone(tz).strftime(time_format)
 
 
 def sanitize_name(name):
