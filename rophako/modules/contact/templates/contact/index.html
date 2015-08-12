@@ -9,39 +9,39 @@ You can use the form below to send me an e-mail.<p>
 <form name="contact" action="{{ url_for('contact.send') }}" method="POST">
 <input type="hidden" name="token" value="{{ csrf_token() }}">
 <table border="0" cellspacing="0" cellpadding="2">
-    <tr>
-        <td width="50%" align="left" valign="middle">
-            <strong>Your name:</strong><br>
-            <small>(so I know who you are)</small><br>
-            <input type="text" class="form-control"size="40" name="name">
-        </td>
-        <td width="50%" align="left" valign="middle">
-            <strong>Your email:</strong><br>
-            <small>(if you want a response)</small><br>
-            <input type="email" class="form-control" size="40" name="email">
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" align="left" valign="middle">
-            <strong>Message subject:</strong><br>
-            <small>(optional)</small><br>
-            <input type="text" class="form-control" size="40" name="subject" style="width: 100%"><p>
+	<tr>
+		<td width="50%" align="left" valign="middle">
+			<strong>Your name:</strong><br>
+			<small>(so I know who you are)</small><br>
+			<input type="text" class="form-control"size="40" name="name">
+		</td>
+		<td width="50%" align="left" valign="middle">
+			<strong>Your email:</strong><br>
+			<small>(if you want a response)</small><br>
+			<input type="email" class="form-control" size="40" name="email">
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" align="left" valign="middle">
+			<strong>Message subject:</strong><br>
+			<small>(optional)</small><br>
+			<input type="text" class="form-control" size="40" name="subject" style="width: 100%"><p>
 
-            <strong>Message:</strong><br>
-            <small>(required)</small><br>
-            <textarea class="form-control" cols="40" rows="12" name="message" style="width: 100%"></textarea>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" align="right" valign="middle">
-            <button type="submit" class="btn btn-primary">Send Message</button>
-        </td>
-    </tr>
+			<strong>Message:</strong><br>
+			<small>(required)</small><br>
+			<textarea class="form-control" cols="40" rows="12" name="message" style="width: 100%"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" align="right" valign="middle">
+			<button type="submit" class="btn btn-primary">Send Message</button>
+		</td>
+	</tr>
 </table>
 <div style="display: none">
-    If you can see these boxes, don't touch them.<br>
-    <input type="text" class="form-control" size="40" name="contact" value=""><br>
-    <input type="text" class="form-control" size="40" name="website" value="http://">
+	If you can see these boxes, don't touch them.<br>
+	<input type="text" class="form-control" size="40" name="contact" value=""><br>
+	<input type="text" class="form-control" size="40" name="website" value="http://">
 </div>
 </form>
 

@@ -7,30 +7,30 @@
 <img src="{{ app['photo_url'] }}/{{ photo['thumb'] }}" class="portrait"><p>
 
 <form name="edit" action="{{ url_for('photo.edit', key=key) }}" method="POST">
-    <input type="hidden" name="token" value="{{ csrf_token() }}">
+	<input type="hidden" name="token" value="{{ csrf_token() }}">
 
-    <strong>Photo Caption:</strong><br>
-    <input type="text"  class="form-control"size="40" name="caption" value="{{ photo['caption'] }}"><p>
+	<strong>Photo Caption:</strong><br>
+	<input type="text"	class="form-control"size="40" name="caption" value="{{ photo['caption'] }}"><p>
 
-    <strong>Description:</strong><br>
-    <textarea class="form-control" cols="50" rows="6" name="description">{{ photo['description'] }}</textarea><br>
-    <small>Use <a href="/markdown">Markdown</a> syntax.</small><p>
+	<strong>Description:</strong><br>
+	<textarea class="form-control" cols="50" rows="6" name="description">{{ photo['description'] }}</textarea><br>
+	<small>Use <a href="/markdown">Markdown</a> syntax.</small><p>
 
-    Rotate:
-    <label>
-        <input type="radio" name="rotate" value="" checked> Leave alone
-    </label>
-    <label>
-        <input type="radio" name="rotate" value="left"> Left 90&deg;
-    </label>
-    <label>
-        <input type="radio" name="rotate" value="right"> Right 90&deg;
-    </label>
-    <label>
-        <input type="radio" name="rotate" value="180"> 180&deg;
-    </label><p>
+	Rotate:
+	<label>
+		<input type="radio" name="rotate" value="" checked> Leave alone
+	</label>
+	<label>
+		<input type="radio" name="rotate" value="left"> Left 90&deg;
+	</label>
+	<label>
+		<input type="radio" name="rotate" value="right"> Right 90&deg;
+	</label>
+	<label>
+		<input type="radio" name="rotate" value="180"> 180&deg;
+	</label><p>
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+	<button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
 
 {% endblock %}

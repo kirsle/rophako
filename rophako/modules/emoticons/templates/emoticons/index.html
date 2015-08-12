@@ -5,26 +5,26 @@
 <h1>Emoticon Theme: {{ theme_name }}</h1>
 
 <table class="table" cellspacing="0" cellpadding="2">
-    <thead>
-        <tr>
-            <th>Emoticon</th>
-            <th>Trigger Text</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for img in smileys %}
-        <tr>
-            <td align="center" valign="middle">
-                <img src="/static/smileys/{{ theme }}/{{ img['img'] }}">
-            </td>
-            <td align="left" valign="middle">
-                {% for trigger in img['triggers'] %}
-                    {{ trigger }}&nbsp;&nbsp;&nbsp;&nbsp;
-                {% endfor %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
+	<thead>
+		<tr>
+			<th>Emoticon</th>
+			<th>Trigger Text</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for img in smileys %}
+		<tr>
+			<td align="center" valign="middle">
+				<img src="/static/smileys/{{ theme }}/{{ img['img'] }}">
+			</td>
+			<td align="left" valign="middle">
+				{% for trigger in img['triggers'] %}
+					{{ trigger }}&nbsp;&nbsp;&nbsp;&nbsp;
+				{% endfor %}
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
 </table>
 
 {% endblock %}

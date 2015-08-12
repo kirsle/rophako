@@ -1,39 +1,39 @@
 <a name="comments"></a>
 {% if header %}
-    <h1>Comments</h1>
+	<h1>Comments</h1>
 {% endif %}
 
 There {% if comments|length == 1 %}is{% else %}are{% endif %}
-    {{ comments|length }} comment{% if comments|length != 1 %}s{% endif %}
-    on this page.<p>
+	{{ comments|length }} comment{% if comments|length != 1 %}s{% endif %}
+	on this page.<p>
 
 {% for comment in comments %}
-    <div class="comment">
-        <div class="comment-author">
-            {% if comment["image"] and (comment["image"].startswith('http:') or comment["image"].startswith('https:') or comment["image"].startswith('//')) %}
-                <img src="{{ comment['image'] }}" alt="Avatar" width="96" height="96">
-            {% elif comment["image"] %}
-                <img src="{{ photo_url }}/{{ comment['image'] }}" alt="Avatar" width="96" height="96">
-            {% else %}
-                <img src="/static/avatars/default.png" alt="guest" width="96" height="96">
-            {% endif %}
-            <div><strong>{% if comment['username'] %}{{ comment['username'] }}{% else %}guest{% endif %}</strong></div>
-        </div>
+	<div class="comment">
+		<div class="comment-author">
+			{% if comment["image"] and (comment["image"].startswith('http:') or comment["image"].startswith('https:') or comment["image"].startswith('//')) %}
+				<img src="{{ comment['image'] }}" alt="Avatar" width="96" height="96">
+			{% elif comment["image"] %}
+				<img src="{{ photo_url }}/{{ comment['image'] }}" alt="Avatar" width="96" height="96">
+			{% else %}
+				<img src="/static/avatars/default.png" alt="guest" width="96" height="96">
+			{% endif %}
+			<div><strong>{% if comment['username'] %}{{ comment['username'] }}{% else %}guest{% endif %}</strong></div>
+		</div>
 
-        <strong>Posted on {{ comment["pretty_time"] }} by {{ comment["name"] }}.</strong><p>
+		<strong>Posted on {{ comment["pretty_time"] }} by {{ comment["name"] }}.</strong><p>
 
-        {{ comment["formatted_message"]|safe }}
+		{{ comment["formatted_message"]|safe }}
 
-        <div class="clear">
-            {% if session["login"] %}
-                [IP: {{ comment["ip"] }}
-                |
-                <a href="{{ url_for('comment.edit', thread=thread, cid=comment['id'], url=url) }}">Edit</a>
-                |
-                <a href="{{ url_for('comment.delete', thread=thread, cid=comment['id'], url=url) }}" onclick="return window.confirm('Are you sure?')">Delete</a>]
-            {% endif %}
-        </div>
-    </div><p>
+		<div class="clear">
+			{% if session["login"] %}
+				[IP: {{ comment["ip"] }}
+				|
+				<a href="{{ url_for('comment.edit', thread=thread, cid=comment['id'], url=url) }}">Edit</a>
+				|
+				<a href="{{ url_for('comment.delete', thread=thread, cid=comment['id'], url=url) }}" onclick="return window.confirm('Are you sure?')">Delete</a>]
+			{% endif %}
+		</div>
+	</div><p>
 {% endfor %}
 
 <h2>Add a Comment</h2>

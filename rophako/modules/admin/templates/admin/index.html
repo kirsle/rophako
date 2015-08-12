@@ -6,14 +6,14 @@
 <h1>Admin Center</h1>
 
 <ul>
-    <li><a href="{{ url_for('admin.users') }}">View and Manage Users</a></li>
+	<li><a href="{{ url_for('admin.users') }}">View and Manage Users</a></li>
 </ul>
 
 <h1>Maintenance Tasks</h1>
 
 <ul>
-    <li><a href="{{ url_for('admin.rebuild_blog_index') }}">Rebuild Blog Index</a></li>
-    <li><a href="{{ url_for('admin.rebuild_visitor_counts') }}">Rebuild Visitor Counts</a></li>
+	<li><a href="{{ url_for('admin.rebuild_blog_index') }}">Rebuild Blog Index</a></li>
+	<li><a href="{{ url_for('admin.rebuild_visitor_counts') }}">Rebuild Visitor Counts</a></li>
 </ul>
 
 {% endblock %}

@@ -1,70 +1,70 @@
 {# Common template for leaving a comment/updating the comment preview. #}
 
 {% if commenting_disabled %}
-    No new comments may be added to this thread.
+	No new comments may be added to this thread.
 {% else %}
-    <form name="comment" action="{{ url_for('comment.preview') }}" method="POST">
-    <input type="hidden" name="token" value="{{ csrf_token() }}">
-    <input type="hidden" name="thread" value="{{ thread }}">
-    <input type="hidden" name="url" value="{{ url }}">
-    <input type="hidden" name="subject" value="{{ subject }}">
-    <table border="0" cellspacing="2" cellpadding="2">
-        <tr>
-            <td align="left" valign="middle">
-                Your name:
-            </td>
-            <td align="left" valign="middle">
-                {% if session["login"] %}
-                    <strong>{{ session["name"] }}</strong>
-                {% else %}
-                    <input type="text" class="form-control" size="40" name="name" value="{{ name }}">
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td align="left" valign="middle">
-                Your Email:
-            </td>
-            <td align="left" valign="middle">
-                <input type="text" class="form-control" size="40" name="contact" value="{{ contact }}" placeholder="(optional; used for Gravatar icons and subscribing)">
-            </td>
-        </tr>
-        <tr>
-            <td align="left" valign="top">
-                Message:
-            </td>
-            <td align="left" valign="top">
-                <textarea class="form-control" cols="40" rows="8" name="message" style="width: 100%">{{ message }}</textarea>
-                <div>
-                    <small>Comments can be formatted with <a href="/markdown" target="_blank">Markdown</a>,
-                    and you can use<br><a href="{{ url_for('emoticons.index') }}" target="_blank">emoticons</a>
-                    in your comment.</small>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="left" valign="top">
-                <label>
-                    <input type="checkbox" name="subscribe" value="true"{% if subscribe == "true" %} checked{% endif %}>
-                    Notify me of future comments on this page via e-mail
-                    (<a href="{{ url_for('comment.privacy') }}" target="_blank">Privacy Policy</a>)
-                </label>
-            </td>
-        </tr>
-    </table><p>
+	<form name="comment" action="{{ url_for('comment.preview') }}" method="POST">
+	<input type="hidden" name="token" value="{{ csrf_token() }}">
+	<input type="hidden" name="thread" value="{{ thread }}">
+	<input type="hidden" name="url" value="{{ url }}">
+	<input type="hidden" name="subject" value="{{ subject }}">
+	<table border="0" cellspacing="2" cellpadding="2">
+		<tr>
+			<td align="left" valign="middle">
+				Your name:
+			</td>
+			<td align="left" valign="middle">
+				{% if session["login"] %}
+					<strong>{{ session["name"] }}</strong>
+				{% else %}
+					<input type="text" class="form-control" size="40" name="name" value="{{ name }}">
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<td align="left" valign="middle">
+				Your Email:
+			</td>
+			<td align="left" valign="middle">
+				<input type="text" class="form-control" size="40" name="contact" value="{{ contact }}" placeholder="(optional; used for Gravatar icons and subscribing)">
+			</td>
+		</tr>
+		<tr>
+			<td align="left" valign="top">
+				Message:
+			</td>
+			<td align="left" valign="top">
+				<textarea class="form-control" cols="40" rows="8" name="message" style="width: 100%">{{ message }}</textarea>
+				<div>
+					<small>Comments can be formatted with <a href="/markdown" target="_blank">Markdown</a>,
+					and you can use<br><a href="{{ url_for('emoticons.index') }}" target="_blank">emoticons</a>
+					in your comment.</small>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="left" valign="top">
+				<label>
+					<input type="checkbox" name="subscribe" value="true"{% if subscribe == "true" %} checked{% endif %}>
+					Notify me of future comments on this page via e-mail
+					(<a href="{{ url_for('comment.privacy') }}" target="_blank">Privacy Policy</a>)
+				</label>
+			</td>
+		</tr>
+	</table><p>
 
-    <div style="display: none">
-        If you can see this, don't touch the following fields.<br>
-        <input type="text" class="form-control" name="website" value="http://"><br>
-        <input type="text" class="form-control" name="email" value="">
-    </div>
+	<div style="display: none">
+		If you can see this, don't touch the following fields.<br>
+		<input type="text" class="form-control" name="website" value="http://"><br>
+		<input type="text" class="form-control" name="email" value="">
+	</div>
 
-    {% if preview %}
-        <button class="btn btn-default" type="submit" name="action" value="preview">Refresh Preview</button>
-        <button class="btn btn-primary" type="submit" name="action" value="submit">Submit Comment</button>
-    {% else %}
-        <button class="btn btn-primary" type="submit" name="action" value="preview">Leave Comment</button>
-    {% endif %}
+	{% if preview %}
+		<button class="btn btn-default" type="submit" name="action" value="preview">Refresh Preview</button>
+		<button class="btn btn-primary" type="submit" name="action" value="submit">Submit Comment</button>
+	{% else %}
+		<button class="btn btn-primary" type="submit" name="action" value="preview">Leave Comment</button>
+	{% endif %}
 
-    </form>
+	</form>
 {% endif %}

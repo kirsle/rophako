@@ -1,19 +1,19 @@
 {% for tag in tags %}
-    {% if not tag["small"] %}
-        &#0187; <a href="{{ url_for('blog.category', category=tag['category']) }}">{{ tag['category'] }}</a>
-                <small>({{ tag['count'] }})</small><br>
-    {% endif %}
+	{% if not tag["small"] %}
+		&#0187; <a href="{{ url_for('blog.category', category=tag['category']) }}">{{ tag['category'] }}</a>
+				<small>({{ tag['count'] }})</small><br>
+	{% endif %}
 {% endfor %}
 {% if has_small %}
-    <div id="blog_show_more" style="display: none">
-        {% for tag in tags %}
-            {% if tag["small"] %}
-                &#0187; <a href="{{ url_for('blog.category', category=tag['category']) }}">{{ tag['category'] }}</a>
-                        <small>({{ tag['count'] }})</small><br>
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div id="blog_show_less" style="display: block">
-        &#0164; <a href="#" onClick="$('#blog_show_less').hide(); $('#blog_show_more').show(1000); return false">Show more...</a>
-    </div>
+	<div id="blog_show_more" style="display: none">
+		{% for tag in tags %}
+			{% if tag["small"] %}
+				&#0187; <a href="{{ url_for('blog.category', category=tag['category']) }}">{{ tag['category'] }}</a>
+						<small>({{ tag['count'] }})</small><br>
+			{% endif %}
+		{% endfor %}
+	</div>
+	<div id="blog_show_less" style="display: block">
+		&#0164; <a href="#" onClick="$('#blog_show_less').hide(); $('#blog_show_more').show(1000); return false">Show more...</a>
+	</div>
 {% endif %}

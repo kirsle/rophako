@@ -7,24 +7,24 @@
 Drag and drop your albums in the positions you want them in.<p>
 
 <form name="arrange" id="arrange-form" action="{{ url_for('photo.arrange_albums') }}" method="POST">
-    <input type="hidden" name="token" value="{{ csrf_token() }}">
-    <input type="hidden" name="order" id="order" value="">
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+	<input type="hidden" name="token" value="{{ csrf_token() }}">
+	<input type="hidden" name="order" id="order" value="">
+	<button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
 <p>
 
 <ul id="arrange-photos" class="photo-grid">
 
 {% for album in albums %}
-    <li data-name="{{ album['name'] }}" class="portrait">
-        <div class="dummy"></div>
-        <div class="photo-grid-item">
-            <a href="{{ url_for('photo.album_index', name=album['name']) }}">
-                <img src="{{ app['photo_url'] }}/{{ album['cover'] }}" width="100%" height="100%">
-                <span class="name">{{ album["name"] }}</span>
-            </a>
-        </div>
-    </li>
+	<li data-name="{{ album['name'] }}" class="portrait">
+		<div class="dummy"></div>
+		<div class="photo-grid-item">
+			<a href="{{ url_for('photo.album_index', name=album['name']) }}">
+				<img src="{{ app['photo_url'] }}/{{ album['cover'] }}" width="100%" height="100%">
+				<span class="name">{{ album["name"] }}</span>
+			</a>
+		</div>
+	</li>
 {% endfor %}
 
 </ul>
@@ -35,26 +35,26 @@ Drag and drop your albums in the positions you want them in.<p>
 <link rel="stylesheet" type="text/css" media="all" href="/css/ui-lightness/jquery-ui-1.10.4.custom.css">
 <script src="/js/jquery-ui-1.10.4.custom.js"></script>
 <script>
-    $(document).ready(function() {
-        var $photos = $("#arrange-photos"),
-            $form = $("#arrange-form"),
-            $order = $("#order");
-        var doArrangePhotos = function() {
-            var order = [];
+	$(document).ready(function() {
+		var $photos = $("#arrange-photos"),
+			$form = $("#arrange-form"),
+			$order = $("#order");
+		var doArrangePhotos = function() {
+			var order = [];
 
-            // Get the list of elements.
-            var list = $photos.children().each(function() {
-                var name = $(this).data("name");
-                order.push(name);
-            });
+			// Get the list of elements.
+			var list = $photos.children().each(function() {
+				var name = $(this).data("name");
+				order.push(name);
+			});
 
-            $order.val(order.join(";"));
-            return true;
-        };
+			$order.val(order.join(";"));
+			return true;
+		};
 
-        $form.submit(doArrangePhotos);
-        $photos.sortable();
-        $photos.disableSelection();
-    });
+		$form.submit(doArrangePhotos);
+		$photos.sortable();
+		$photos.disableSelection();
+	});
 </script>
 {% endblock %}

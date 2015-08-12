@@ -17,38 +17,38 @@ Here is a full list of hits over time. Percentages are relative to the current
 records.<p>
 
 <table class="table" width="100%" border="0" cellspacing="2" cellpadding="2">
-    <thead>
-        <tr>
-            <th width="20">Date</th>
-            <th>Graph</th>
-            <th width="250">Details</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for date in history["traffic"]|reverse %}
-        <tr>
-            <td align="center" valign="middle" rowspan="2">
-                {{ date["date"] }}
-            </td>
-            <td align="left" valign="middle">
-                {% set pct = (date["unique"] / history["most_unique"][1]) * 100 %}
-                <div class="visitor-graph unique" style="width: {{ pct|int }}%"></div>
-            </td>
-            <td align="left" valign="middle">
-                Unique: {{ date["unique"] }} ({{ pct|int }}%)
-            </td>
-        </tr>
-        <tr>
-            <td align="left" valign="middle">
-                {% set pct = (date["unique"] / history["most_unique"][1]) * 100 %}
-                <div class="visitor-graph hits" style="width: {{ pct|int }}%"></div>
-            </td>
-            <td align="left" valign="middle">
-                Hits: {{ date["hits"] }} ({{ pct|int }}%)
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
+	<thead>
+		<tr>
+			<th width="20">Date</th>
+			<th>Graph</th>
+			<th width="250">Details</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for date in history["traffic"]|reverse %}
+		<tr>
+			<td align="center" valign="middle" rowspan="2">
+				{{ date["date"] }}
+			</td>
+			<td align="left" valign="middle">
+				{% set pct = (date["unique"] / history["most_unique"][1]) * 100 %}
+				<div class="visitor-graph unique" style="width: {{ pct|int }}%"></div>
+			</td>
+			<td align="left" valign="middle">
+				Unique: {{ date["unique"] }} ({{ pct|int }}%)
+			</td>
+		</tr>
+		<tr>
+			<td align="left" valign="middle">
+				{% set pct = (date["unique"] / history["most_unique"][1]) * 100 %}
+				<div class="visitor-graph hits" style="width: {{ pct|int }}%"></div>
+			</td>
+			<td align="left" valign="middle">
+				Hits: {{ date["hits"] }} ({{ pct|int }}%)
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
 </table>
 
 {% endblock %}

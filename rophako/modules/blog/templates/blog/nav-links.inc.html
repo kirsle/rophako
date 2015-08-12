@@ -1,27 +1,27 @@
 {# Older/Newer links #}
 
 {% if can_older or can_newer %}
-    <div class="right">
-    [
-        <a href="{{ url_for('blog.rss') }}">RSS Feed</a> |
-    {% if can_earlier %}
-        {% if category %}
-            <a href="{{ url_for('blog.category', category=category) }}?skip={{ earlier }}">&lt; Newer</a>
-        {% else %}
-            <a href="{{ url_for('blog.index') }}?skip={{ earlier }}">&lt; Newer</a>
-        {% endif %}
+	<div class="right">
+	[
+		<a href="{{ url_for('blog.rss') }}">RSS Feed</a> |
+	{% if can_earlier %}
+		{% if category %}
+			<a href="{{ url_for('blog.category', category=category) }}?skip={{ earlier }}">&lt; Newer</a>
+		{% else %}
+			<a href="{{ url_for('blog.index') }}?skip={{ earlier }}">&lt; Newer</a>
+		{% endif %}
 
-        {% if can_older %} | {% endif %}
-    {% endif %}
+		{% if can_older %} | {% endif %}
+	{% endif %}
 
-    {% if can_older %}
-        {% if category %}
-            <a href="{{ url_for('blog.category', category=category) }}?skip={{ older }}">Older &gt;</a>
-        {% else %}
-            <a href="{{ url_for('blog.index') }}?skip={{ older }}">Older &gt;</a>
-        {% endif %}
-    {% endif %}
+	{% if can_older %}
+		{% if category %}
+			<a href="{{ url_for('blog.category', category=category) }}?skip={{ older }}">Older &gt;</a>
+		{% else %}
+			<a href="{{ url_for('blog.index') }}?skip={{ older }}">Older &gt;</a>
+		{% endif %}
+	{% endif %}
 
-    ]
-    </div>
+	]
+	</div>
 {% endif %}

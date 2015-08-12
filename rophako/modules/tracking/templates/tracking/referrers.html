@@ -10,26 +10,26 @@ the most recent 25 links, see <a href="#recent">the end of this page</a>.<p>
 
 <div style="height: 450px; overflow: auto">
 <table class="table" width="100%">
-    <thead>
-        <tr>
-            <th width="40">Hits</th>
-            <th>Query</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for link in referrers["referrers"] %}
-            {% if link %}
-                <tr>
-                    <td align="center" valign="top">
-                        {{ link[1] }}
-                    </td>
-                    <td align="left" valign="top" style="position: relative">
-                        {{ link[0]|safe }}
-                    </td>
-                </tr>
-            {% endif %}
-        {% endfor %}
-    </tbody>
+	<thead>
+		<tr>
+			<th width="40">Hits</th>
+			<th>Query</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for link in referrers["referrers"] %}
+			{% if link %}
+				<tr>
+					<td align="center" valign="top">
+						{{ link[1] }}
+					</td>
+					<td align="left" valign="top" style="position: relative">
+						{{ link[0]|safe }}
+					</td>
+				</tr>
+			{% endif %}
+		{% endfor %}
+	</tbody>
 </table>
 </div>
 
@@ -37,7 +37,7 @@ the most recent 25 links, see <a href="#recent">the end of this page</a>.<p>
 
 <ol>
 {% for item in referrers["recent"] %}
-    <li>{{ item }}</li>
+	<li>{{ item }}</li>
 {% endfor %}
 </ol>
 

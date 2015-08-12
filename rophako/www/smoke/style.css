@@ -7,74 +7,74 @@
  *********************/
 
 body {
-    background-image: url("navbg.png");
-    background-position: 0 0;
-    background-repeat: repeat-y;
-    background-color: #CFCFCF;
-    font-family: Ubuntu,Verdana,Arial,Helvetica,sans-serif;
-    font-size: small;
-    color: #000000;
-    margin: 0;
-    padding: 0;
+	background-image: url("navbg.png");
+	background-position: 0 0;
+	background-repeat: repeat-y;
+	background-color: #CFCFCF;
+	font-family: Ubuntu,Verdana,Arial,Helvetica,sans-serif;
+	font-size: small;
+	color: #000000;
+	margin: 0;
+	padding: 0;
 }
 
 small {
-    font-size: 9pt;
+	font-size: 9pt;
 }
 
 a:link, a:visited {
-    color: #FF4400;
-    text-decoration: underline;
+	color: #FF4400;
+	text-decoration: underline;
 }
 
 a img {
-    border: 0;
+	border: 0;
 }
 
 h1,
 h2,
 h3,
 h4 {
-    font-weight: bold;
-    color: #000000;
-    text-shadow: 2px 2px 4px #FF4444;
-    padding: 0;
-    margin: 15px 0;
+	font-weight: bold;
+	color: #000000;
+	text-shadow: 2px 2px 4px #FF4444;
+	padding: 0;
+	margin: 15px 0;
 }
 h1 {
-    font-size: 34pt;
+	font-size: 34pt;
 }
 h1:first-of-type {
-    margin-top: 0;
+	margin-top: 0;
 }
 h2 {
-    font-size: 28pt;
+	font-size: 28pt;
 }
 h3 {
-    font-size: 24pt;
+	font-size: 24pt;
 }
 h4 {
-    font-size: 18pt;
+	font-size: 18pt;
 }
 
 fieldset {
-    display: block;
-    border: 1px solid #666666;
+	display: block;
+	border: 1px solid #666666;
 }
 
 fieldset legend {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 /* Markdown Code-Hilite class overrides. */
 .codehilite {
-    border: 1px dashed #000000;
-    padding: 0px 20px;
-    background-color: transparent;
+	border: 1px dashed #000000;
+	padding: 0px 20px;
+	background-color: transparent;
 }
 pre, code {
-    font-family: "DejaVu Sans Mono","Ubuntu Mono","Lucida Console","Courier New","Courier",monospace;
-    font-size: 10pt;
+	font-family: "DejaVu Sans Mono","Ubuntu Mono","Lucida Console","Courier New","Courier",monospace;
+	font-size: 10pt;
 }
 
 /* Use responsive images in Markdown code. */
@@ -89,234 +89,234 @@ pre, code {
  *********************/
 
 .right {
-    text-align: right;
+	text-align: right;
 }
 
 .center {
-    text-align: center;
+	text-align: center;
 }
 
 .clear {
-    clear: both;
+	clear: both;
 }
 
 table.table,
 table.table th,
 table.table td {
-    border: 1px solid #999999;
+	border: 1px solid #999999;
 }
 
 table.table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    margin: 0px;
-    padding: 0px;
+	border-collapse: collapse;
+	border-spacing: 0;
+	margin: 0px;
+	padding: 0px;
 }
 
 table.table-wide {
-    width: 100%;
+	width: 100%;
 }
 
 table.table th {
-    background-color: #333333;
-    color: #FFFFFF;
-    text-align: left;
-    padding: 4px;
+	background-color: #333333;
+	color: #FFFFFF;
+	text-align: left;
+	padding: 4px;
 }
 
 table.table tr:nth-child(even) {
-    background-color: #FFFFFF;
+	background-color: #FFFFFF;
 }
 
 table.table tr:nth-child(odd) {
-    background-color: #CFCFCF;
+	background-color: #CFCFCF;
 }
 
 table.table td {
-    padding: 4px;
+	padding: 4px;
 }
 
 /* Photo Upload page */
 .photo-upload-dropbox {
-    border: 2px dashed #000000;
-    padding: 40px;
+	border: 2px dashed #000000;
+	padding: 40px;
 }
 .photo-upload-dropbox.active {
-    border: 4px dashed #FF0000;
+	border: 4px dashed #FF0000;
 }
 .upload-trough {
-    position: relative;
-    border: 1px solid #000000;
-    width: 100%;
-    height: 28px;
+	position: relative;
+	border: 1px solid #000000;
+	width: 100%;
+	height: 28px;
 }
 .upload-progress-bar {
-    position: relative;
-    width: 0%;
-    height: 100%;
-    background-color: #FF9900;
+	position: relative;
+	width: 0%;
+	height: 100%;
+	background-color: #FF9900;
 }
 
 /* Photo Grids: see http://ansciath.tumblr.com/post/7347495869/css-aspect-ratio */
 ul.photo-grid {
-    list-style: none;
-    display: inline;
-    margin: 0;
-    padding: 0;
-    position: relative;
+	list-style: none;
+	display: inline;
+	margin: 0;
+	padding: 0;
+	position: relative;
 }
 
 ul.photo-grid li {
-    position: relative;
-    display: inline-block;
-    width: 260px;
-    height: 260px;
-    margin-left: 20px;
-    margin-top: 20px;
+	position: relative;
+	display: inline-block;
+	width: 260px;
+	height: 260px;
+	margin-left: 20px;
+	margin-top: 20px;
 }
 
 ul.photo-grid li .dummy {
-    padding-top: 100%;
+	padding-top: 100%;
 }
 
 .photo-grid-item {
-    cursor: pointer;
-    overflow: hidden; /* Crop off long names, etc. */
+	cursor: pointer;
+	overflow: hidden; /* Crop off long names, etc. */
 
-    /* We use absolute positioning to detach this element from the flow, */
-    /* allowing the .dummy to dictate the height of the square. */
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+	/* We use absolute positioning to detach this element from the flow, */
+	/* allowing the .dummy to dictate the height of the square. */
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 }
 
 .photo-grid-item img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 }
 
 .photo-grid-item .name {
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    right: 4px;
-    font-family: Arial,Helvetica,sans-serif;
-    font-size: 14pt;
-    font-weight: bold;
-    color: #FFFFFF;
-    text-align: left;
-    text-shadow: 1px 1px 0px #000000,
-                -1px -1px 0px #000000,
-                 1px -1px 0px #000000,
-                -1px 1px 0px #000000;
+	position: absolute;
+	top: 4px;
+	left: 4px;
+	right: 4px;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 14pt;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align: left;
+	text-shadow: 1px 1px 0px #000000,
+				-1px -1px 0px #000000,
+				 1px -1px 0px #000000,
+				-1px 1px 0px #000000;
 }
 
 /* Make a photo look nice. */
 .portrait {
-    display: inline;
-    background-color: #CFCFCF;
-    padding: 4px;
-    border: 1px solid #000000;
-    box-shadow: 0px 0px 4px #FF4444;
+	display: inline;
+	background-color: #CFCFCF;
+	padding: 4px;
+	border: 1px solid #000000;
+	box-shadow: 0px 0px 4px #FF4444;
 }
 
 /* Photo description blocks */
 .photo-description {
-    display: block;
-    border: 1px solid #000000;
-    box-shadow: 0px 0px 4px #000000;
-    padding: 10px;
-    margin: 20px 0px;
-    background-color: #646464;
-    color: #FFFFFF;
-    width: 790px;
+	display: block;
+	border: 1px solid #000000;
+	box-shadow: 0px 0px 4px #000000;
+	padding: 10px;
+	margin: 20px 0px;
+	background-color: #646464;
+	color: #FFFFFF;
+	width: 790px;
 }
 
 /* Blog titles when shown on index view */
 a.blog-title-index:link, a.blog-title-index:visited {
-    font-size: 32pt;
-    font-weight: bold;
-    color: #000000;
-    text-decoration: none;
-    text-shadow: 2px 2px 4px #FF4444;
+	font-size: 32pt;
+	font-weight: bold;
+	color: #000000;
+	text-decoration: none;
+	text-shadow: 2px 2px 4px #FF4444;
 }
 a.blog-title-index:hover, a.blog-title-index:active {
-    text-decoration: underline;
-    text-shadow: 2px 2px 4px #FF4444;
+	text-decoration: underline;
+	text-shadow: 2px 2px 4px #FF4444;
 }
 
 /* Poster's avatar box */
 .blog-author, .comment-author {
-    float: right;
-    background-color: #999999;
-    border: 1px solid #000000;
-    padding: 2px;
-    margin-left: 10px;
-    margin-bottom: 10px;
-    width: 100px; /* 96 avatar width + 4px padding */
-    text-align: center;
-    font-weight: bold
+	float: right;
+	background-color: #999999;
+	border: 1px solid #000000;
+	padding: 2px;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	width: 100px; /* 96 avatar width + 4px padding */
+	text-align: center;
+	font-weight: bold
 }
 .blog-author a, .comment-author a {
-    text-decoration: none;
+	text-decoration: none;
 }
 div.siikir-avatar {
-    width: 96px;
-    margin: auto;
+	width: 96px;
+	margin: auto;
 }
 
 /* Timestamp and author line below blog titles */
 .blog-timestamp {
-    font-style: italic;
-    padding-left: 30px;
-    padding-top: 5px;
-    padding-bottom: 10px
+	font-style: italic;
+	padding-left: 30px;
+	padding-top: 5px;
+	padding-bottom: 10px
 }
 
 ul.blog-categories {
-    list-style: none;
-    display: inline;
-    margin: 0;
-    padding: 0;
+	list-style: none;
+	display: inline;
+	margin: 0;
+	padding: 0;
 }
 ul.blog-categories li {
-    display: inline;
+	display: inline;
 }
 ul.blog-categories li:after {
-    content: ", ";
+	content: ", ";
 }
 ul.blog-categories li:last-child:after {
-    content: "";
+	content: "";
 }
 
 /* Blog comment wrapper */
 .comment {
-    border: 1px dashed #006699;
-    padding: 5px
+	border: 1px dashed #006699;
+	padding: 5px
 }
 
 /* Style overrides for comments */
 .comment h1 {
-    font-size: 14pt;
+	font-size: 14pt;
 }
 .comment h2 {
-    font-size: 12pt;
+	font-size: 12pt;
 }
 .comment h3 {
-    font-size: 10pt;
+	font-size: 10pt;
 }
 .comment h4 {
-    font-size: 9pt;
+	font-size: 9pt;
 }
 
 /* Wiki styles */
 a.wiki-broken {
-    text-decoration: line-through;
+	text-decoration: line-through;
 }
 
 /* Visitor history page */
@@ -341,90 +341,90 @@ a.wiki-broken {
  *********************/
 
 header {
-    display: block;
-    background-image: url("header.png");
-    background-position: left bottom;
-    background-repeat: repeat-x;
-    margin: 0;
-    height: 174px;
+	display: block;
+	background-image: url("header.png");
+	background-position: left bottom;
+	background-repeat: repeat-x;
+	margin: 0;
+	height: 174px;
 }
 
 header img {
-    position: absolute;
-    top: 0px;
-    left: 16px;
-    width: 161px;
-    height: 169px;
+	position: absolute;
+	top: 0px;
+	left: 16px;
+	width: 161px;
+	height: 169px;
 }
 
 header span {
-    font-size: 72pt;
-    font-weight: bold;
-    font-style: italic;
-    line-height: 169px;
-    color: #CFCFCF;
-    margin-left: 220px;
+	font-size: 72pt;
+	font-weight: bold;
+	font-style: italic;
+	line-height: 169px;
+	color: #CFCFCF;
+	margin-left: 220px;
 }
 
 nav {
-    position: absolute;
-    top: 180px;
-    left: 0px;
-    width: 200px;
+	position: absolute;
+	top: 180px;
+	left: 0px;
+	width: 200px;
 }
 
 nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+	list-style: none;
+	padding: 0;
+	margin: 0;
 }
 
 nav ul li {
-    display: block;
-    line-height: 1.5em;
-    padding-left: 10px;
-    color: #FFFFFF;
+	display: block;
+	line-height: 1.5em;
+	padding-left: 10px;
+	color: #FFFFFF;
 }
 
 nav ul li.header {
-    background-image: url("navhead.png");
-    background-repeat: no-repeat;
-    height: 34px;
-    line-height: 34px;
-    font-weight: bold;
-    color: #000000;
-    margin: 8px 0px;
+	background-image: url("navhead.png");
+	background-repeat: no-repeat;
+	height: 34px;
+	line-height: 34px;
+	font-weight: bold;
+	color: #000000;
+	margin: 8px 0px;
 }
 
 nav a:link, nav a:visited {
-    color: #FFFFFF;
-    text-decoration: none;
+	color: #FFFFFF;
+	text-decoration: none;
 }
 nav a:hover, nav a:active {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 #content {
-    position: absolute;
-    top: 180px;
-    left: 220px;
-    right: 20px;
+	position: absolute;
+	top: 180px;
+	left: 220px;
+	right: 20px;
 }
 
 footer {
-    display: block;
-    text-align: center;
-    font-weight: bold;
-    color: #666666;
-    margin: 40px 0px;
+	display: block;
+	text-align: center;
+	font-weight: bold;
+	color: #666666;
+	margin: 40px 0px;
 }
 
 footer div {
-    display: block;
-    width: 400px;
-    margin: auto;
+	display: block;
+	width: 400px;
+	margin: auto;
 }
 
 footer a:link, footer a:visited {
-    color: #666666;
+	color: #666666;
 }

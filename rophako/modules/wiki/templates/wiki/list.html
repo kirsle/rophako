@@ -3,17 +3,17 @@
 {% block content %}
 
 {% if session["login"] %}
-    <div class="right">
-        [ <a href="{{ url_for('wiki.edit') }}">New Page</a> ]
-    </div>
+	<div class="right">
+		[ <a href="{{ url_for('wiki.edit') }}">New Page</a> ]
+	</div>
 {% endif %}
 
 <h1>Wiki Pages</h1>
 
 <ul>
-    {% for page in pages %}
-    <li><a href="{{ url_for('wiki.view_page', name=page['link']) }}">{{ page['name'] }}</a></li>
-    {% endfor %}
+	{% for page in pages %}
+	<li><a href="{{ url_for('wiki.view_page', name=page['link']) }}">{{ page['name'] }}</a></li>
+	{% endfor %}
 </ul>
 
 {% endblock %}

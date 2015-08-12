@@ -3,17 +3,17 @@
 {% block content %}
 
 {% macro nav_links() %}
-    <div class="right">
-        Photo {{ photo["position"] }} of {{ photo["siblings"] }}
-        {% if photo["siblings"] > 1 %}
-            &nbsp;&nbsp;&nbsp;
-            [
-                <a href="{{ url_for('photo.view_photo', key=photo['previous']) }}">&lt; Previous</a>
-                |
-                <a href="{{ url_for('photo.view_photo', key=photo['next']) }}">Next &gt;</a>
-            ]
-        {% endif %}
-    </div>
+	<div class="right">
+		Photo {{ photo["position"] }} of {{ photo["siblings"] }}
+		{% if photo["siblings"] > 1 %}
+			&nbsp;&nbsp;&nbsp;
+			[
+				<a href="{{ url_for('photo.view_photo', key=photo['previous']) }}">&lt; Previous</a>
+				|
+				<a href="{{ url_for('photo.view_photo', key=photo['next']) }}">Next &gt;</a>
+			]
+		{% endif %}
+	</div>
 {% endmacro %}
 
 <h1>Photo</h1>
@@ -23,41 +23,41 @@
 {{ nav_links() }}
 
 {% if photo["caption"] %}
-    <h2>{{ photo["caption"] }}</h2>
+	<h2>{{ photo["caption"] }}</h2>
 {% endif %}
 <a href="{{ url_for('photo.view_photo', key=photo['next']) }}">
-    <img src="{{ app['photo_url'] }}/{{ photo['large'] }}" class="portrait">
+	<img src="{{ app['photo_url'] }}/{{ photo['large'] }}" class="portrait">
 </a><p>
 {% if photo["description"] %}
-    <div class="photo-description">{{ photo["markdown"]|safe }}</div>
+	<div class="photo-description">{{ photo["markdown"]|safe }}</div>
 {% endif %}
 
 <em>Uploaded by {{ author["name"] }} on {{ photo["pretty_time"] }}.</em>
 
 {% if session["login"] %}
-    <p>Embed this image in a blog post:<br>
-    <input type="text" class="form-control inline" readonly value="![{{ photo['caption'] }}]({{ app['photo_url'] }}/{{ photo['large'] }})"> (Markdown)<br>
-    <input type="text" class="form-control inline" readonly value='<img src="{{ app['photo_url'] }}/{{ photo['large'] }}" alt="{{ photo['caption'] }}">'> (HTML)
+	<p>Embed this image in a blog post:<br>
+	<input type="text" class="form-control inline" readonly value="![{{ photo['caption'] }}]({{ app['photo_url'] }}/{{ photo['large'] }})"> (Markdown)<br>
+	<input type="text" class="form-control inline" readonly value='<img src="{{ app['photo_url'] }}/{{ photo['large'] }}" alt="{{ photo['caption'] }}">'> (HTML)
 {% endif %}
 
 {{ nav_links() }}
 
 {% if session["login"] %}
-    <h1>Administrative Options</h1>
+	<h1>Administrative Options</h1>
 
-    <ul>
-        <li><a href="{{ url_for('photo.upload') }}">Upload a Photo</a></li>
-        <li><a href="{{ url_for('photo.set_cover', album=photo['album'], key=photo['key']) }}">Set Album Cover</a></li>
-        <li><a href="{{ url_for('photo.set_profile', key=photo['key']) }}">Set as my Profile Picture</a></li>
-        <li><a href="{{ url_for('photo.edit', key=photo['key']) }}">Edit this photo</a></li>
-        <li><a href="{{ url_for('photo.crop', photo=photo['key']) }}">Change Thumbnail</a></li>
-        <li><a href="{{ url_for('photo.delete', key=photo['key']) }}">Delete this photo</a></li>
-    </ul>
+	<ul>
+		<li><a href="{{ url_for('photo.upload') }}">Upload a Photo</a></li>
+		<li><a href="{{ url_for('photo.set_cover', album=photo['album'], key=photo['key']) }}">Set Album Cover</a></li>
+		<li><a href="{{ url_for('photo.set_profile', key=photo['key']) }}">Set as my Profile Picture</a></li>
+		<li><a href="{{ url_for('photo.edit', key=photo['key']) }}">Edit this photo</a></li>
+		<li><a href="{{ url_for('photo.crop', photo=photo['key']) }}">Change Thumbnail</a></li>
+		<li><a href="{{ url_for('photo.delete', key=photo['key']) }}">Delete this photo</a></li>
+	</ul>
 {% endif %}
 
 {{ include_page("comment.partial_index",
-    thread="photos-{}".format(photo["key"]),
-    subject="Photo Comment",
+	thread="photos-{}".format(photo["key"]),
+	subject="Photo Comment",
 ) | safe }}
 
 {% endblock %}

@@ -15,27 +15,27 @@ to create the initial Administrator user account.<p>
 <form id="setup_form" action="{{ url_for('account.setup') }}" method="POST">
 <input type="hidden" name="token" value="{{ csrf_token() }}">
 <fieldset>
-    <legend>Admin User</legend>
+	<legend>Admin User</legend>
 
-    Your site needs at least one admin user to log in and manage the site.
-    You can use any username/password combination you want, but "admin" is
-    a typical username.<p>
+	Your site needs at least one admin user to log in and manage the site.
+	You can use any username/password combination you want, but "admin" is
+	a typical username.<p>
 
-    <strong>Username:</strong><br>
-    <input type="text" class="form-control" size="40" name="username" id="username" placeholder="admin"><p>
+	<strong>Username:</strong><br>
+	<input type="text" class="form-control" size="40" name="username" id="username" placeholder="admin"><p>
 
-    <strong>Real name:</strong><br>
-    <input type="text" class="form-control" size="40" name="name" placeholder="John Doe"><p>
+	<strong>Real name:</strong><br>
+	<input type="text" class="form-control" size="40" name="name" placeholder="John Doe"><p>
 
-    <strong>Passphrase:</strong><br>
-    This can be as long as you want. Pick something
-    <a href="http://xkcd.com/936/" target="_blank">secure!</a><br>
-    <input type="password" class="form-control" size="40" id="pw1" name="password1" placeholder="correct horse battery staple"><p>
+	<strong>Passphrase:</strong><br>
+	This can be as long as you want. Pick something
+	<a href="http://xkcd.com/936/" target="_blank">secure!</a><br>
+	<input type="password" class="form-control" size="40" id="pw1" name="password1" placeholder="correct horse battery staple"><p>
 
-    <strong>Confirm Passphrase:</strong><br>
-    <input type="password" class="form-control" size="40" id="pw2" name="password2" placeholder="correct horse battery staple"><p>
+	<strong>Confirm Passphrase:</strong><br>
+	<input type="password" class="form-control" size="40" id="pw2" name="password2" placeholder="correct horse battery staple"><p>
 
-    <button type="submit" class="btn btn-primary">Next</button>
+	<button type="submit" class="btn btn-primary">Next</button>
 </fieldset>
 </form>
 

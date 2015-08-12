@@ -7,23 +7,23 @@
 Current preview of the comment:<p>
 
 <div class="comment">
-    {{ comment["formatted_message"]|safe }}
+	{{ comment["formatted_message"]|safe }}
 </div>
 
 <h2>Edit Comment</h2>
 
 <form name="editor" action="{{ url_for('comment.edit', thread=thread, cid=cid) }}" method="POST">
-    <input type="hidden" name="token" value="{{ csrf_token() }}">
-    <input type="hidden" name="url" value="{{ url }}">
+	<input type="hidden" name="token" value="{{ csrf_token() }}">
+	<input type="hidden" name="url" value="{{ url }}">
 
-    <strong>Message:</strong><br>
-    <textarea class="form-control" cols="40" rows="8" name="message">{{ comment["message"] }}</textarea><br>
-    <small>Comments can be formatted with <a href="/markdown" target="_blank">Markdown</a>,
-    and you can use<br><a href="{{ url_for('emoticons.index') }}" target="_blank">emoticons</a>
-    in your comment.</small><p>
+	<strong>Message:</strong><br>
+	<textarea class="form-control" cols="40" rows="8" name="message">{{ comment["message"] }}</textarea><br>
+	<small>Comments can be formatted with <a href="/markdown" target="_blank">Markdown</a>,
+	and you can use<br><a href="{{ url_for('emoticons.index') }}" target="_blank">emoticons</a>
+	in your comment.</small><p>
 
-    <button type="submit" class="btn btn-default" name="action" value="preview">Preview Comment</button>
-    <button type="submit" class="btn btn-primary" name="action" value="save">Save</button>
+	<button type="submit" class="btn btn-default" name="action" value="preview">Preview Comment</button>
+	<button type="submit" class="btn btn-primary" name="action" value="save">Save</button>
 </form>
 
 {% endblock %}

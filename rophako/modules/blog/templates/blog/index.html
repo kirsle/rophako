@@ -3,9 +3,9 @@
 {% block content %}
 
 {% if url_category %}
-    <h1>Category: {{ url_category }}</h1>
+	<h1>Category: {{ url_category }}</h1>
 {% else %}
-    <h1>My Blog</h1>
+	<h1>My Blog</h1>
 {% endif %}
 
 {{ include_page("blog.partial_index") | safe }}

@@ -5,33 +5,33 @@
 <h1>Photo Albums</h1>
 
 {% if albums|length == 0 %}
-    <em>There are no photo albums yet.</em>
+	<em>There are no photo albums yet.</em>
 {% else %}
-    <ul class="photo-grid">
+	<ul class="photo-grid">
 
-    {% for album in albums %}
-        <li class="portrait">
-            <div class="dummy"></div>
-            <div class="photo-grid-item">
-                <a href="{{ url_for('photo.album_index', name=album['name']) }}">
-                    <img src="{{ app['photo_url'] }}/{{ album['cover'] }}" width="100%" height="100%">
-                    <span class="name">{{ album["name"] }}</span>
-                </a>
-            </div>
-        </li>
-    {% endfor %}
+	{% for album in albums %}
+		<li class="portrait">
+			<div class="dummy"></div>
+			<div class="photo-grid-item">
+				<a href="{{ url_for('photo.album_index', name=album['name']) }}">
+					<img src="{{ app['photo_url'] }}/{{ album['cover'] }}" width="100%" height="100%">
+					<span class="name">{{ album["name"] }}</span>
+				</a>
+			</div>
+		</li>
+	{% endfor %}
 
-    </ul>
-    <div class="clear"></div>
+	</ul>
+	<div class="clear"></div>
 {% endif %}
 
 {% if session["login"] %}
-    <h1>Administrative Options</h1>
+	<h1>Administrative Options</h1>
 
-    <ul>
-        <li><a href="{{ url_for('photo.upload') }}">Upload a Photo</a></li>
-        {% if albums|length > 0 %}<li><a href="{{ url_for('photo.arrange_albums') }}">Rearrange Albums</a></li>{% endif %}
-    </ul>
+	<ul>
+		<li><a href="{{ url_for('photo.upload') }}">Upload a Photo</a></li>
+		{% if albums|length > 0 %}<li><a href="{{ url_for('photo.arrange_albums') }}">Rearrange Albums</a></li>{% endif %}
+	</ul>
 {% endif %}
 
 {% endblock %}

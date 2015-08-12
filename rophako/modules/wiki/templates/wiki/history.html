@@ -5,36 +5,36 @@
 <h1>History: {{ title }}</h1>
 
 <table class="table">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Edited By</th>
-            <th>Revision Note</th>
-            {% if session["login"] %}
-                <th>Delete?</th>
-            {% endif %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in history %}
-        <tr>
-            <td>{{ item["pretty_time"] }}</td>
-            <td>{{ item["author"]["name"] }}</td>
-            <td><a href="{{ url_for('wiki.view_page', name=link, revision=item['id']) }}">{{ item["note"] }}</a></td>
-            {% if session["login"] %}
-                <td><a href="{{ url_for('wiki.delete_revision', name=link, revision=item['id']) }}">Delete</a></td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </tbody>
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th>Edited By</th>
+			<th>Revision Note</th>
+			{% if session["login"] %}
+				<th>Delete?</th>
+			{% endif %}
+		</tr>
+	</thead>
+	<tbody>
+		{% for item in history %}
+		<tr>
+			<td>{{ item["pretty_time"] }}</td>
+			<td>{{ item["author"]["name"] }}</td>
+			<td><a href="{{ url_for('wiki.view_page', name=link, revision=item['id']) }}">{{ item["note"] }}</a></td>
+			{% if session["login"] %}
+				<td><a href="{{ url_for('wiki.delete_revision', name=link, revision=item['id']) }}">Delete</a></td>
+			{% endif %}
+		</tr>
+		{% endfor %}
+	</tbody>
 </table>
 
 {% if session["login"] %}
-    <p>
-    <strong>Admin Actions:</strong>
-    <ul>
-        <li><a href="{{ url_for('wiki.delete_page', name=link) }}">Delete Page</a></li>
-    </ul>
+	<p>
+	<strong>Admin Actions:</strong>
+	<ul>
+		<li><a href="{{ url_for('wiki.delete_page', name=link) }}">Delete Page</a></li>
+	</ul>
 {% endif %}
 
 {% endblock %}

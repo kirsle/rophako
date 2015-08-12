@@ -1,69 +1,69 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>{% block title %}{% endblock %}</title>
+	<head>
+		<title>{% block title %}{% endblock %}</title>
 
-        <link rel="stylesheet" type="text/css" href="/css/codehilite.css">
-        <link rel="stylesheet" type="text/css" href="/smoke/style.css">
-    </head>
+		<link rel="stylesheet" type="text/css" href="/css/codehilite.css">
+		<link rel="stylesheet" type="text/css" href="/smoke/style.css">
+	</head>
 <body>
 
 <header>
-    <a href="/">
-        <img src="/smoke/firemarble.png" width="161" height="169" alt="Logo">
-    </a>
-    <span>Rophako</span>
+	<a href="/">
+		<img src="/smoke/firemarble.png" width="161" height="169" alt="Logo">
+	</a>
+	<span>Rophako</span>
 </header>
 
 <nav>
-    <ul>
-        <li class="header">:: Navigation</li>
-        <li><a href="/">Home</a></li>
-        <li><a href="/photos/albums">Photo Albums</a></li>
-        <li><a href="https://github.com/kirsle/rophako" target="_blank">View on Github</a></li>
-        <li><a href="https://github.com/kirsle/rophako/archive/master.zip">Download</a></li>
+	<ul>
+		<li class="header">:: Navigation</li>
+		<li><a href="/">Home</a></li>
+		<li><a href="/photos/albums">Photo Albums</a></li>
+		<li><a href="https://github.com/kirsle/rophako" target="_blank">View on Github</a></li>
+		<li><a href="https://github.com/kirsle/rophako/archive/master.zip">Download</a></li>
 
-        <li class="header">:: Site Admin</li>
-        {% if session["login"] %}
-            {% if session["role"] == "admin" %}
-                <li><a href="{{ url_for('admin.index') }}">Admin Center</a></li>
-            {% endif %}
-            <li><a href="{{ url_for('blog.update') }}">Update Blog</a></li>
-            {% if "impersonator" in session %}
-                <li><a href="{{ url_for('admin.unimpersonate') }}">Unimpersonate</a>
-            {% endif %}
-            <li><a href="{{ url_for('account.logout') }}">Log out {{ session["username"] }}</a></li>
-        {% else %}
-            <li><a href="{{ url_for('account.login') }}">Log in</a></li>
-        {% endif %}
-    </ul>
+		<li class="header">:: Site Admin</li>
+		{% if session["login"] %}
+			{% if session["role"] == "admin" %}
+				<li><a href="{{ url_for('admin.index') }}">Admin Center</a></li>
+			{% endif %}
+			<li><a href="{{ url_for('blog.update') }}">Update Blog</a></li>
+			{% if "impersonator" in session %}
+				<li><a href="{{ url_for('admin.unimpersonate') }}">Unimpersonate</a>
+			{% endif %}
+			<li><a href="{{ url_for('account.logout') }}">Log out {{ session["username"] }}</a></li>
+		{% else %}
+			<li><a href="{{ url_for('account.login') }}">Log in</a></li>
+		{% endif %}
+	</ul>
 </nav>
 
 <div id="content">
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <h1>Notice!</h1>
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<h1>Notice!</h1>
 
-            <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+			<ul>
+			{% for message in messages %}
+				<li>{{ message }}</li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+	{% endwith %}
 
-    {% block content %}{% endblock %}
+	{% block content %}{% endblock %}
 
-    <footer>
-        <div>
-            &copy; {{ strftime("%Y") }} Noah Petherbridge. Web design released along with the Rophako CMS
-            under the GNU General Public License v2.0.<br>
-            <a href="https://github.com/kirsle/rophako" target="_blank">
-                {{ app["name"] }} v{{ app["version"] }} on Python {{ app["python_version"] }}
-            </a>
-        </div>
+	<footer>
+		<div>
+			&copy; {{ strftime("%Y") }} Noah Petherbridge. Web design released along with the Rophako CMS
+			under the GNU General Public License v2.0.<br>
+			<a href="https://github.com/kirsle/rophako" target="_blank">
+				{{ app["name"] }} v{{ app["version"] }} on Python {{ app["python_version"] }}
+			</a>
+		</div>
 
-    </footer>
+	</footer>
 </div>
 
 <script type="text/javascript" src="/js/jquery-2.1.0.min.js"></script>

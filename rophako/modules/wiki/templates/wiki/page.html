@@ -3,16 +3,16 @@
 {% block content %}
 
 <div class="right">
-    Last edited by {{ author["name"] }} on {{ pretty_time }}
+	Last edited by {{ author["name"] }} on {{ pretty_time }}
 
-    [ <a href="{{ url_for('wiki.history', name=link) }}">History</a>
-    | <a href="{{ url_for('wiki.list_pages') }}">Index</a>
-    | <a href="{{ url_for('wiki.view_page', name=link, source='1') }}">Source</a>
-    {% if session["login"] %}
-            | <a href="{{ url_for('wiki.edit', name=title) }}">Edit</a>
-            | <a href="{{ url_for('wiki.edit') }}">New Page</a>
-    {% endif %}
-    ]
+	[ <a href="{{ url_for('wiki.history', name=link) }}">History</a>
+	| <a href="{{ url_for('wiki.list_pages') }}">Index</a>
+	| <a href="{{ url_for('wiki.view_page', name=link, source='1') }}">Source</a>
+	{% if session["login"] %}
+			| <a href="{{ url_for('wiki.edit', name=title) }}">Edit</a>
+			| <a href="{{ url_for('wiki.edit') }}">New Page</a>
+	{% endif %}
+	]
 </div>
 
 <h1 class="wiki-title">{{ title }}</h1>

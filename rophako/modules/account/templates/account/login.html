@@ -8,15 +8,15 @@
 <form action="{{ url_for('account.login') }}" method="POST">
 <input type="hidden" name="token" value="{{ csrf_token() }}">
 <fieldset>
-    <legend>Log In</legend>
+	<legend>Log In</legend>
 
-    <strong>Username:</strong><br>
-    <input type="text" class="form-control" size="20" name="username" id="username"><p>
+	<strong>Username:</strong><br>
+	<input type="text" class="form-control" size="20" name="username" id="username"><p>
 
-    <strong>Passphrase:</strong><br>
-    <input type="password" class="form-control" size="20" name="password"><p>
+	<strong>Passphrase:</strong><br>
+	<input type="password" class="form-control" size="20" name="password"><p>
 
-    <button type="submit" class="btn btn-primary">Log In</button>
+	<button type="submit" class="btn btn-primary">Log In</button>
 </fieldset>
 </form>
 

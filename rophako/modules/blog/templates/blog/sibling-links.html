@@ -1,18 +1,18 @@
 {# Older/Newer links #}
 
 {% if post["siblings"][0] or post["siblings"][1] %}
-    <div class="right">
-    [
-    {% if post["siblings"][0] %}
-        <a href="{{ url_for('blog.entry', fid=post["siblings"][0]['fid']) }}">&lt; {{ post["siblings"][0]['subject'] }}</a>
+	<div class="right">
+	[
+	{% if post["siblings"][0] %}
+		<a href="{{ url_for('blog.entry', fid=post["siblings"][0]['fid']) }}">&lt; {{ post["siblings"][0]['subject'] }}</a>
 
-        {% if post["siblings"][1] %} | {% endif %}
-    {% endif %}
+		{% if post["siblings"][1] %} | {% endif %}
+	{% endif %}
 
-    {% if post["siblings"][1] %}
-        <a href="{{ url_for('blog.entry', fid=post["siblings"][1]['fid']) }}">{{ post["siblings"][1]['subject'] }} &gt;</a>
-    {% endif %}
+	{% if post["siblings"][1] %}
+		<a href="{{ url_for('blog.entry', fid=post["siblings"][1]['fid']) }}">{{ post["siblings"][1]['subject'] }} &gt;</a>
+	{% endif %}
 
-    ]
-    </div>
+	]
+	</div>
 {% endif %}

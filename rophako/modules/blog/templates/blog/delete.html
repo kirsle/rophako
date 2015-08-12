@@ -5,13 +5,13 @@
 <h1>Delete Entry</h1>
 
 <form name="editor" action="{{ url_for('blog.delete', id=post_id) }}" method="POST">
-    <input type="hidden" name="token" value="{{ csrf_token() }}">
-    <input type="hidden" name="confirm" value="true">
+	<input type="hidden" name="token" value="{{ csrf_token() }}">
+	<input type="hidden" name="confirm" value="true">
 
-    Are you sure you want to delete the blog post,
-    "{{ subject }}"?<p>
+	Are you sure you want to delete the blog post,
+	"{{ subject }}"?<p>
 
-    <button type="submit" class="btn btn-warning">Confirm Deletion</button>
+	<button type="submit" class="btn btn-warning">Confirm Deletion</button>
 </form>
 
 {% endblock %}

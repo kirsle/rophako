@@ -9,27 +9,27 @@ shape. You can use this page to modify the region of the photo you want to
 crop.<p>
 
 <table border="0" cellspacing="4" cellpadding="2">
-    <tr>
-        <td align="center" valign="middle">
-            <img src="{{ app['photo_url'] }}/{{ preview }}" id="cropbox">
-        </td>
-        <td align="center" valign="top">
-            <strong>Preview:</strong><br>
-            <div style="width: 100px; height: 100px; overflow: hidden">
-                <img src="{{ app['photo_url'] }}/{{ preview }}" id="preview" style="max-width: none">
-            </div>
-            <p>
+	<tr>
+		<td align="center" valign="middle">
+			<img src="{{ app['photo_url'] }}/{{ preview }}" id="cropbox">
+		</td>
+		<td align="center" valign="top">
+			<strong>Preview:</strong><br>
+			<div style="width: 100px; height: 100px; overflow: hidden">
+				<img src="{{ app['photo_url'] }}/{{ preview }}" id="preview" style="max-width: none">
+			</div>
+			<p>
 
-            <form name="crop" action="{{ url_for('photo.crop', photo=photo) }}" method="POST">
-                <input type="hidden" name="token" value="{{ csrf_token() }}">
-                <input type="hidden" name="x" id="x" value="0">
-                <input type="hidden" name="y" id="y" value="0">
-                <input type="hidden" name="length" id="length" value="0">
+			<form name="crop" action="{{ url_for('photo.crop', photo=photo) }}" method="POST">
+				<input type="hidden" name="token" value="{{ csrf_token() }}">
+				<input type="hidden" name="x" id="x" value="0">
+				<input type="hidden" name="y" id="y" value="0">
+				<input type="hidden" name="length" id="length" value="0">
 
-                <button type="submit" class="btn btn-primary">Crop Photo!</button>
-            </form>
-        </td>
-    </tr>
+				<button type="submit" class="btn btn-primary">Crop Photo!</button>
+			</form>
+		</td>
+	</tr>
 </table>
 
 {% endblock %}
@@ -38,70 +38,70 @@ crop.<p>
 <script src="/js/jquery.Jcrop.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/jquery.Jcrop.css">
 <script>
-    $(document).ready(function() {
-        var $cropbox = $("#cropbox"),
-            $preview = $("#preview"),
-            $x = $("#x"),
-            $y = $("#y"),
-            $length = $("#length");
+	$(document).ready(function() {
+		var $cropbox = $("#cropbox"),
+			$preview = $("#preview"),
+			$x = $("#x"),
+			$y = $("#y"),
+			$length = $("#length");
 
-        // Find the shortest side.
-        var len;
-        if ($cropbox.width() > $cropbox.height()) {
-            len = $cropbox.height();
-        }
-        else {
-            len = $cropbox.width();
-        }
+		// Find the shortest side.
+		var len;
+		if ($cropbox.width() > $cropbox.height()) {
+			len = $cropbox.height();
+		}
+		else {
+			len = $cropbox.width();
+		}
 
-        // Jcrop handler.
-        var showPreview = function(coords) {
-            if (parseInt(coords.w) > 0) {
-                var rx = 100 / coords.w;
-                var ry = 100 / coords.h;
-                var ht = $cropbox.height();
-                var wt = $cropbox.width();
+		// Jcrop handler.
+		var showPreview = function(coords) {
+			if (parseInt(coords.w) > 0) {
+				var rx = 100 / coords.w;
+				var ry = 100 / coords.h;
+				var ht = $cropbox.height();
+				var wt = $cropbox.width();
 
-                // Make the coords into percentages, so it works on mobile.
+				// Make the coords into percentages, so it works on mobile.
 
-                // Get the true dimensions of the image from PIL.
-                var trueW = {{ true_width }};
-                var trueH = {{ true_height }};
+				// Get the true dimensions of the image from PIL.
+				var trueW = {{ true_width }};
+				var trueH = {{ true_height }};
 
-                // The actual (possibly scaled) image shown on the page is hereby called
-                // the "display image"... turn our "display coords" into percentages
-                // across the image.
-                var percentX   = coords.x / wt;
-                var percentY   = coords.y / ht;
-                var percentLen = coords.w / wt;
+				// The actual (possibly scaled) image shown on the page is hereby called
+				// the "display image"... turn our "display coords" into percentages
+				// across the image.
+				var percentX   = coords.x / wt;
+				var percentY   = coords.y / ht;
+				var percentLen = coords.w / wt;
 
-                // Now get our true coords by multiplying those percentages against the
-                // true dimensions of the image from PIL.
-                var trueX = trueW * percentX;
-                var trueY = trueH * percentY;
-                var trueLen = trueW * percentLen;
+				// Now get our true coords by multiplying those percentages against the
+				// true dimensions of the image from PIL.
+				var trueX = trueW * percentX;
+				var trueY = trueH * percentY;
+				var trueLen = trueW * percentLen;
 
-                // Update the preview.
-                $preview.css({
-                    width: Math.round(rx * wt) + "px",
-                    height: Math.round(ry * ht) + "px",
-                    marginLeft: "-" + Math.round(rx * coords.x) + "px",
-                    marginTop: "-" + Math.round(ry * coords.y) + "px"
-                })
+				// Update the preview.
+				$preview.css({
+					width: Math.round(rx * wt) + "px",
+					height: Math.round(ry * ht) + "px",
+					marginLeft: "-" + Math.round(rx * coords.x) + "px",
+					marginTop: "-" + Math.round(ry * coords.y) + "px"
+				})
 
-                // Update the form.
-                $x.val(parseInt(trueX));
-                $y.val(parseInt(trueY));
-                $length.val(parseInt(trueLen));
-            }
-        }
+				// Update the form.
+				$x.val(parseInt(trueX));
+				$y.val(parseInt(trueY));
+				$length.val(parseInt(trueLen));
+			}
+		}
 
-        $cropbox.Jcrop({
-            onChange: showPreview,
-            onSelect: showPreview,
-            aspectRatio: 1,
-            setSelect: [ 0, 0, len, len ],
-        })
-    });
+		$cropbox.Jcrop({
+			onChange: showPreview,
+			onSelect: showPreview,
+			aspectRatio: 1,
+			setSelect: [ 0, 0, len, len ],
+		})
+	});
 </script>
 {% endblock %}
