@@ -44,7 +44,7 @@ app.secret_key = bytes(Config.security.secret_key.encode("utf-8")) \
                  .decode(string_escape)
 
 # Security?
-if Config.security.force_ssl == "true":
+if Config.security.force_ssl == True:
     app.config['SESSION_COOKIE_SECURE'] = True
     sslify = SSLify(app)
 

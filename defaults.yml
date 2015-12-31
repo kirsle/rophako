@@ -59,7 +59,7 @@ rophako:
     # will do the following:
     # - Send HTTP Strict-Transport-Security header
     # - Use secure session cookies (SSL-only)
-    force_ssl: true
+    force_ssl: false
 
     # Secret key used for session cookie signing. Make this long and hard to
     # guess.

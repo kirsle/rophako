@@ -74,7 +74,7 @@ def edit_page(name, author, body, note, history=True):
 
     # The new revision to be added.
     rev = dict(
-        id=hashlib.md5(str(int(time.time()))).hexdigest(),
+        id=hashlib.md5(str(int(time.time())).encode("utf-8")).hexdigest(),
         time=int(time.time()),
         author=author,
         body=body,
