@@ -45,14 +45,13 @@ def get_index():
     db = JsonDB.get("blog/index")
 
     # Hide any private posts if we aren't logged in.
-    new_db = dict()
     if not g.info["session"]["login"]:
-        for post_id, data in db.items():
-            if data["privacy"] == "private":
-                continue
-            new_db[post_id] = db[post_id]
+        posts = list(db.keys())
+        for post_id in posts:
+            if db[post_id]["privacy"] == "private":
+                del db[post_id]
 
-    return new_db
+    return db
 
 
 def rebuild_index():
