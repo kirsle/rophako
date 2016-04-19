@@ -43,6 +43,9 @@ def album_index(name):
 
     g.info["album"]      = name
     g.info["album_info"] = Photo.get_album(name)
+    if not g.info["album_info"]:
+        flash("That photo album wasn't found!")
+        return redirect(url_for(".albums"))
     g.info["markdown"]   = render_markdown(g.info["album_info"]["description"])
     g.info["photos"]     = photos
 
