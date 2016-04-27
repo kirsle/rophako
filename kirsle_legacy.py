@@ -57,6 +57,13 @@ def legacy_download():
     if request.method == "POST":
         form = request.form
     else:
+        # CNET links to the MS-DOS download using semicolon delimiters in the
+        # query string. Fix that if detected.
+        query = request.query_string.decode()
+        if not '&' in query and ';' in query:
+            url = re.sub(r';|%3b', '&', request.url, flags=re.IGNORECASE)
+            return redirect(url)
+
         form = request.args
 
     method   = form.get("method", "index")
