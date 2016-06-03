@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block title %}Draft Entries{% endblock %}
+{% block content %}
+
+<h1>Private Entries</h1>
+
+{{ include_page("blog.partial_index", mode="private") | safe }}
+
+{% endblock %}

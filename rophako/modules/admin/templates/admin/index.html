@@ -5,6 +5,16 @@
 
 <h1>Admin Center</h1>
 
+<h2>Blog</h2>
+
+<ul>
+	<li><a href="{{ url_for('blog.update') }}">Post a new blog entry</a></li>
+	<li><a href="{{ url_for('blog.drafts') }}">View draft entries</a></li>
+	<li><a href="{{ url_for('blog.private') }}">View private entries</a></li>
+</ul>
+
+<h2>Users</h2>
+
 <ul>
 	<li><a href="{{ url_for('admin.users') }}">View and Manage Users</a></li>
 </ul>

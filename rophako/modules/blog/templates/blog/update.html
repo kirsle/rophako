@@ -56,12 +56,19 @@
 		<option value="public"{% if privacy == "public" %} selected{% endif %}>
 			Public: everybody can see this blog entry
 		</option>
+		<option value="draft"{% if privacy == "draft" %} selected{% endif %}>
+			Draft: don't show this on the blog anywhere
+		</option>
 		<option value="private"{% if privacy == "private" %} selected{% endif %}>
 			Private: only site admins can see this blog entry
 		</option>
 	</select><p>
 
 	<strong>Options:</strong><br>
+	<label>
+		<input type="checkbox" name="sticky" value="true"{% if sticky %} checked{% endif %}>
+		Make this post sticky (always on top)
+	</label><br>
 	<label>
 		<input type="checkbox" name="emoticons" value="true"{% if emoticons %} checked{% endif %}>
 		Enable graphical emoticons
@@ -71,18 +78,14 @@
 		Enable comments on this entry
 	</label><p>
 
-	<strong>Time Stamp:</strong><br>
-	<input type="text" class="form-control input-sm inline" size="2" name="month" id="month" value="{{ month }}"> /
-	<input type="text" class="form-control input-sm inline" size="2" name="day" id="day" value="{{ day }}"> /
-	<input type="text" class="form-control input-sm inline" size="4" name="year" id="year" value="{{ year }}"> @
-	<input type="text" class="form-control input-sm inline" size="2" name="hour" id="hour" value="{{ hour }}"> :
-	<input type="text" class="form-control input-sm inline" size="2" name="min" id="min" value="{{ min }}"> :
-	<input type="text" class="form-control input-sm inline" size="2" name="sec" id="sec" value="{{ sec }}"><br>
-	mm / dd / yyyy @ hh:mm:ss<br>
+	<input type="hidden" name="time" value="{{ time }}">
+	{% if post_id != "" %}
+	<strong>Reset Time Stamp:</strong><br>
 	<label>
-		<input type="checkbox" id="autoup" value="yes"{% if post_id == "" %} checked{% endif %}>
-		Automatically update
+		<input type="checkbox" name="reset-time" value="yes"{% if post_id == "" %} checked{% endif %}>
+		Reset the post's time stamp to the current time.
 	</label><p>
+	{% endif %}
 
 	<button type="submit" class="btn btn-default" name="action" value="preview">Preview</button>
 	<button type="submit" class="btn btn-primary" name="action" value="publish">Publish Entry</button>

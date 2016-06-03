@@ -80,13 +80,24 @@ def category(category):
     g.info["url_category"] = category
     return template("blog/index.html")
 
+@mod.route("/drafts")
+@login_required
+def drafts():
+    """View all of the draft blog posts."""
+    return template("blog/drafts.html")
+
+@mod.route("/private")
+@login_required
+def private():
+    """View all of the blog posts marked as private."""
+    return template("blog/private.html")
 
 @mod.route("/entry/<fid>")
 def entry(fid):
     """Endpoint to view a specific blog entry."""
 
     # Resolve the friendly ID to a real ID.
-    post_id = Blog.resolve_id(fid)
+    post_id = Blog.resolve_id(fid, drafts=True)
     if not post_id:
         flash("That blog post wasn't found.")
         return redirect(url_for(".index"))
@@ -165,21 +176,16 @@ def update():
         avatar="",
         categories="",
         privacy=Config.blog.default_privacy,
+        sticky=False,
         emoticons=True,
         comments=Config.blog.allow_comments,
-        month="",
-        day="",
-        year="",
-        hour="",
-        min="",
-        sec="",
         preview=False,
     ))
 
     # Editing an existing post?
     post_id = request.args.get("id", None)
     if post_id:
-        post_id = Blog.resolve_id(post_id)
+        post_id = Blog.resolve_id(post_id, drafts=True)
         if post_id:
             logger.info("Editing existing blog post {}".format(post_id))
             post = Blog.get_entry(post_id)
@@ -187,21 +193,10 @@ def update():
             g.info["post"] = post
 
             # Copy fields.
-            for field in ["author", "fid", "subject", "format", "format",
+            for field in ["author", "fid", "subject", "time", "format",
                           "body", "avatar", "categories", "privacy",
-                          "emoticons", "comments"]:
+                          "sticky", "emoticons", "comments"]:
                 g.info[field] = post[field]
-
-            # Dissect the time.
-            date = datetime.datetime.fromtimestamp(post["time"])
-            g.info.update(dict(
-                month="{:02d}".format(date.month),
-                day="{:02d}".format(date.day),
-                year=date.year,
-                hour="{:02d}".format(date.hour),
-                min="{:02d}".format(date.minute),
-                sec="{:02d}".format(date.second),
-            ))
 
     # Are we SUBMITTING the form?
     if request.method == "POST":
@@ -211,10 +206,9 @@ def update():
         g.info["post_id"] = request.form.get("id")
         for field in ["fid", "subject", "format", "body", "avatar", "categories", "privacy"]:
             g.info[field] = request.form.get(field)
-        for boolean in ["emoticons", "comments"]:
+        for boolean in ["sticky", "emoticons", "comments"]:
             g.info[boolean] = True if request.form.get(boolean, None) == "true" else False
-        for number in ["author", "month", "day", "year", "hour", "min", "sec"]:
-            g.info[number] = int(request.form.get(number, 0))
+        g.info["author"] = int(g.info["author"])
 
         # What action are they doing?
         if action == "preview":
@@ -240,20 +234,11 @@ def update():
                 invalid = True
                 flash("You must enter a subject for your blog post.")
 
-            # Make sure the times are valid.
-            date = None
-            try:
-                date = datetime.datetime(
-                    g.info["year"],
-                    g.info["month"],
-                    g.info["day"],
-                    g.info["hour"],
-                    g.info["min"],
-                    g.info["sec"],
-                )
-            except ValueError as e:
-                invalid = True
-                flash("Invalid date/time: " + str(e))
+            # Resetting the post's time stamp?
+            if not request.form.get("id") or request.form.get("reset-time"):
+                g.info["time"] = float(time.time())
+            else:
+                g.info["time"] = float(request.form.get("time", time.time()))
 
             # Format the categories.
             tags = []
@@ -262,12 +247,9 @@ def update():
 
             # Okay to update?
             if invalid is False:
-                # Convert the date into a Unix time stamp.
-                epoch = float(date.strftime("%s"))
-
                 new_id, new_fid = Blog.post_entry(
                     post_id    = g.info["post_id"],
-                    epoch      = epoch,
+                    epoch      = g.info["time"],
                     author     = g.info["author"],
                     subject    = g.info["subject"],
                     fid        = g.info["fid"],
@@ -276,6 +258,7 @@ def update():
                     privacy    = g.info["privacy"],
                     ip         = remote_addr(),
                     emoticons  = g.info["emoticons"],
+                    sticky     = g.info["sticky"],
                     comments   = g.info["comments"],
                     format     = g.info["format"],
                     body       = g.info["body"],
@@ -297,7 +280,7 @@ def delete():
     post_id = request.args.get("id")
 
     # Resolve the post ID.
-    post_id = Blog.resolve_id(post_id)
+    post_id = Blog.resolve_id(post_id, drafts=True)
     if not post_id:
         flash("That blog post wasn't found.")
         return redirect(url_for(".index"))
@@ -408,11 +391,30 @@ def xml_add_text_tags(doc, root_node, tags):
         root_node.appendChild(channelTag)
 
 
-def partial_index(template_name="blog/index.inc.html"):
-    """Partial template for including the index view of the blog."""
+def partial_index(template_name="blog/index.inc.html", mode="normal"):
+    """Partial template for including the index view of the blog.
+
+    Args:
+        template_name (str): The name of the template to be rendered.
+        mode (str): The view mode of the posts, one of:
+            - normal: Only list public entries, or private posts for users
+                who are logged in.
+            - drafts: Only list draft entries for logged-in users.
+    """
 
     # Get the blog index.
-    index = Blog.get_index()
+    if mode == "normal":
+        index = Blog.get_index()
+    elif mode == "drafts":
+        index = Blog.get_drafts()
+    elif mode == "private":
+        index = Blog.get_private()
+    else:
+        return "Invalid partial_index mode."
+
+    # Let the pages know what mode they're in.
+    g.info["mode"] = mode
+
     pool  = {} # The set of blog posts to show.
 
     category = g.info.get("url_category", None)
@@ -449,7 +451,7 @@ def partial_index(template_name="blog/index.inc.html"):
     g.info["older"]   = offset + int(Config.blog.entries_per_page)
     if g.info["earlier"] < 0:
         g.info["earlier"] = 0
-    if g.info["older"] < 0 or g.info["older"] > len(posts):
+    if g.info["older"] < 0 or g.info["older"] > len(posts) - 1:
         g.info["older"] = 0
     g.info["count"] = 0
 
@@ -530,7 +532,7 @@ def partial_tags():
     has_small = False
     for tag in sort_tags:
         result.append(dict(
-            category=tag,
+            category=tag if len(tag) else Config.blog.default_category,
             count=tags[tag],
             small=tags[tag] < 3, # TODO: make this configurable
         ))
