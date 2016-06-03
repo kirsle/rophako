@@ -64,6 +64,8 @@ template_paths = [
 template_paths.extend(BLUEPRINT_PATHS)
 app.jinja_loader = jinja2.ChoiceLoader([ jinja2.FileSystemLoader(x) for x in template_paths])
 
+app.jinja_env.trim_blocks = True
+app.jinja_env.lstrip_blocks = True
 app.jinja_env.globals["csrf_token"] = rophako.utils.generate_csrf_token
 app.jinja_env.globals["include_page"] = rophako.utils.include
 app.jinja_env.globals["settings"] = lambda: Config
