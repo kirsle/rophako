@@ -43,6 +43,9 @@ app.DEBUG      = Config.site.debug == "true"
 app.secret_key = bytes(Config.security.secret_key.encode("utf-8")) \
                  .decode(string_escape)
 
+# Make templates easier to edit live.
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+
 # Security?
 if Config.security.force_ssl == True:
     app.config['SESSION_COOKIE_SECURE'] = True

@@ -18,7 +18,7 @@ from rophako.settings import Config
 import rophako.jsondb as JsonDB
 from rophako.log import logger
 
-def get_index():
+def get_index(drafts=False):
     """Get the blog index.
 
     The index is the cache of available blog posts. It has the format:
@@ -37,6 +37,10 @@ def get_index():
         ...
     }
     ```
+
+    Args:
+        drafts (bool): Whether to allow draft posts to be included in the index
+            (for logged-in users only).
     """
 
     # Index doesn't exist?
@@ -44,14 +48,65 @@ def get_index():
         return rebuild_index()
     db = JsonDB.get("blog/index")
 
-    # Hide any private posts if we aren't logged in.
-    if not g.info["session"]["login"]:
-        posts = list(db.keys())
-        for post_id in posts:
-            if db[post_id]["privacy"] == "private":
+    # Filter out posts that shouldn't be visible (draft/private)
+    posts = list(db.keys())
+    for post_id in posts:
+        privacy = db[post_id]["privacy"]
+
+        # Drafts are hidden universally so they can't be seen on any of the
+        # normal blog routes.
+        if privacy == "draft":
+            if drafts is False or not g.info["session"]["login"]:
                 del db[post_id]
 
+        # Private posts are only visible to logged in users.
+        elif privacy == "private" and not g.info["session"]["login"]:
+            del db[post_id]
+
     return db
+
+
+def get_drafts():
+    """Get the draft blog posts.
+
+    Drafts are hidden from all places of the blog, just like private posts are
+    (for non-logged-in users), so get_index() skips drafts and therefore
+    resolve_id, etc. does too, making them invisible on the normal blog pages.
+
+    This function is like get_index() except it *only* returns the drafts.
+    """
+
+    # Index doesn't exist?
+    if not JsonDB.exists("blog/index"):
+        return rebuild_index()
+    db = JsonDB.get("blog/index")
+
+    # Filter out only the draft posts.
+    return {
+        key: data for key, data in db.items() if data["privacy"] == "draft"
+    }
+
+
+def get_private():
+    """Get only the private blog posts.
+
+    Since you can view only drafts, it made sense to have an easy way to view
+    only private posts, too.
+
+    This function is like get_index() except it *only* returns the private
+    posts. It doesn't check for logged-in users, because the routes that view
+    all private posts are login_required anyway.
+    """
+
+    # Index doesn't exist?
+    if not JsonDB.exists("blog/index"):
+        return rebuild_index()
+    db = JsonDB.get("blog/index")
+
+    # Filter out only the draft posts.
+    return {
+        key: data for key, data in db.items() if data["privacy"] == "private"
+    }
 
 
 def rebuild_index():
@@ -76,13 +131,13 @@ def update_index(post_id, post, index=None, commit=True):
     * index: If you already have the index open, you can pass it here
     * commit: Write the DB after updating the index (default True)"""
     if index is None:
-        index = get_index()
+        index = get_index(drafts=True)
 
     index[post_id] = dict(
         fid        = post["fid"],
         time       = post["time"] or int(time.time()),
         categories = post["categories"],
-        sticky     = False, # TODO
+        sticky     = post["sticky"],
         author     = post["author"],
         privacy    = post["privacy"] or "public",
         subject    = post["subject"],
@@ -125,11 +180,11 @@ def get_entry(post_id):
 
 
 def post_entry(post_id, fid, epoch, author, subject, avatar, categories,
-               privacy, ip, emoticons, comments, format, body):
+               privacy, ip, emoticons, sticky, comments, format, body):
     """Post (or update) a blog entry."""
 
     # Fetch the index.
-    index = get_index()
+    index = get_index(drafts=True)
 
     # Editing an existing post?
     if not post_id:
@@ -180,7 +235,7 @@ def post_entry(post_id, fid, epoch, author, subject, avatar, categories,
         ip         = ip,
         time       = epoch or int(time.time()),
         categories = categories,
-        sticky     = False, # TODO: implement sticky
+        sticky     = sticky,
         comments   = comments,
         emoticons  = emoticons,
         avatar     = avatar,
@@ -203,7 +258,7 @@ def post_entry(post_id, fid, epoch, author, subject, avatar, categories,
 def delete_entry(post_id):
     """Remove a blog entry."""
     # Fetch the blog information.
-    index = get_index()
+    index = get_index(drafts=True)
     post  = get_entry(post_id)
     if post is None:
         logger.warning("Can't delete post {}, it doesn't exist!".format(post_id))
@@ -216,9 +271,14 @@ def delete_entry(post_id):
     JsonDB.commit("blog/index", index)
 
 
-def resolve_id(fid):
-    """Resolve a friendly ID to the blog ID number."""
-    index = get_index()
+def resolve_id(fid, drafts=False):
+    """Resolve a friendly ID to the blog ID number.
+
+    Args:
+        drafts (bool): Whether to allow draft IDs to be resolved (for
+            logged-in users only).
+    """
+    index = get_index(drafts=drafts)
 
     # If the ID is all numeric, it's the blog post ID directly.
     if re.match(r'^\d+$', fid):

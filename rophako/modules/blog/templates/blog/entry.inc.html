@@ -25,6 +25,15 @@
 	</div>
 
 	<div class="blog-timestamp">
+		{% if post["privacy"] == "private" %}
+			<span class="blog-entry-private">[Private]</span>
+		{% elif post["privacy"] == "draft" %}
+			<span class="blog-entry-draft">[Draft]</span>
+		{% endif %}
+		{% if post["sticky"] %}
+			<span class="blog-entry-sticky">[Sticky]</span>
+		{% endif %}
+
 		Posted by {{ post["profile"]["name"] }}
 		on <span title="{{ post['time'] }}">{{ post["pretty_time"] }}</span>
 	</div>
@@ -63,6 +72,14 @@
 				<a href="{{ url_for('blog.entry', fid=post['fid']) }}">Permalink</a>
 			{% else %}
 				<a href="{{ url_for('blog.index') }}">Blog</a>
+			{% endif %}
+
+			{% if post["privacy"] == "private" %}
+				| <a href="{{ url_for('blog.private') }}">Private posts</a>
+			{% endif %}
+
+			{% if post["privacy"] == "draft" %}
+				| <a href="{{ url_for('blog.drafts') }}">Drafts</a>
 			{% endif %}
 
 			{% if session["login"] %}
