@@ -99,6 +99,15 @@ def entry(fid):
     # Resolve the friendly ID to a real ID.
     post_id = Blog.resolve_id(fid, drafts=True)
     if not post_id:
+        # See if the friendly ID contains any extraneous dashes at the front
+        # or end, and remove them and see if we have a match. This allows for
+        # fixing blog fid's that allowed leading/trailing dashes and having the
+        # old URL just redirect to the new one.
+        post_id = Blog.resolve_id(fid.strip("-"), drafts=True)
+        if post_id:
+            # Got one! Redirect to it.
+            return redirect(url_for(".entry", fid=fid.strip("-")))
+
         flash("That blog post wasn't found.")
         return redirect(url_for(".index"))
 
