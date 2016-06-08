@@ -103,10 +103,17 @@ def entry(fid):
         # or end, and remove them and see if we have a match. This allows for
         # fixing blog fid's that allowed leading/trailing dashes and having the
         # old URL just redirect to the new one.
-        post_id = Blog.resolve_id(fid.strip("-"), drafts=True)
+        fid = fid.strip("-")
+        post_id = Blog.resolve_id(fid, drafts=True)
+
+        # If still nothing, try consolidating extra dashes into one.
+        if not post_id:
+            fid = re.sub(r'-+', '-', fid)
+            post_id = Blog.resolve_id(fid, drafts=True)
+
+        # Did we find one now?
         if post_id:
-            # Got one! Redirect to it.
-            return redirect(url_for(".entry", fid=fid.strip("-")))
+            return redirect(url_for(".entry", fid=fid))
 
         flash("That blog post wasn't found.")
         return redirect(url_for(".index"))
