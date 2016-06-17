@@ -2,6 +2,18 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
 
+{% if toc %}
+	<nav class="markdown-toc">
+		<ul>
+			{% for entry in toc %}
+			<li class="toc-{{ entry['level'] }}">
+				<a href="#{{ entry['id'] }}">{{ entry['text'] }}</a>
+			</li>
+			{% endfor %}
+		</ul>
+	</nav>
+{% endif %}
+
 {{ markdown|safe }}
 
 {% endblock %}
