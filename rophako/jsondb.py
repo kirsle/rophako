@@ -96,7 +96,7 @@ def delete(document):
     """Delete a document from the DB."""
     path = mkpath(document)
     if os.path.isfile(path):
-        logger.info("Delete DB document: {}".format(path))
+        logger.debug("Delete DB document: {}".format(path))
         os.unlink(path)
         del_cache(document)
 
@@ -253,7 +253,7 @@ def get_cache(key):
         if value:
             value = json.loads(value)
     except:
-        logger.warning("Redis exception: couldn't get_cache {}".format(key))
+        logger.debug("Redis exception: couldn't get_cache {}".format(key))
         value = None
     return value
 
