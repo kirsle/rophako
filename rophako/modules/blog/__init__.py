@@ -199,7 +199,7 @@ def update():
     ))
 
     # Editing an existing post?
-    post_id = request.args.get("id", None)
+    post_id = request.args.get("id", request.form.get("id", None))
     if post_id:
         post_id = Blog.resolve_id(post_id, drafts=True)
         if post_id:
