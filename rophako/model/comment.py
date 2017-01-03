@@ -155,8 +155,9 @@ def update_comment(thread, cid, data):
 def delete_comment(thread, cid):
     """Delete a comment from a thread."""
     comments = get_comments(thread)
-    del comments[cid]
-    write_comments(thread, comments)
+    if cid in comments:
+        del comments[cid]
+        write_comments(thread, comments)
 
 
 def make_quick_delete_token(thread, cid):
