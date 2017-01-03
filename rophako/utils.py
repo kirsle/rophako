@@ -236,13 +236,46 @@ def parse_anchors(html):
     return toc
 
 
-def send_email(to, subject, message, sender=None, reply_to=None):
-    """Send an e-mail out."""
+def send_email(to, subject, message, header=None, footer=None, sender=None,
+               reply_to=None):
+    """Send a (markdown-formatted) e-mail out.
+
+    This will deliver an HTML-formatted e-mail (using the ``email.inc.html``
+    template) using the rendered Markdown contents of ``message`` and
+    ``footer``. It will also send a plain text version using the raw Markdown
+    formatting in case the user can't accept HTML.
+
+    Parameters:
+        to ([]str): list of addresses to send the message to.
+        subject (str): email subject and title.
+        message (str): the email body, in Markdown format.
+        header (str): the header text for the HTML email (plain text).
+        footer (str): optional email footer, in Markdown format. The default
+            footer is defined in the ``email.inc.html`` template.
+        sender (str): optional sender email address. Defaults to the one
+            specified in the site configuration.
+        reply_to (str): optional Reply-To address header.
+    """
     if sender is None:
         sender = Config.mail.sender
 
     if type(to) != list:
         to = [to]
+
+    # Render the Markdown bits.
+    if footer:
+        footer = render_markdown(footer)
+
+    # Default header matches the subject.
+    if not header:
+        header = subject
+
+    html_message = render_template("email.inc.html",
+        title=subject,
+        header=header,
+        message=render_markdown(message),
+        footer=footer,
+    )
 
     logger.info("Send email to {}".format(to))
     if Config.mail.method == "smtp":
@@ -259,6 +292,9 @@ def send_email(to, subject, message, sender=None, reply_to=None):
 
             text = MIMEText(message, "plain", "utf-8")
             msg.attach(text)
+
+            html = MIMEText(html_message, "html", "utf-8")
+            msg.attach(html)
 
             # Send the e-mail.
             try:

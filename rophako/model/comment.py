@@ -3,13 +3,14 @@ from __future__ import unicode_literals, absolute_import
 
 """Commenting models."""
 
-from flask import url_for
+from flask import url_for, session
+from itsdangerous import URLSafeSerializer
 import time
 import hashlib
 import urllib
 import random
-import re
 import sys
+import uuid
 
 from rophako.settings import Config
 import rophako.jsondb as JsonDB
@@ -18,18 +19,39 @@ import rophako.model.emoticons as Emoticons
 from rophako.utils import send_email, render_markdown
 from rophako.log import logger
 
+def deletion_token():
+    """Retrieves the comment deletion token for the current user's session.
 
-def add_comment(thread, uid, name, subject, message, url, time, ip, image=None):
+    Deletion tokens are random strings saved with a comment's data that allows
+    its original commenter to delete or modify their comment on their own,
+    within a window of time configurable by the site owner
+    (in ``comment.edit_period``).
+
+    If the current session doesn't have a deletion token yet, this function
+    will generate and set one. Otherwise it returns the one set last time.
+    All comments posted by the same session would share the same deletion
+    token.
+    """
+    if not "comment_token" in session:
+        session["comment_token"] = str(uuid.uuid4())
+    return session.get("comment_token")
+
+
+def add_comment(thread, uid, name, subject, message, url, time, ip,
+    token=None, image=None):
     """Add a comment to a comment thread.
 
-    * uid is 0 if it's a guest post, otherwise the UID of the user.
-    * name is the commenter's name (if a guest)
-    * subject is for the e-mails that are sent out
-    * message is self explanatory.
-    * url is the URL where the comment can be read.
-    * time, epoch time of comment.
-    * ip is the IP address of the commenter.
-    * image is a Gravatar image URL etc.
+    Parameters:
+        thread (str): the unique comment thread name.
+        uid (int): 0 for guest posts, otherwise the UID of the logged-in user.
+        name (str): the commenter's name (if a guest)
+        subject (str)
+        message (str)
+        url (str): the URL where the comment can be read (i.e. the blog post)
+        time (int): epoch time of the comment.
+        ip (str): the user's IP address.
+        token (str): the user's session's comment deletion token.
+        image (str): the URL to a Gravatar image, if any.
     """
 
     # Get the comments for this thread.
@@ -48,6 +70,7 @@ def add_comment(thread, uid, name, subject, message, url, time, ip, image=None):
         message=message,
         time=time or int(time.time()),
         ip=ip,
+        token=token,
     )
     write_comments(thread, comments)
 
@@ -60,20 +83,25 @@ def add_comment(thread, uid, name, subject, message, url, time, ip, image=None):
     # Send the e-mail to the site admins.
     send_email(
         to=Config.site.notify_address,
-        subject="New comment: {}".format(subject),
+        subject="Comment Added: {}".format(subject),
         message="""{name} has left a comment on: {subject}
 
 {message}
 
-To view this comment, please go to {url}
+-----
 
-=====================
+To view this comment, please go to <{url}>
 
-This e-mail was automatically generated. Do not reply to it.""".format(
+Was this comment spam? [Delete it]({deletion_link}).""".format(
             name=name,
             subject=subject,
             message=message,
             url=url,
+            deletion_link=url_for("comment.quick_delete",
+                token=make_quick_delete_token(thread, cid),
+                url=url,
+                _external=True,
+            )
         ),
     )
 
@@ -88,28 +116,25 @@ This e-mail was automatically generated. Do not reply to it.""".format(
             subject="New Comment: {}".format(subject),
             message="""Hello,
 
-You are currently subscribed to the comment thread '{thread}', and somebody has
-just added a new comment!
-
 {name} has left a comment on: {subject}
 
 {message}
 
-To view this comment, please go to {url}
+-----
 
-=====================
-
-This e-mail was automatically generated. Do not reply to it.
-
-If you wish to unsubscribe from this comment thread, please visit the following
-URL: {unsub}""".format(
+To view this comment, please go to <{url}>""".format(
                 thread=thread,
                 name=name,
                 subject=subject,
                 message=message,
                 url=url,
                 unsub=unsub,
-            )
+            ),
+            footer="You received this e-mail because you subscribed to the "
+                "comment thread that this comment was added to. You may "
+                "[**unsubscribe**]({unsub}) if you like.".format(
+                unsub=unsub,
+            ),
         )
 
 
@@ -132,6 +157,84 @@ def delete_comment(thread, cid):
     comments = get_comments(thread)
     del comments[cid]
     write_comments(thread, comments)
+
+
+def make_quick_delete_token(thread, cid):
+    """Generate a unique tamper-proof token for quickly deleting comments.
+
+    This allows for an instant 'delete' link to be included in the notification
+    e-mail sent to the site admins, to delete obviously spammy comments
+    quickly.
+
+    It uses ``itsdangerous`` to create a unique token signed by the site's
+    secret key so that users can't forge their own tokens.
+
+    Parameters:
+        thread (str): comment thread name.
+        cid (str): unique comment ID.
+
+    Returns:
+        str
+    """
+    s = URLSafeSerializer(Config.security.secret_key)
+    return s.dumps(dict(
+        t=thread,
+        c=cid,
+    ))
+
+
+def validate_quick_delete_token(token):
+    """Validate and decode a quick delete token.
+
+    If the token is valid, returns a dict of the thread name and comment ID,
+    as keys ``t`` and ``c`` respectively.
+
+    If not valid, returns ``None``.
+    """
+    s = URLSafeSerializer(Config.security.secret_key)
+    try:
+        return s.loads(token)
+    except:
+        logger.exception("Failed to validate quick-delete token {}".format(token))
+        return None
+
+
+def is_editable(thread, cid, comment=None):
+    """Determine if the comment is editable by the end user.
+
+    A comment is editable to its own author (even guests) for a window defined
+    by the site owner. In this event, the user's session has their
+    'comment deletion token' that matches the comment's saved token, and the
+    comment was posted recently.
+
+    Site admins (any logged-in user) can always edit all comments.
+
+    Parameters:
+        thread (str): the unique comment thread name.
+        cid (str): the comment ID.
+        comment (dict): if you already have the comment object, you can provide
+            it here and save an extra DB lookup.
+
+    Returns:
+        bool: True if the user is logged in *OR* has a valid deletion token and
+            the comment is relatively new. Otherwise returns False.
+    """
+    # Logged in users can always do it.
+    if session["login"]:
+        return True
+
+    # Get the comment, or bail if not found.
+    if comment is None:
+        comment = get_comment(thread, cid)
+        if not comment:
+            return False
+
+    # Make sure the comment's token matches the user's, or bail.
+    if comment.get("token", "x") != deletion_token():
+        return False
+
+    # And finally, make sure the comment is new enough.
+    return time.time() - comment["time"] < 60*60*Config.comment.edit_period
 
 
 def count_comments(thread):
