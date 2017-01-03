@@ -74,6 +74,9 @@ rophako:
     # key. Do NOT use that one, it was just an example. Make your own!
     secret_key: 'for the love of Arceus, change this key!'
 
+    # How long the session key should last for (in days).
+    session_lifetime: 30
+
     # Password strength: number of iterations for bcrypt password.
     bcrypt_iterations: 12
 
@@ -141,10 +144,15 @@ rophako:
 
   comment:
     time_format: *DATE_FORMAT
+
     # We use Gravatar for comments if the user provides an e-mail address.
     # Specify the URL to a fallback image to use in case they don't have
     # a gravatar.
-    default_avatar:
+    default_avatar: ""
+
+    # The grace period window that users are allowed to modify or delete their
+    # own comments (in hours)
+    edit_period: 2
 
   wiki:
     default_page: Main Page

@@ -80,6 +80,10 @@ Emoticons.load_theme()
 def before_request():
     """Called before all requests. Initialize global template variables."""
 
+    # Session lifetime.
+    app.permanent_session_lifetime = datetime.timedelta(days=Config.security.session_lifetime)
+    session.permanent = True
+
     # Default template vars.
     g.info = rophako.utils.default_vars()
 

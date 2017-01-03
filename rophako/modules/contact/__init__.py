@@ -48,12 +48,12 @@ def send():
         subject="Contact Form on {}: {}".format(Config.site.site_name, subject),
         message="""A visitor to {site_name} has sent you a message!
 
-IP Address: {ip}
-User Agent: {ua}
-Referrer: {referer}
-Name: {name}
-E-mail: {email}
-Subject: {subject}
+* IP Address: `{ip}`
+* User Agent: `{ua}`
+* Referrer: <{referer}>
+* Name: {name}
+* E-mail: <{email}>
+* Subject: {subject}
 
 {message}""".format(
             site_name=Config.site.site_name,

@@ -8,8 +8,7 @@ import time
 
 import rophako.model.user as User
 import rophako.model.comment as Comment
-from rophako.utils import (template, pretty_time, login_required, sanitize_name,
-    remote_addr)
+from rophako.utils import (template, pretty_time, sanitize_name, remote_addr)
 from rophako.plugin import load_plugin
 from rophako.settings import Config
 
@@ -42,9 +41,18 @@ def preview():
 
     # Gravatar?
     gravatar = Comment.gravatar(form["contact"])
+    if g.info["session"]["login"]:
+        form["name"] = g.info["session"]["name"]
+        gravatar = "/".join([
+            Config.photo.root_public,
+            User.get_picture(uid=g.info["session"]["uid"]),
+        ])
 
     # Are they submitting?
     if form["action"] == "submit":
+        # Make sure they have a deletion token in their session.
+        token = Comment.deletion_token()
+
         Comment.add_comment(
             thread=thread,
             uid=g.info["session"]["uid"],
@@ -55,6 +63,7 @@ def preview():
             subject=form["subject"],
             message=form["message"],
             url=form["url"],
+            token=token,
         )
 
         # Are we subscribing to the thread?
@@ -77,19 +86,45 @@ def preview():
 
 
 @mod.route("/delete/<thread>/<cid>")
-@login_required
 def delete(thread, cid):
     """Delete a comment."""
+    if not Comment.is_editable(thread, cid):
+        flash("Permission denied; maybe you need to log in?")
+        return redirect(url_for("account.login"))
+
     url = request.args.get("url")
     Comment.delete_comment(thread, cid)
     flash("Comment deleted!")
     return redirect(url or url_for("index"))
 
 
+@mod.route("/quickdelete/<token>")
+def quick_delete(token):
+    """Quick-delete a comment.
+
+    This is for the site admins: when a comment is posted, the admins' version
+    of the email contains a quick deletion link in case of spam. The ``token``
+    here is in relation to that. It's a signed hash via ``itsdangerous`` using
+    the site's secret key so that users can't forge their own tokens.
+    """
+    data = Comment.validate_quick_delete_token(token)
+    if data is None:
+        flash("Permission denied: token not valid.")
+        return redirect(url_for("index"))
+
+    url = request.args.get("url")
+    Comment.delete_comment(data["t"], data["c"])
+    flash("Comment has been quick-deleted!")
+    return redirect(url or url_for("index"))
+
+
 @mod.route("/edit/<thread>/<cid>", methods=["GET", "POST"])
-@login_required
 def edit(thread, cid):
     """Edit an existing comment."""
+    if not Comment.is_editable(thread, cid):
+        flash("Permission denied; maybe you need to log in?")
+        return redirect(url_for("account.login"))
+
     url = request.args.get("url")
     comment = Comment.get_comment(thread, cid)
     if not comment:
@@ -172,11 +207,14 @@ def unsubscribe():
 def partial_index(thread, subject, header=True, addable=True):
     """Partial template for including the index view of a comment thread.
 
-    * thread: unique name for the comment thread
-    * subject: subject name for the comment thread
-    * header: show the Comments h1 header
-    * addable: boolean, can new comments be added to the thread"""
+    Parameters:
+        thread (str): the unique name for the comment thread.
+        subject (str): subject name for the comment thread.
+        header (bool): show the 'Comments' H1 header.
+        addable (bool): can new comments be added to the thread?
+    """
 
+    # Get all the comments on this thread.
     comments = Comment.get_comments(thread)
 
     # Sort the comments by most recent on bottom.
@@ -199,6 +237,9 @@ def partial_index(thread, subject, header=True, addable=True):
 
         # Format the message for display.
         comment["formatted_message"] = Comment.format_message(comment["message"])
+
+        # Was this comment posted by the current user viewing it?
+        comment["editable"] = Comment.is_editable(thread, cid, comment)
 
         sorted_comments.append(comment)
 

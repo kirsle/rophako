@@ -25,12 +25,18 @@ There {% if comments|length == 1 %}is{% else %}are{% endif %}
 		{{ comment["formatted_message"]|safe }}
 
 		<div class="clear">
-			{% if session["login"] %}
-				[IP: {{ comment["ip"] }}
+			{% if session["login"] or comment["editable"] %}
+				[
+				{% if session["login"] %}
+					IP: {{ comment["ip"] }}
+				{% else %}
+					<em class="comment-editable">You recently posted this</em>
+				{% endif %}
 				|
 				<a href="{{ url_for('comment.edit', thread=thread, cid=comment['id'], url=url) }}">Edit</a>
 				|
-				<a href="{{ url_for('comment.delete', thread=thread, cid=comment['id'], url=url) }}" onclick="return window.confirm('Are you sure?')">Delete</a>]
+				<a href="{{ url_for('comment.delete', thread=thread, cid=comment['id'], url=url) }}" onclick="return window.confirm('Are you sure?')">Delete</a>
+				]
 			{% endif %}
 		</div>
 	</div><p>
