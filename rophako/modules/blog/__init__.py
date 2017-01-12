@@ -550,9 +550,9 @@ def partial_tags():
         result.append(dict(
             category=tag if len(tag) else Config.blog.default_category,
             count=tags[tag],
-            small=tags[tag] < 3, # TODO: make this configurable
+            small=tags[tag] < 10, # TODO: make this configurable
         ))
-        if tags[tag] < 3:
+        if tags[tag] < 10:
             has_small = True
 
     g.info["tags"] = result
