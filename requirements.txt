@@ -1,4 +1,5 @@
 flask
+flask-compress
 flask-sslify
 redis
 pytz

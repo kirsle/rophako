@@ -6,6 +6,7 @@ from __future__ import unicode_literals, absolute_import
 from flask import (Flask, g, request, session, render_template, send_file,
     abort, redirect)
 from flask_sslify import SSLify
+from flask_compress import Compress
 import jinja2
 import os.path
 import datetime
@@ -16,6 +17,7 @@ import sys
 app = Flask(__name__,
     static_url_path="/.static",
 )
+Compress(app)
 
 # We use a custom Jinja loader to support multiple template paths for custom
 # and default templates. The base list of template paths to check includes
