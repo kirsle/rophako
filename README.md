@@ -1,5 +1,7 @@
 # Rophako
 
+> :rotating_light: **This repo has migrated:** https://git.kirsle.net/apps/rophako
+
 A simplistic content management system designed for
 [kirsle.net](http://www.kirsle.net/).
 
